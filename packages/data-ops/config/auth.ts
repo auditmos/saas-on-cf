@@ -11,7 +11,7 @@ export const auth = createBetterAuth({
       username: process.env.DATABASE_USERNAME!,
     }),
     {
-      provider: "mysql",
+      provider: "pg",
     },
   ),
 });

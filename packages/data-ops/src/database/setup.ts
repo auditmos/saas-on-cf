@@ -1,5 +1,5 @@
-// packages/data-ops/src/database/setup.ts
-import { drizzle } from "drizzle-orm/planetscale-serverless";
+// packages/data-ops/database/setup.ts
+import { drizzle } from "drizzle-orm/neon-http";
 
 let db: ReturnType<typeof drizzle>;
 
@@ -11,7 +11,8 @@ export function initDatabase(connection: {
   if (db) {
     return db;
   }
-  db = drizzle({ connection });
+  const connectionString = `postgres://${connection.username}:${connection.password}@${connection.host}`;
+  db = drizzle(connectionString);
   return db;
 }
 

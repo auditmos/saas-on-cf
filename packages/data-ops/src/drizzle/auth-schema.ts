@@ -1,15 +1,9 @@
-import {
-  mysqlTable,
-  varchar,
-  text,
-  timestamp,
-  boolean,
-} from "drizzle-orm/mysql-core";
+import { pgTable, text, timestamp, boolean } from "drizzle-orm/pg-core";
 
-export const auth_user = mysqlTable("auth_user", {
-  id: varchar("id", { length: 36 }).primaryKey(),
+export const auth_user = pgTable("auth_user", {
+  id: text("id").primaryKey(),
   name: text("name").notNull(),
-  email: varchar("email", { length: 255 }).notNull().unique(),
+  email: text("email").notNull().unique(),
   emailVerified: boolean("email_verified").default(false).notNull(),
   image: text("image"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -19,26 +13,26 @@ export const auth_user = mysqlTable("auth_user", {
     .notNull(),
 });
 
-export const auth_session = mysqlTable("auth_session", {
-  id: varchar("id", { length: 36 }).primaryKey(),
+export const auth_session = pgTable("auth_session", {
+  id: text("id").primaryKey(),
   expiresAt: timestamp("expires_at").notNull(),
-  token: varchar("token", { length: 255 }).notNull().unique(),
+  token: text("token").notNull().unique(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
   ipAddress: text("ip_address"),
   userAgent: text("user_agent"),
-  userId: varchar("user_id", { length: 36 })
+  userId: text("user_id")
     .notNull()
     .references(() => auth_user.id, { onDelete: "cascade" }),
 });
 
-export const auth_account = mysqlTable("auth_account", {
-  id: varchar("id", { length: 36 }).primaryKey(),
+export const auth_account = pgTable("auth_account", {
+  id: text("id").primaryKey(),
   accountId: text("account_id").notNull(),
   providerId: text("provider_id").notNull(),
-  userId: varchar("user_id", { length: 36 })
+  userId: text("user_id")
     .notNull()
     .references(() => auth_user.id, { onDelete: "cascade" }),
   accessToken: text("access_token"),
@@ -54,8 +48,8 @@ export const auth_account = mysqlTable("auth_account", {
     .notNull(),
 });
 
-export const auth_verification = mysqlTable("auth_verification", {
-  id: varchar("id", { length: 36 }).primaryKey(),
+export const auth_verification = pgTable("auth_verification", {
+  id: text("id").primaryKey(),
   identifier: text("identifier").notNull(),
   value: text("value").notNull(),
   expiresAt: timestamp("expires_at").notNull(),
