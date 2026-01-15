@@ -169,4 +169,6 @@ dist
 # wrangler project
 
 .dev.vars
+.staging.vars
+.production.vars
 .wrangler/

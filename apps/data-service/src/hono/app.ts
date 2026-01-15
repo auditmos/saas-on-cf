@@ -1,7 +1,11 @@
 import { Hono } from "hono";
+import health from "./handlers/health-handlers";
+import { errorHandler, onErrorHandler } from "./middleware/error-handler";
 
-export const app = new Hono<{ Bindings: Env }>();
+export const App = new Hono<{ Bindings: Env }>();
 
-app.get("/", (c) => {
-  return c.text("Hello World");
-});
+App.onError(onErrorHandler);
+
+App.use('*', errorHandler());
+
+App.route('/health', health);  

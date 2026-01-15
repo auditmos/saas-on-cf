@@ -1,26 +1,21 @@
-# Worker Publisher
+# SaaS-on-CF (Software as a Service on Cloudflare) - Data Service
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/worker-publisher-template)
+Modular web application template - data service (backend package)
 
-<!-- dash-content-start -->
+## Architecture
 
-A Cloudflare Worker that creates and deploys Workers to a Dispatch Namespace via the Cloudflare SDK.
+### Environment Variables
 
-## How it works
+Config files in `apps/data-service/`:
+- `.dev.vars` - Local development
+- `.staging.vars` - Staging
+- `.production.vars` - Production
 
-- Automatically creates a Workers for Platforms dispatch namespace
-- Uses Cloudflare SDK to deploy Workers to the namespace
-- Each deployed Worker gets its own /{worker-name} path
-- Main Worker acts as a router, forwarding requests to deployed Workers
-- Each deployed Worker runs in its own isolated environment
+Sample `.example.vars` file with minimum number of values available - [.example.vars](./apps/data-service/.example.vars)
 
-You can modify this and use it to deploy static sites or full stack applications at scale, build a vibe coding platform, deploy personalized AI agents ... the possibilities are endless!
+Sync script - synchronize secrets with remote environment
 
-<!-- dash-content-end -->
-
-## Setup
-
-After you click "Deploy to Cloudflare", you'll be prompted for:
-
-- `CLOUDFLARE_ACCOUNT_ID` - Your Cloudflare account ID
-- `CLOUDFLARE_API_TOKEN` - Your Cloudflare API token with Workers:Edit permission
+```bash
+chmod +x sync-secrets.sh
+./sync-secrets.sh {env}
+```

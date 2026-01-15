@@ -3,22 +3,21 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "deploy": "wrangler deploy",
-    "dev": "wrangler dev --x-remote-bindings",
-    "start": "wrangler dev",
+    "deploy:stage": "wrangler deploy --env stage",
+    "deploy:prod": "wrangler deploy --env prod",
+    "dev": "wrangler dev --env dev --port 8788",
     "test": "vitest",
-    "cf-typegen": "wrangler types --env-interface BaseEnv"
+    "cf-typegen": "wrangler types --env-interface BaseEnv --env dev"
   },
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "^0.8.19",
     "@types/node": "^22.15.19",
     "typescript": "^5.5.2",
     "vitest": "~3.2.0",
-    "wrangler": "^4.24.3"
+    "wrangler": "^4.59.2"
   },
   "dependencies": {
     "@repo/data-ops": "workspace:*",
-    "hono": "^4.8.3",
-    "zod": "^3.25.67"
+    "hono": "^4.8.3"
   }
 }

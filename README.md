@@ -106,8 +106,9 @@ Replace `dev` with `staging` or `production`. Migrations stored in `src/drizzle/
 Config files in `packages/data-ops/`:
 - `.env.dev` - Local development
 - `.env.staging` - Staging
-- `.env.Replace `dev` with `staging` or `production`. Migrations stored in `src/drizzle/migrations/{env}/`.
-` - Production
+- `.env.Replace `dev` with `staging` or `production`. 
+
+Migrations stored in `src/drizzle/migrations/{env}/`.
 
 Sample `.env` file with minimum number of values available - [.env.example](./packages/data-ops/.env.example)
 

@@ -1,8 +1,28 @@
 import { WorkerEntrypoint } from "cloudflare:workers";
-import { app } from "@/hono/app";
+import { App } from "@/hono/app";
+import { initDatabase } from "@repo/data-ops/database/setup";
+import { handleScheduled } from "./scheduled";
+import { handleQueue } from "./queues";
 
 export default class DataService extends WorkerEntrypoint<Env> {
+  constructor(ctx: ExecutionContext, env: Env) {
+		super(ctx, env)
+    console.log(env.CLOUDFLARE_ENV + ' Data Service Worker starting up...');
+		// initDatabase({
+    //   host: env.DATABASE_HOST,
+    //   username: env.DATABASE_USERNAME,
+    //   password: env.DATABASE_PASSWORD,
+    // })
+	}
   fetch(request: Request) {
-    return app.fetch(request, this.env, this.ctx);
+    return App.fetch(request, this.env, this.ctx);
+  }
+
+  async scheduled(controller: ScheduledController) {
+    await handleScheduled(controller, this.env, this.ctx);
+  }
+
+  async queue(batch: MessageBatch<ExampleQueueMessage>) {
+    await handleQueue(batch, this.env);
   }
 }

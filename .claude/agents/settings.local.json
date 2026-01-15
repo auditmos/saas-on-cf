@@ -5,6 +5,9 @@
       "Bash(grep:*)",
       "Bash(find:*)",
       "Bash(awk:*)"
+    ],
+    "deny": [
+      "Bash(rm -rf:*)"
     ]
   }
 }
