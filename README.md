@@ -55,7 +55,7 @@ Validation schemas using Zod.
 
 Example: `user.ts` exports `UserSchema` schema.
 
-#### `src/database/`
+#### [`src/database/`](./packages/data-ops/src/database/)
 - **`setup.ts`** - DB client initialization (`getDb()` function)
 - **`seed/`** - Data seeding utilities
 
