@@ -5,17 +5,19 @@ Modular web application template
 ## Architecture
 
 Monorepo using [pnpm workspace](https://pnpm.io/workspaces) with modular packages shared across apps:
+
 - [apps/user-application](./apps/user-application/) - TanStack Start consumer-facing app
 - [apps/data-service](./apps/data-service/) - Backend service for long-running tasks
 - [packages/data-ops](./packages/data-ops/) - Shared DB layer (schemas, queries, auth)
 
 Stack: 
+
 - [Better Auth](https://www.better-auth.com/docs/introduction), 
 - [Drizzle ORM](https://orm.drizzle.team/docs/overview), 
 - [Cloudflare Workers](https://developers.cloudflare.com/workers/), 
 - [Neon Postgres](https://neon.tech).
 
-## packages/data-ops
+## [packages/data-ops](./packages/data-ops/)
 
 Central shared package for all database operations. Both apps consume this package for type-safe DB access.
 
@@ -23,7 +25,7 @@ Central shared package for all database operations. Both apps consume this packa
 
 ### Directory Structure
 
-#### `src/drizzle/`
+#### [`src/drizzle/`](./packages/data-ops/src/drizzle/)
 Core database definitions using Drizzle ORM.
 
 - **`schema.ts`** - Main application tables
@@ -31,7 +33,7 @@ Core database definitions using Drizzle ORM.
 - **`relations.ts`** - Drizzle relational queries config (defines joins between tables)
 - **`migrations/{env}/`** - Migration history per environment (dev/staging/production)
 
-#### `src/queries/`
+#### [`src/queries/`](./packages/data-ops/src/queries/)
 Reusable database operations exported as functions.
 
 Example: `user.ts` exports `getUser()`
@@ -43,7 +45,7 @@ import { getUser } from "data-ops/queries/user";
 const user = await getUser(userId);
 ```
 
-#### `src/zod-schema/`
+#### [`src/zod-schema/`](./packages/data-ops/src/zod-schema/)
 Validation schemas using Zod.
 - API request/response
 - Forms
@@ -57,7 +59,7 @@ Example: `user.ts` exports `UserSchema` schema.
 - **`setup.ts`** - DB client initialization (`getDb()` function)
 - **`seed/`** - Data seeding utilities
 
-#### `src/auth/`
+#### [`src/auth/`](./packages/data-ops/src/auth/)
 Better Auth configuration.
 - **`setup.ts`** - Auth config (providers, plugins)
 - **`server.ts`** - Auth server instance
@@ -87,7 +89,7 @@ Installs all dependencies and builds data-ops package.
 
 ```bash
 pnpm run dev:user-application  # TanStack Start app (port 3000)
-pnpm run dev:data-service      # Hono backend service
+pnpm run dev:data-service      # Hono backend service (port 8788)
 ```
 
 ### Database Migrations
@@ -106,7 +108,9 @@ Replace `dev` with `staging` or `production`. Migrations stored in `src/drizzle/
 Config files in `packages/data-ops/`:
 - `.env.dev` - Local development
 - `.env.staging` - Staging
-- `.env.Replace `dev` with `staging` or `production`. 
+- `.env.production` - Production
+
+Replace dev` with `staging` or `production`. 
 
 Migrations stored in `src/drizzle/migrations/{env}/`.
 
