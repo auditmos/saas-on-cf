@@ -17,6 +17,7 @@
     "wrangler": "^4.59.2"
   },
   "dependencies": {
+    "@hono/zod-validator": "^0.7.6",
     "@repo/data-ops": "workspace:*",
     "hono": "^4.8.3"
   }

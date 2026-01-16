@@ -19,14 +19,30 @@ Cloudflare Durable Objects.
 Hono Framework.
 
 ##### [`src/hono/handlers/`](./src/hono/handlers)
+Route definitions with validation.
 
 ##### [`src/hono/middleware/`](./src/hono/middleware)
+Auth (bearer token) and rate limiting.
 
 ##### [`src/hono/services/`](./src/hono/services)
+Business logic layer.
 
 ##### [`src/hono/utils/`](./src/hono/utils)
 
 - **`app.ts`** - Main entrypoint
+
+##### Endpoints
+
+**Users** `/users`
+| Method | Path | Auth | Description |
+|--------|------|------|-------------|
+| GET | `/users` | - | List (`?limit=10&offset=0`) |
+| GET | `/users/:id` | - | Get |
+| POST | `/users` | 🔒 | Create |
+| PUT | `/users/:id` | 🔒 | Update |
+| DELETE | `/users/:id` | 🔒 | Delete |
+
+🔒 = `Authorization: Bearer <API_TOKEN>`
 
 #### [`src/queues/`](./src/queues/)
 Cloudflare Queues.
