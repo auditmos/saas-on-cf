@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "saas-on-cf",
+  "name": "saas-on-cf-ds",
   "main": "./src/index.ts",
   "compatibility_date": "2025-04-01",
   "compatibility_flags": [
@@ -19,7 +19,7 @@
 		* Local / Development environment
 		*/
     "dev": {
-      "name": "saas-on-cf",
+      "name": "saas-on-cf-ds-dev",
       // "kv_namespaces": [
       //   {
       //     "binding": "CACHE",
@@ -52,10 +52,10 @@
       // "routes": [
       //   {
       //     "zone_name": "YOUR_DOMAIN.COM",
-      //     "pattern": "stage.YOUR_DOMAIN.COM/api/*"
+      //     "pattern": "staging.YOUR_DOMAIN.COM/api/*"
       //   }
       // ],
-      "name": "saas-on-cf-staging",
+      "name": "saas-on-cf-ds-staging",
       // "kv_namespaces": [
       //   {
       //     "binding": "CACHE",
@@ -91,7 +91,7 @@
       //     "pattern": "YOUR_DOMAIN.COM/api/*"
       //   }
       // ],
-      "name": "saas-on-cf-production",
+      "name": "saas-on-cf-ds-production",
       // "kv_namespaces": [
       //   {
       //     "binding": "CACHE",

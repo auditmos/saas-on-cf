@@ -17,12 +17,12 @@ const navigation = {
   social: [
     {
       name: "GitHub",
-      href: "https://github.com/backpine/saas-kit",
+      href: "https://github.com/auditmos/saas-on-cf",
       icon: FaGithub,
     },
     {
       name: "X",
-      href: "https://x.com/backpinelabs",
+      href: "https://x.com/auditmos",
       icon: FaXTwitter,
     },
   ],
@@ -100,7 +100,7 @@ export function Footer() {
               Built with TanStack Start
             </p>
             <p className="text-xs text-muted-foreground mt-1">
-              &copy; {new Date().getFullYear()} Backpine SaaS Kit. MIT Licensed.
+              &copy; {new Date().getFullYear()} auditmos SaaS Kit. MIT Licensed.
             </p>
           </div>
         </div>

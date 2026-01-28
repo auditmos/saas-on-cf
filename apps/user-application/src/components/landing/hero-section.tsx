@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Github, Sparkles, Zap, Shield } from "lucide-react";
-import { Link } from "@tanstack/react-router";
+import { Github, Sparkles, Zap, Shield } from "lucide-react";
 
 export function HeroSection() {
   return (
@@ -35,16 +34,10 @@ export function HeroSection() {
         </p>
 
         <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Link to="/docs">
-            <Button size="lg" className="group">
-              Get Started
-              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Button>
-          </Link>
 
           <Button variant="outline" size="lg" asChild>
             <a
-              href="https://github.com/backpine/saas-kit"
+              href="https://github.com/auditmos/saas-on-cf"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center"

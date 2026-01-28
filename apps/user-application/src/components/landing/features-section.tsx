@@ -8,8 +8,7 @@ import {
   Palette, 
   Code,
   Server,
-  Layers,
-  GitBranch
+  Layers 
 } from "lucide-react"
 
 const features = [
@@ -79,13 +78,6 @@ const templateFeatures = [
     highlight: true
   },
   {
-    image: "/polar.png",
-    title: "Polar Payments",
-    description: "Modern subscription management and payment processing. No webhooks needed, developer-focused API with built-in product metadata.",
-    badge: "Payments",
-    highlight: true
-  },
-  {
     image: "/pnpm.webp",
     title: "Monorepo Architecture",
     description: "Organized workspace structure with pnpm. Shared components, utilities, and configurations across multiple applications.",
@@ -108,7 +100,7 @@ export function FeaturesSection() {
           </p>
         </div>
         
-        <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-6 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-2 xl:grid-cols-4">
+        <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-6 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
           {templateFeatures.map((feature) => {
             return (
               <Card key={feature.title} className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-primary/20">

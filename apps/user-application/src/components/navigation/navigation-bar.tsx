@@ -32,7 +32,7 @@ const navigationItems: NavigationItem[] = [
   },
   {
     label: "GitHub",
-    href: "https://github.com/backpine/saas-kit",
+    href: "https://github.com/auditmos/saas-on-cf",
     isExternal: true,
   },
 ];
