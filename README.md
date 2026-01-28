@@ -118,6 +118,10 @@ Sample `.env` file with minimum number of values available - [.env.example](./pa
 
 ## Deployment
 
+### Cloudflare Account Configuration
+
+If you want to deploy to a different Cloudflare account that is not logged in globally on your machine, prepare a `.env` file in the main directory with values from `.env.example`. This allows you to specify account credentials for deployment without changing your global Cloudflare configuration.
+
 ### User Application
 
 Once the deployment is done, Cloudflare will response with URL to view the deployment. If you want to change the name associated with Worker, do so by changing the `name` in the [wrangler.jsonc](./apps/user-application/wrangler.jsonc) file.
