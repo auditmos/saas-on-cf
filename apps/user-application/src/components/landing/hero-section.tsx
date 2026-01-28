@@ -4,7 +4,7 @@ import { Github, Sparkles, Zap, Shield } from "lucide-react";
 
 export function HeroSection() {
   return (
-    <section className="relative px-6 lg:px-8 py-24 sm:py-32">
+    <section className="relative px-6 lg:px-8 pt-24 sm:pt-32 pb-12 sm:pb-16">
       <div className="mx-auto max-w-4xl text-center">
         <div className="mb-8 flex flex-wrap justify-center gap-2">
           <Badge variant="secondary" className="mb-4">

@@ -88,7 +88,7 @@ const templateFeatures = [
 
 export function FeaturesSection() {
   return (
-    <section id="features" className="py-24 sm:py-32">
+    <section id="features" className="pt-12 sm:pt-16 pb-24 sm:pb-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         {/* Template Features Section */}
         <div className="mx-auto max-w-2xl text-center">
