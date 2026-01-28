@@ -52,11 +52,77 @@ Server functions with middleware support.
 
 - **`example-functions.ts`** - Sample server function
 
+##### [`src/core/forms/`](./src/core/forms/)
+TanStack Form definitions for form handling with server validation.
+
 ##### [`src/core/middleware/`](./src/core/middleware/)
 Server-side middleware for authentication, validation, and more.
 
 - **`auth.ts`** - Authentication middleware (includes `protectedFunctionMiddleware` and `protectedRequestMiddleware`)
 - **`example-middleware.ts`** - Sample middleware
+
+### Server Functions & Data Access
+
+> **Detailed Reference:** See [docs/003-server-function-reference.md](../../docs/003-server-function-reference.md) for complete implementation guide.
+
+#### What: Three Data Access Patterns
+
+| Pattern | Flow | Use Case |
+|---------|------|----------|
+| **1. Server Fn → data-service** | Browser → Server Function → Service Binding → data-service API | CRUD with business logic, shared APIs |
+| **2. Server Fn → data-ops** | Browser → Server Function → data-ops → Database | Auth, performance-critical, transactions |
+| **3. Client → data-service** | Browser → data-service (public API) | Mobile apps, SPAs, real-time features |
+
+#### How: Choosing the Right Pattern
+
+```
+                    Need server-side logic?
+                           │
+              ┌────────────┴────────────┐
+              │ YES                     │ NO
+              ▼                         ▼
+    Is the operation also         Pattern 3:
+    used by external APIs?        Client → data-service
+              │                   (requires public API setup)
+    ┌─────────┴─────────┐
+    │ YES               │ NO
+    ▼                   ▼
+Pattern 1:          Pattern 2:
+Server Fn →         Server Fn → data-ops
+data-service        (direct database)
+```
+
+#### Why: Trade-offs
+
+| Consideration | Pattern 1 (via data-service) | Pattern 2 (direct data-ops) | Pattern 3 (client direct) |
+|--------------|------------------------------|----------------------------|--------------------------|
+| **Latency** | Higher (2 hops) | Lower (1 hop) | Medium |
+| **Code reuse** | Shares with external APIs | Frontend-specific | Shares with external APIs |
+| **SSR support** | Yes | Yes | No |
+| **Complexity** | Medium | Low | Low (but auth is harder) |
+
+#### Quick Reference
+
+| Operation Type | Recommended Pattern |
+|----------------|-------------------|
+| Auth/session | Pattern 2 (data-ops) |
+| User CRUD | Pattern 1 (data-service) |
+| Dashboard aggregations | Pattern 2 (data-ops) |
+| Mobile API | Pattern 3 (client direct) |
+| Admin operations | Pattern 1 (data-service) |
+
+#### Form Handling
+
+Two approaches for forms:
+
+1. **TanStack Form + FormData** - For complex forms with validation
+   - Progressive enhancement (works without JS)
+   - Server + client validation
+   - Requires: `@tanstack/react-form`, `@tanstack/react-form-start`
+
+2. **Direct Server Functions** - For simple mutations
+   - Use with TanStack Query (`useMutation`)
+   - Good for delete buttons, toggles
 
 #### [`src/components/`](./src/components/)
 React components organized by feature.
@@ -92,14 +158,71 @@ Shared utilities and client libraries.
 - **`auth-client.ts`** - Better Auth client configuration
 - **`utils.ts`** - Utility functions
 
-### Service Bindings
+### Service Bindings vs Environment Variables
 
-The application connects to the data service via Cloudflare service bindings:
+#### Service Bindings (Current Setup)
 
-- **`DATA_SERVICE`** - Binding to the data service worker
-  - **dev**: `saas-on-cf-ds-dev`
-  - **staging**: `saas-on-cf-ds-staging`
-  - **production**: `saas-on-cf-ds-production`
+The application connects to `data-service` via **Cloudflare service bindings** - internal worker-to-worker communication.
+
+```jsonc
+// wrangler.jsonc
+"services": [
+  {
+    "binding": "DATA_SERVICE",
+    "service": "saas-on-cf-ds-dev"
+  }
+]
+```
+
+**Configuration per environment:**
+- **dev**: `saas-on-cf-ds-dev`
+- **staging**: `saas-on-cf-ds-staging`
+- **production**: `saas-on-cf-ds-production`
+
+**Usage in code:**
+```typescript
+import { env } from "cloudflare:workers";
+
+const response = await env.DATA_SERVICE.fetch(
+  new Request("https://internal/users")  // hostname ignored
+);
+```
+
+**Benefits:**
+- Faster (Cloudflare internal network, no public internet hop)
+- More secure (`data-service` not publicly exposed)
+- No CORS configuration needed
+- No URL management per environment
+
+#### When to Use Vars (Public API URLs)
+
+Use `vars` only when you need **public API access** (mobile apps, third-party integrations):
+
+```jsonc
+// wrangler.jsonc - Only if exposing data-service publicly
+"vars": {
+  "PUBLIC_API_URL": "https://api.your-domain.com"
+}
+```
+
+This would require:
+1. Adding public routes to `data-service/wrangler.jsonc`
+2. CORS middleware in `data-service`
+3. Client-side auth token management
+
+#### Comparison
+
+| Aspect | Service Binding (`services`) | Env Var (`vars`) |
+|--------|------------------------------|------------------|
+| **Network** | Cloudflare internal | Public internet |
+| **Speed** | Faster | Slower |
+| **Security** | Private (not exposed) | Must secure endpoint |
+| **Use case** | Server functions (Pattern 1) | Client direct calls (Pattern 3) |
+| **Setup** | Just binding config | Routes + CORS + auth |
+
+#### Recommendation
+
+**Use service bindings** (current setup) for all server-side operations. Only add public API routes + vars when you actually need external client access.
 
 ### Environment Variables
 

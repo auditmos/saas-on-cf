@@ -17,6 +17,59 @@ Stack:
 - [Cloudflare Workers](https://developers.cloudflare.com/workers/), 
 - [Neon Postgres](https://neon.tech).
 
+### Design Documents
+
+Implementation guides and architectural decisions:
+
+- [001-user-api-endpoints.md](./docs/001-user-api-endpoints.md) - User API design for data-service
+- [002-webhook-implementation.md](./docs/002-webhook-implementation.md) - Webhook handling patterns
+- [003-server-function-reference.md](./docs/003-server-function-reference.md) - **Server functions & data access patterns**
+
+### Data Flow Overview
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                         Browser                                  │
+└─────────────────────────────┬───────────────────────────────────┘
+                              │
+              ┌───────────────┴───────────────┐
+              ▼                               ▼
+┌─────────────────────────┐       ┌─────────────────────────┐
+│   user-application      │       │   data-service          │
+│   (TanStack Start)      │       │   (Hono API)            │
+│                         │       │                         │
+│ • Server functions      │──────▶│ • REST endpoints        │
+│ • TanStack Form         │ via   │ • Business logic        │
+│ • SSR rendering         │binding│ • Rate limiting         │
+└───────────┬─────────────┘       └───────────┬─────────────┘
+            │                                 │
+            │       ┌─────────────────────────┘
+            │       │
+            ▼       ▼
+     ┌─────────────────────┐
+     │     data-ops        │
+     │  (shared package)   │
+     │                     │
+     │ • Zod schemas       │
+     │ • Drizzle queries   │
+     │ • Better Auth       │
+     └──────────┬──────────┘
+               │
+               ▼
+        ┌────────────┐
+        │  Postgres  │
+        │   (Neon)   │
+        └────────────┘
+```
+
+**Three data access patterns** (see [003-server-function-reference.md](./docs/003-server-function-reference.md)):
+
+| Pattern | When to Use |
+|---------|-------------|
+| Server Fn → data-service | CRUD with business logic, shared APIs |
+| Server Fn → data-ops | Auth, performance-critical, transactions |
+| Client → data-service | Mobile apps, SPAs, real-time features |
+
 ## [packages/data-ops](./packages/data-ops/)
 
 Central shared package for all database operations. Both apps consume this package for type-safe DB access.
