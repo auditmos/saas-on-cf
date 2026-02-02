@@ -1,0 +1,28 @@
+import { createFileRoute, Outlet, Link } from '@tanstack/react-router';
+
+export const Route = createFileRoute('/demo')({
+  component: DemoLayout,
+});
+
+function DemoLayout() {
+  return (
+    <div className="min-h-screen bg-background">
+      <header className="border-b">
+        <div className="container mx-auto px-4 py-4">
+          <h1 className="text-2xl font-bold">Data Flow Demos</h1>
+          <nav className="mt-4 flex gap-4 flex-wrap">
+            <Link
+              to="/demo/users-list-api"
+              className="text-sm hover:underline [&.active]:font-bold"
+            >
+              GET Users (Client→API)
+            </Link>
+          </nav>
+        </div>
+      </header>
+      <main className="container mx-auto px-4 py-8">
+        <Outlet />
+      </main>
+    </div>
+  );
+}

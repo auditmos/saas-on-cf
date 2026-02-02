@@ -25,6 +25,7 @@ interface NavigationItem {
 
 const navigationItems: NavigationItem[] = [
   { label: "Features", href: "/#features", scrollTo: "features" },
+  { label: "Demos", href: "/demo" },
   {
     label: "Documentation",
     href: "/docs",
@@ -62,16 +63,6 @@ export function NavigationBar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  const handleSmoothScroll = (elementId: string) => {
-    const element = document.getElementById(elementId);
-    if (element) {
-      element.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }
-  };
 
   const handleNavClick = (item: NavigationItem) => {
     setIsOpen(false);

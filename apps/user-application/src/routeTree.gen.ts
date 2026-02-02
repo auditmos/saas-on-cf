@@ -9,11 +9,19 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as DemoRouteRouteImport } from './routes/demo/route'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DemoIndexRouteImport } from './routes/demo/index'
+import { Route as DemoUsersListApiRouteImport } from './routes/demo/users-list-api'
 import { Route as AuthAppIndexRouteImport } from './routes/_auth/app/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth.$'
 
+const DemoRouteRoute = DemoRouteRouteImport.update({
+  id: '/demo',
+  path: '/demo',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRouteRoute = AuthRouteRouteImport.update({
   id: '/_auth',
   getParentRoute: () => rootRouteImport,
@@ -22,6 +30,16 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const DemoIndexRoute = DemoIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+const DemoUsersListApiRoute = DemoUsersListApiRouteImport.update({
+  id: '/users-list-api',
+  path: '/users-list-api',
+  getParentRoute: () => DemoRouteRoute,
 } as any)
 const AuthAppIndexRoute = AuthAppIndexRouteImport.update({
   id: '/app/',
@@ -36,11 +54,16 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/demo': typeof DemoRouteRouteWithChildren
+  '/demo/users-list-api': typeof DemoUsersListApiRoute
+  '/demo/': typeof DemoIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/app': typeof AuthAppIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/demo/users-list-api': typeof DemoUsersListApiRoute
+  '/demo': typeof DemoIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/app': typeof AuthAppIndexRoute
 }
@@ -48,25 +71,50 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteRouteWithChildren
+  '/demo': typeof DemoRouteRouteWithChildren
+  '/demo/users-list-api': typeof DemoUsersListApiRoute
+  '/demo/': typeof DemoIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/_auth/app/': typeof AuthAppIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/auth/$' | '/app'
+  fullPaths:
+    | '/'
+    | '/demo'
+    | '/demo/users-list-api'
+    | '/demo/'
+    | '/api/auth/$'
+    | '/app'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/auth/$' | '/app'
-  id: '__root__' | '/' | '/_auth' | '/api/auth/$' | '/_auth/app/'
+  to: '/' | '/demo/users-list-api' | '/demo' | '/api/auth/$' | '/app'
+  id:
+    | '__root__'
+    | '/'
+    | '/_auth'
+    | '/demo'
+    | '/demo/users-list-api'
+    | '/demo/'
+    | '/api/auth/$'
+    | '/_auth/app/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
+  DemoRouteRoute: typeof DemoRouteRouteWithChildren
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/demo': {
+      id: '/demo'
+      path: '/demo'
+      fullPath: '/demo'
+      preLoaderRoute: typeof DemoRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_auth': {
       id: '/_auth'
       path: ''
@@ -80,6 +128,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/demo/': {
+      id: '/demo/'
+      path: '/'
+      fullPath: '/demo/'
+      preLoaderRoute: typeof DemoIndexRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
+    '/demo/users-list-api': {
+      id: '/demo/users-list-api'
+      path: '/users-list-api'
+      fullPath: '/demo/users-list-api'
+      preLoaderRoute: typeof DemoUsersListApiRouteImport
+      parentRoute: typeof DemoRouteRoute
     }
     '/_auth/app/': {
       id: '/_auth/app/'
@@ -110,9 +172,24 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
   AuthRouteRouteChildren,
 )
 
+interface DemoRouteRouteChildren {
+  DemoUsersListApiRoute: typeof DemoUsersListApiRoute
+  DemoIndexRoute: typeof DemoIndexRoute
+}
+
+const DemoRouteRouteChildren: DemoRouteRouteChildren = {
+  DemoUsersListApiRoute: DemoUsersListApiRoute,
+  DemoIndexRoute: DemoIndexRoute,
+}
+
+const DemoRouteRouteWithChildren = DemoRouteRoute._addFileChildren(
+  DemoRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRouteRoute: AuthRouteRouteWithChildren,
+  DemoRouteRoute: DemoRouteRouteWithChildren,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport

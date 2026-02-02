@@ -37,7 +37,13 @@ export const UserListResponse = z.object({
   pagination: PaginationMetaSchema
 });
 
+export const ApiErrorResponseSchema = z.object({
+  message: z.string().optional(),
+  code: z.string().optional()
+});
+
 export type User = z.infer<typeof UserSchema>;
+export type ApiErrorResponse = z.infer<typeof ApiErrorResponseSchema>;
 export type UserCreateInput = z.infer<typeof UserCreateRequest>;
 export type UserUpdateInput = z.infer<typeof UserUpdateRequest>;
 export type PaginationQuery = z.infer<typeof PaginationQuerySchema>;
