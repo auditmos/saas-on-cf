@@ -17,6 +17,12 @@ function DemoLayout() {
             >
               GET Users (Client→API)
             </Link>
+            <Link
+              to="/demo/user-detail-direct"
+              className="text-sm hover:underline [&.active]:font-bold"
+            >
+              GET User (Server→data-ops)
+            </Link>
           </nav>
         </div>
       </header>

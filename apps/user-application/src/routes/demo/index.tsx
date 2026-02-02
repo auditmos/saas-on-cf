@@ -14,6 +14,13 @@ function DemoIndexPage() {
       pattern: 'Pattern A',
       ssr: false,
     },
+    {
+      title: 'GET User - Server → data-ops',
+      description: 'Server function queries data-ops directly, bypassing API layer',
+      href: '/demo/user-detail-direct' as const,
+      pattern: 'Pattern C',
+      ssr: true,
+    },
   ];
 
   return (
