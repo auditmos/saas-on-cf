@@ -21,6 +21,13 @@ function DemoIndexPage() {
       pattern: 'Pattern C',
       ssr: true,
     },
+    {
+      title: 'POST User - Server → Binding',
+      description: 'Server function calls data-service via Cloudflare service binding',
+      href: '/demo/user-create-binding' as const,
+      pattern: 'Pattern B',
+      ssr: true,
+    },
   ];
 
   return (

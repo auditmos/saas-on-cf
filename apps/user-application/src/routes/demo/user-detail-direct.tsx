@@ -43,9 +43,9 @@ function UserDetailDirectDemo() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold">GET User - Server → data-ops</h2>
+        <h2 className="text-2xl font-bold">GET User - Server → data-service (Binding)</h2>
         <p className="text-muted-foreground mt-1">
-          Server function directly queries database via data-ops package
+          Server function queries data-service via Cloudflare service binding
         </p>
       </div>
 
@@ -64,41 +64,39 @@ function UserDetailDirectDemo() {
     ▼
 Server Function (getUserDirect)
     │
-    │ 2. Zod validation → data-ops query
+    │ 2. Zod validation
     │
     ▼
-data-ops: getUser(id) → Mock data
+env.DATA_SERVICE.fetch('/users/{id}')
     │
-    │ 3. Result cached in React Query
-    │
-    ▼
-Component Renders
-    │
-    │ 4. useQuery reads from cache (no refetch)
-    │    staleTime prevents immediate refetch
+    │ 3. Internal network (service binding)
     │
     ▼
-Smooth UI (no flash)`}
+data-service (Hono API)
+    │
+    │ 4. Result cached in React Query
+    │
+    ▼
+Component Renders (no refetch flash)`}
           </pre>
 
           <div className="grid md:grid-cols-2 gap-4">
             <div>
               <h4 className="font-semibold text-green-700">✓ Pros</h4>
               <ul className="text-sm list-disc list-inside space-y-1 mt-2">
-                <li>Lowest latency (no extra hop)</li>
                 <li>Full SSR support</li>
-                <li>Direct transaction control</li>
-                <li>No API serialization overhead</li>
-                <li>Server session auth</li>
+                <li>Internal network (no CORS)</li>
+                <li>Shared data with other demos</li>
+                <li>Server-side auth token</li>
+                <li>Centralized business logic</li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold text-red-700">✗ Cons</h4>
               <ul className="text-sm list-disc list-inside space-y-1 mt-2">
-                <li>Logic not shared with data-service</li>
-                <li>Requires D1 binding</li>
-                <li>Tighter coupling to database</li>
-                <li>Testing needs DB setup</li>
+                <li>Extra hop latency</li>
+                <li>Depends on data-service</li>
+                <li>API token management</li>
               </ul>
             </div>
           </div>
@@ -106,17 +104,16 @@ Smooth UI (no flash)`}
           <div className="bg-blue-50 dark:bg-blue-950 p-4 rounded">
             <h4 className="font-semibold">When to Use</h4>
             <p className="text-sm mt-1">
-              Best for performance-critical reads, app-specific queries, complex joins,
-              dashboard aggregations, and auth/session operations.
+              Best for SSR with shared data source, when data-service has the
+              endpoint, and when you need consistent data across all demos.
             </p>
           </div>
 
           <div className="bg-green-50 dark:bg-green-950 p-4 rounded">
-            <h4 className="font-semibold">SSR Advantage</h4>
+            <h4 className="font-semibold">SSR + Service Binding</h4>
             <p className="text-sm mt-1">
-              This page uses route loader for SSR. The initial user data was loaded
-              on the server before the page rendered, providing instant display
-              without loading states on first visit.
+              Route loader prefetches via service binding (internal network).
+              Data cached in React Query for instant client render.
             </p>
           </div>
         </CardContent>

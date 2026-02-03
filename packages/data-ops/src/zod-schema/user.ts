@@ -7,8 +7,10 @@ export const UserSchema = z.object({
 });
 
 export const UserCreateRequest = z.object({
-  name: z.string().min(1).max(30),
-  email: z.string().email()
+  name: z.string()
+    .min(1, 'Name is required')
+    .max(30, 'Name must be at most 30 characters'),
+  email: z.string().email('Invalid email format')
 });
 
 export const UserUpdateRequest = z.object({

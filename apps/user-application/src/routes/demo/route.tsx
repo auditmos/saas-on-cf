@@ -23,6 +23,12 @@ function DemoLayout() {
             >
               GET User (Server→data-ops)
             </Link>
+            <Link
+              to="/demo/user-create-binding"
+              className="text-sm hover:underline [&.active]:font-bold"
+            >
+              POST User (Server→Binding)
+            </Link>
           </nav>
         </div>
       </header>
