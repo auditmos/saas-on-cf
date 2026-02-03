@@ -14,6 +14,7 @@ import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DemoIndexRouteImport } from './routes/demo/index'
 import { Route as DemoUsersListApiRouteImport } from './routes/demo/users-list-api'
+import { Route as DemoUserUpdateDirectRouteImport } from './routes/demo/user-update-direct'
 import { Route as DemoUserDetailDirectRouteImport } from './routes/demo/user-detail-direct'
 import { Route as DemoUserCreateBindingRouteImport } from './routes/demo/user-create-binding'
 import { Route as AuthAppIndexRouteImport } from './routes/_auth/app/index'
@@ -43,6 +44,11 @@ const DemoUsersListApiRoute = DemoUsersListApiRouteImport.update({
   path: '/users-list-api',
   getParentRoute: () => DemoRouteRoute,
 } as any)
+const DemoUserUpdateDirectRoute = DemoUserUpdateDirectRouteImport.update({
+  id: '/user-update-direct',
+  path: '/user-update-direct',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
 const DemoUserDetailDirectRoute = DemoUserDetailDirectRouteImport.update({
   id: '/user-detail-direct',
   path: '/user-detail-direct',
@@ -69,6 +75,7 @@ export interface FileRoutesByFullPath {
   '/demo': typeof DemoRouteRouteWithChildren
   '/demo/user-create-binding': typeof DemoUserCreateBindingRoute
   '/demo/user-detail-direct': typeof DemoUserDetailDirectRoute
+  '/demo/user-update-direct': typeof DemoUserUpdateDirectRoute
   '/demo/users-list-api': typeof DemoUsersListApiRoute
   '/demo/': typeof DemoIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -78,6 +85,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/demo/user-create-binding': typeof DemoUserCreateBindingRoute
   '/demo/user-detail-direct': typeof DemoUserDetailDirectRoute
+  '/demo/user-update-direct': typeof DemoUserUpdateDirectRoute
   '/demo/users-list-api': typeof DemoUsersListApiRoute
   '/demo': typeof DemoIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -90,6 +98,7 @@ export interface FileRoutesById {
   '/demo': typeof DemoRouteRouteWithChildren
   '/demo/user-create-binding': typeof DemoUserCreateBindingRoute
   '/demo/user-detail-direct': typeof DemoUserDetailDirectRoute
+  '/demo/user-update-direct': typeof DemoUserUpdateDirectRoute
   '/demo/users-list-api': typeof DemoUsersListApiRoute
   '/demo/': typeof DemoIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -102,6 +111,7 @@ export interface FileRouteTypes {
     | '/demo'
     | '/demo/user-create-binding'
     | '/demo/user-detail-direct'
+    | '/demo/user-update-direct'
     | '/demo/users-list-api'
     | '/demo/'
     | '/api/auth/$'
@@ -111,6 +121,7 @@ export interface FileRouteTypes {
     | '/'
     | '/demo/user-create-binding'
     | '/demo/user-detail-direct'
+    | '/demo/user-update-direct'
     | '/demo/users-list-api'
     | '/demo'
     | '/api/auth/$'
@@ -122,6 +133,7 @@ export interface FileRouteTypes {
     | '/demo'
     | '/demo/user-create-binding'
     | '/demo/user-detail-direct'
+    | '/demo/user-update-direct'
     | '/demo/users-list-api'
     | '/demo/'
     | '/api/auth/$'
@@ -172,6 +184,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoUsersListApiRouteImport
       parentRoute: typeof DemoRouteRoute
     }
+    '/demo/user-update-direct': {
+      id: '/demo/user-update-direct'
+      path: '/user-update-direct'
+      fullPath: '/demo/user-update-direct'
+      preLoaderRoute: typeof DemoUserUpdateDirectRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
     '/demo/user-detail-direct': {
       id: '/demo/user-detail-direct'
       path: '/user-detail-direct'
@@ -218,6 +237,7 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 interface DemoRouteRouteChildren {
   DemoUserCreateBindingRoute: typeof DemoUserCreateBindingRoute
   DemoUserDetailDirectRoute: typeof DemoUserDetailDirectRoute
+  DemoUserUpdateDirectRoute: typeof DemoUserUpdateDirectRoute
   DemoUsersListApiRoute: typeof DemoUsersListApiRoute
   DemoIndexRoute: typeof DemoIndexRoute
 }
@@ -225,6 +245,7 @@ interface DemoRouteRouteChildren {
 const DemoRouteRouteChildren: DemoRouteRouteChildren = {
   DemoUserCreateBindingRoute: DemoUserCreateBindingRoute,
   DemoUserDetailDirectRoute: DemoUserDetailDirectRoute,
+  DemoUserUpdateDirectRoute: DemoUserUpdateDirectRoute,
   DemoUsersListApiRoute: DemoUsersListApiRoute,
   DemoIndexRoute: DemoIndexRoute,
 }

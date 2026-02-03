@@ -2,6 +2,7 @@ import { createServerFn } from '@tanstack/react-start';
 import { z } from 'zod';
 import { env } from 'cloudflare:workers';
 import { UserSchema, type User } from '@repo/data-ops/zod-schema/user';
+import { getUser } from '@repo/data-ops/queries/user';
 
 const GetUserInput = z.object({
   id: z.string().min(1, 'User ID is required'),
@@ -36,4 +37,16 @@ export const getUserDirect = createServerFn()
     }
 
     return UserSchema.parse(await response.json());
+  });
+
+/**
+ * Get user by ID via data-ops directly (same mock store as mutations)
+ * Data Flow: Browser → Server Function → data-ops → Mock Store → Response
+ */
+export const getUserDataOps = createServerFn()
+  .inputValidator((data: GetUserInputType) => GetUserInput.parse(data))
+  .handler(async (ctx): Promise<User | null> => {
+    const { id } = ctx.data;
+    const user = await getUser(id);
+    return user ? UserSchema.parse(user) : null;
   });

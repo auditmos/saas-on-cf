@@ -14,10 +14,10 @@ This demo showcases **Pattern C for mutations**: a server function directly call
 │  (React Client)  │
 │                  │
 │  TanStack Form   │
-│  or useMutation  │
+│  + useMutation   │
 └────────┬─────────┘
          │
-         │ 1. Form submit / mutation call
+         │ 1. Form validation → mutation.mutate()
          │
          ▼
 ┌──────────────────────────────────────┐
@@ -251,8 +251,9 @@ export const updateUserDirect = createServerFn({ method: 'POST' })
 ```tsx
 // apps/user-application/src/routes/demo/user-update-direct.tsx
 import { createFileRoute } from '@tanstack/react-router';
+import { useForm } from '@tanstack/react-form';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { getUserDirect } from '@/core/functions/user-queries';
 import { updateUserDirect } from '@/core/functions/user-mutations';
 import { userKeys } from '@/lib/query-keys';
@@ -268,8 +269,6 @@ export const Route = createFileRoute('/demo/user-update-direct')({
 function UserUpdateDirectDemo() {
   const queryClient = useQueryClient();
   const [userId, setUserId] = useState('1');
-  const [editName, setEditName] = useState('');
-  const [editEmail, setEditEmail] = useState('');
   const [isEditing, setIsEditing] = useState(false);
 
   // Fetch user data
@@ -282,55 +281,54 @@ function UserUpdateDirectDemo() {
   const updateMutation = useMutation({
     mutationFn: (data: { name?: string; email?: string }) =>
       updateUserDirect({ data: { id: userId, data } }),
-    
-    // Optimistic update
+
     onMutate: async (newData) => {
-      // Cancel outgoing refetches
       await queryClient.cancelQueries({ queryKey: userKeys.detail(userId) });
-      
-      // Snapshot previous value
       const previousUser = queryClient.getQueryData(userKeys.detail(userId));
-      
-      // Optimistically update
       queryClient.setQueryData(userKeys.detail(userId), (old: any) => ({
         ...old,
         ...newData,
       }));
-      
       return { previousUser };
     },
-    
-    // Rollback on error
+
     onError: (err, newData, context) => {
       if (context?.previousUser) {
         queryClient.setQueryData(userKeys.detail(userId), context.previousUser);
       }
     },
-    
-    // Refetch after success or error
+
+    onSuccess: () => {
+      setIsEditing(false);
+    },
+
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: userKeys.detail(userId) });
-      setIsEditing(false);
     },
   });
 
+  // TanStack Form for edit form state + validation
+  const form = useForm({
+    defaultValues: { name: '', email: '' },
+    onSubmit: async ({ value }) => {
+      const updates: { name?: string; email?: string } = {};
+      if (value.name !== user?.name) updates.name = value.name;
+      if (value.email !== user?.email) updates.email = value.email;
+
+      if (Object.keys(updates).length > 0) {
+        updateMutation.mutate(updates);
+      } else {
+        setIsEditing(false);
+      }
+    },
+  });
+
+  // Sync form with user data when entering edit mode
   const handleStartEdit = () => {
     if (user) {
-      setEditName(user.name);
-      setEditEmail(user.email);
+      form.setFieldValue('name', user.name);
+      form.setFieldValue('email', user.email);
       setIsEditing(true);
-    }
-  };
-
-  const handleSave = () => {
-    const updates: { name?: string; email?: string } = {};
-    if (editName !== user?.name) updates.name = editName;
-    if (editEmail !== user?.email) updates.email = editEmail;
-    
-    if (Object.keys(updates).length > 0) {
-      updateMutation.mutate(updates);
-    } else {
-      setIsEditing(false);
     }
   };
 
@@ -351,9 +349,9 @@ function UserUpdateDirectDemo() {
         </CardHeader>
         <CardContent className="space-y-4">
           <pre className="bg-muted p-4 rounded text-sm overflow-x-auto">
-{`Browser (TanStack Query Mutation)
+{`Browser (TanStack Form + useMutation)
     │
-    │ 1. useMutation triggers updateUserDirect()
+    │ 1. Form validation → mutation.mutate()
     │    + Optimistic update applied to cache
     │
     ▼
@@ -475,38 +473,82 @@ Browser (UI reflects final state)`}
           {user && (
             <div className="border rounded p-4 space-y-4">
               {isEditing ? (
-                <>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Name</label>
-                    <Input
-                      value={editName}
-                      onChange={(e) => setEditName(e.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Email</label>
-                    <Input
-                      type="email"
-                      value={editEmail}
-                      onChange={(e) => setEditEmail(e.target.value)}
-                    />
-                  </div>
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    form.handleSubmit();
+                  }}
+                  className="space-y-4"
+                >
+                  <form.Field
+                    name="name"
+                    validators={{
+                      onChange: ({ value }) =>
+                        !value ? 'Name is required' : undefined,
+                      onBlur: ({ value }) =>
+                        value.length > 30 ? 'Name must be at most 30 characters' : undefined,
+                    }}
+                  >
+                    {(field) => (
+                      <div className="space-y-1">
+                        <label htmlFor={field.name} className="text-sm font-medium">Name</label>
+                        <Input
+                          id={field.name}
+                          value={field.state.value}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          onBlur={field.handleBlur}
+                        />
+                        {field.state.meta.errors.map((error) => (
+                          <p key={error as string} className="text-red-500 text-sm">{error}</p>
+                        ))}
+                      </div>
+                    )}
+                  </form.Field>
+
+                  <form.Field
+                    name="email"
+                    validators={{
+                      onChange: ({ value }) => {
+                        if (!value) return 'Email is required';
+                        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return 'Invalid email';
+                      },
+                    }}
+                  >
+                    {(field) => (
+                      <div className="space-y-1">
+                        <label htmlFor={field.name} className="text-sm font-medium">Email</label>
+                        <Input
+                          id={field.name}
+                          type="email"
+                          value={field.state.value}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          onBlur={field.handleBlur}
+                        />
+                        {field.state.meta.errors.map((error) => (
+                          <p key={error as string} className="text-red-500 text-sm">{error}</p>
+                        ))}
+                      </div>
+                    )}
+                  </form.Field>
+
                   <div className="flex gap-2">
-                    <Button 
-                      onClick={handleSave}
-                      disabled={updateMutation.isPending}
-                    >
-                      {updateMutation.isPending ? 'Saving...' : 'Save'}
-                    </Button>
-                    <Button 
-                      variant="outline" 
+                    <form.Subscribe selector={(state) => state.canSubmit}>
+                      {(canSubmit) => (
+                        <Button type="submit" disabled={!canSubmit || updateMutation.isPending}>
+                          {updateMutation.isPending ? 'Saving...' : 'Save'}
+                        </Button>
+                      )}
+                    </form.Subscribe>
+                    <Button
+                      type="button"
+                      variant="outline"
                       onClick={() => setIsEditing(false)}
                       disabled={updateMutation.isPending}
                     >
                       Cancel
                     </Button>
                   </div>
-                </>
+                </form>
               ) : (
                 <>
                   <div className="grid grid-cols-2 gap-2">
@@ -542,43 +584,54 @@ Browser (UI reflects final state)`}
         </CardHeader>
         <CardContent>
           <pre className="bg-muted p-4 rounded text-sm overflow-x-auto">
-{`// Server Function (direct data-ops)
-import { updateUser } from '@repo/data-ops/queries/user';
-
-export const updateUserDirect = createServerFn({ method: 'POST' })
-  .middleware([protectedFunctionMiddleware])
-  .validator((data) => UpdateUserInput.parse(data))
-  .handler(async ({ data, context }) => {
-    // Authorization check
-    const isOwner = targetUser.id === context.session.user.id;
-    if (!isOwner && !isAdmin) throw new MutationError('Forbidden', 'FORBIDDEN');
-    
-    // Direct mutation - no network hop!
-    const updated = await updateUser(data.id, data.data);
-    return UserSchema.parse(updated);
-  });
-
-// Component with optimistic updates
+{`// useMutation for submission + optimistic updates
 const updateMutation = useMutation({
   mutationFn: (data) => updateUserDirect({ data: { id, data } }),
-  
   onMutate: async (newData) => {
-    await queryClient.cancelQueries({ queryKey: userKeys.detail(id) });
     const previous = queryClient.getQueryData(userKeys.detail(id));
     queryClient.setQueryData(userKeys.detail(id), (old) => ({
       ...old, ...newData
     }));
     return { previous };
   },
-  
   onError: (err, newData, ctx) => {
     queryClient.setQueryData(userKeys.detail(id), ctx.previous);
   },
-  
   onSettled: () => {
     queryClient.invalidateQueries({ queryKey: userKeys.detail(id) });
   },
-});`}
+});
+
+// TanStack Form for validation + form state
+const form = useForm({
+  defaultValues: { name: '', email: '' },
+  onSubmit: ({ value }) => {
+    const updates = {};
+    if (value.name !== user?.name) updates.name = value.name;
+    if (value.email !== user?.email) updates.email = value.email;
+    if (Object.keys(updates).length > 0) updateMutation.mutate(updates);
+  },
+});
+
+// Field with client validation
+<form.Field
+  name="name"
+  validators={{
+    onChange: ({ value }) => !value ? 'Required' : undefined,
+  }}
+>
+  {(field) => (
+    <Input
+      value={field.state.value}
+      onChange={(e) => field.handleChange(e.target.value)}
+    />
+  )}
+</form.Field>
+
+// Button uses mutation.isPending
+<Button disabled={!canSubmit || updateMutation.isPending}>
+  {updateMutation.isPending ? 'Saving...' : 'Save'}
+</Button>`}
           </pre>
         </CardContent>
       </Card>

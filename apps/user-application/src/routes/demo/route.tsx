@@ -29,6 +29,12 @@ function DemoLayout() {
             >
               POST User (Server→Binding)
             </Link>
+            <Link
+              to="/demo/user-update-direct"
+              className="text-sm hover:underline [&.active]:font-bold"
+            >
+              PUT User (Server→data-ops)
+            </Link>
           </nav>
         </div>
       </header>
