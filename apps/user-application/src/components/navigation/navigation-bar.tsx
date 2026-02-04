@@ -27,11 +27,6 @@ const navigationItems: NavigationItem[] = [
   { label: "Features", href: "/#features", scrollTo: "features" },
   { label: "Demos", href: "/demo" },
   {
-    label: "Documentation",
-    href: "/docs",
-    isExternal: false,
-  },
-  {
     label: "GitHub",
     href: "https://github.com/auditmos/saas-on-cf",
     isExternal: true,

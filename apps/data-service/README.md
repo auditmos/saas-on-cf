@@ -44,6 +44,14 @@ Business logic layer.
 
 🔒 = `Authorization: Bearer <API_TOKEN>`
 
+**Webhooks** `/webhooks`
+| Method | Path | Auth | Description |
+|--------|------|------|-------------|
+| POST | `/webhooks/user.sync` | 🔐 | Sync user from external system |
+| POST | `/webhooks/user.action` | 🔐 | Receive user action events |
+
+🔐 = standard-webhooks signature (`webhook-id`, `webhook-timestamp`, `webhook-signature` headers)
+
 #### [`src/queues/`](./src/queues/)
 Cloudflare Queues.
 

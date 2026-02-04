@@ -47,6 +47,23 @@ src/
 - `GET /health/live` - liveness (instant 200)
 - `GET /health/ready` - readiness (checks DB)
 - `GET|POST|PUT|DELETE /users/*` - CRUD (POST/PUT/DELETE require Bearer token)
+- `POST /webhooks/*` - inbound webhooks (signature verified)
+
+## Webhooks
+
+**Pattern:** verification middleware → handler → service → data-ops
+
+**Key constraint:** signature verification needs raw body string before JSON parsing. Cannot use `zValidator` as route middleware. Instead:
+1. Middleware reads body via `c.req.text()`, stores in context
+2. Verifies signature against raw string
+3. Handler parses body with `Schema.parse(JSON.parse(body))`
+
+**Headers (standard-webhooks):**
+- `webhook-id` - UUID, used for idempotency
+- `webhook-timestamp` - unix seconds, 5min tolerance
+- `webhook-signature` - `v1,<base64 HMAC-SHA256>`
+
+**Idempotency:** `webhook_logs.msgId` unique constraint - duplicates are no-ops
 
 ## Dev
 
@@ -69,3 +86,4 @@ Required in `.dev.vars` (local) or Cloudflare dashboard (remote):
 
 - Put DB queries here - add to `@repo/data-ops/queries`
 - Forget to rebuild data-ops after schema changes (`pnpm --filter @repo/data-ops build`)
+- Modify `worker-configuration.d.ts`, use `pnpm run cf-typegen`

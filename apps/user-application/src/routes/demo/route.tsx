@@ -9,37 +9,30 @@ function DemoLayout() {
     <div className="min-h-screen bg-background">
       <header className="border-b">
         <div className="container mx-auto px-4 py-4">
-          <h1 className="text-2xl font-bold">Data Flow Demos</h1>
-          <nav className="mt-4 flex gap-4 flex-wrap">
+          <Link to="/demo" className="text-2xl font-bold hover:underline">
+            Data Flow Demos
+          </Link>
+          <nav className="mt-4 flex gap-6">
             <Link
-              to="/demo/users-list-api"
+              to="/demo/direct"
               className="text-sm hover:underline [&.active]:font-bold"
+              activeOptions={{ exact: false }}
             >
-              GET Users (Client→API)
+              Direct (data-ops)
             </Link>
             <Link
-              to="/demo/user-detail-direct"
+              to="/demo/binding"
               className="text-sm hover:underline [&.active]:font-bold"
+              activeOptions={{ exact: false }}
             >
-              GET User (Server→data-ops)
+              Binding (service)
             </Link>
             <Link
-              to="/demo/user-create-binding"
+              to="/demo/api"
               className="text-sm hover:underline [&.active]:font-bold"
+              activeOptions={{ exact: false }}
             >
-              POST User (Server→Binding)
-            </Link>
-            <Link
-              to="/demo/user-update-direct"
-              className="text-sm hover:underline [&.active]:font-bold"
-            >
-              PUT User (Server→data-ops)
-            </Link>
-            <Link
-              to="/demo/user-delete-direct"
-              className="text-sm hover:underline [&.active]:font-bold"
-            >
-              DELETE User (Server→data-ops)
+              API (browser)
             </Link>
           </nav>
         </div>

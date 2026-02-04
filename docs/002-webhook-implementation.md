@@ -1,178 +1,210 @@
-# Webhook Implementation Reference
+# Webhook Implementation - Inbound Reference
 
 ## Overview
 
-Reference implementation for sending webhooks following [standard-webhooks spec](https://github.com/standard-webhooks/standard-webhooks). Uses HMAC-SHA256 signature verification, proper headers, and exponential backoff retries.
+Two inbound webhook endpoints in data-service that receive user events from external systems. Both verify signatures per [standard-webhooks](https://github.com/standard-webhooks/standard-webhooks), log every request to `webhook_logs`, and follow the handlers -> services -> data-ops pattern.
 
-## Goals
+- `POST /webhooks/user.sync` - syncs user data into DB. Basic reference implementation.
+- `POST /webhooks/user.action` - receives user action events, logs to DB. Structured for later CF Queue/Workflow enhancement.
 
-- Standard-webhooks compliant implementation
-- HMAC-SHA256 signature verification (symmetric)
-- Required headers: webhook-id, webhook-timestamp, webhook-signature
-- Exponential backoff with retry logic
-- TypeScript with proper interfaces (no `any` types)
-- Hono framework patterns
+## Signature Verification
 
-## Webhook Flow
+All inbound webhooks require standard-webhooks headers:
 
-1. Event occurs → trigger webhook
-2. Generate webhook-id (UUID), timestamp
-3. Sign payload: `id.timestamp.payload`
-4. Send POST to endpoint with headers
-5. Retry on failure (exponential backoff)
-6. Consumer verifies signature
+| Header | Description |
+|--------|-------------|
+| `webhook-id` | Unique message ID (UUID) |
+| `webhook-timestamp` | Unix epoch seconds |
+| `webhook-signature` | `v1,<base64 HMAC-SHA256>` (space-separated if multiple keys) |
 
-## Implementation
+Signed content: `${webhook-id}.${webhook-timestamp}.${raw body}`
 
-### Schemas (`packages/data-ops/src/zod-schema/webhook.ts`)
+Verification middleware runs before any handler logic. Timestamp tolerance: 5 minutes (replay protection). Comparison is constant-time.
+
+## DB Schema
+
+### `webhook_logs` table (`packages/data-ops/src/drizzle/schema.ts`)
 
 ```typescript
-import { z } from 'zod';
+import { pgTable, text, uuid, timestamp, jsonb } from "drizzle-orm/pg-core";
 
-// Base schema
-export const WebhookEventSchema = z.object({
-  type: z.string(),        // e.g., "user.created"
-  timestamp: z.string(),   // ISO 8601
-  data: z.unknown()        // event-specific payload
+export const webhookLogs = pgTable("webhook_logs", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  msgId: text("msg_id").notNull().unique(),
+  eventType: text("event_type").notNull(),
+  status: text("status").notNull().default("received"),  // received | processed | failed
+  payload: jsonb("payload").notNull(),
+  error: text("error"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+```
+
+`msgId` unique constraint provides idempotency - duplicate deliveries are rejected at the DB level.
+
+## Zod Schemas (`packages/data-ops/src/zod-schema/webhook.ts`)
+
+```typescript
+import { z } from "zod";
+
+// ============================================
+// Webhook headers (extracted before body parse)
+// ============================================
+
+export const WebhookHeadersSchema = z.object({
+  "webhook-id": z.string(),
+  "webhook-timestamp": z.string(),
+  "webhook-signature": z.string(),
 });
 
-// Typed event schemas
-export const UserCreatedDataSchema = z.object({
+// ============================================
+// user.sync event
+// ============================================
+
+export const UserSyncPayloadSchema = z.object({
   userId: z.string(),
   email: z.string().email(),
-  createdAt: z.string()
+  name: z.string(),
+  surname: z.string(),
 });
 
-export const UserUpdatedDataSchema = z.object({
+export const UserSyncEventSchema = z.object({
+  type: z.literal("user.sync"),
+  data: UserSyncPayloadSchema,
+});
+
+// ============================================
+// user.action event
+// ============================================
+
+export const UserActionPayloadSchema = z.object({
   userId: z.string(),
-  changes: z.record(z.string(), z.unknown())
+  action: z.string(),
+  metadata: z.record(z.string(), z.string()).optional(),
 });
 
-export const UserCreatedEventSchema = z.object({
-  type: z.literal('user.created'),
-  timestamp: z.string(),
-  data: UserCreatedDataSchema
+export const UserActionEventSchema = z.object({
+  type: z.literal("user.action"),
+  data: UserActionPayloadSchema,
 });
 
-export const UserUpdatedEventSchema = z.object({
-  type: z.literal('user.updated'),
-  timestamp: z.string(),
-  data: UserUpdatedDataSchema
-});
+// ============================================
+// Types
+// ============================================
 
-// Union of all typed events
-export const TypedWebhookEventSchema = z.discriminatedUnion('type', [
-  UserCreatedEventSchema,
-  UserUpdatedEventSchema
-]);
-
-export type UserCreatedEvent = z.infer<typeof UserCreatedEventSchema>;
-export type UserUpdatedEvent = z.infer<typeof UserUpdatedEventSchema>;
-export type TypedWebhookEvent = z.infer<typeof TypedWebhookEventSchema>;
-
-export const WebhookEndpointSchema = z.object({
-  id: z.string(),
-  url: z.string().url(),
-  secret: z.string(),      // whsec_... prefix
-  enabled: z.boolean()
-});
-
-export const WebhookDeliverySchema = z.object({
-  id: z.string(),
-  endpointId: z.string(),
-  eventType: z.string(),
-  status: z.enum(['pending', 'success', 'failed', 'disabled']),
-  attempts: z.number(),
-  lastAttemptAt: z.string().optional(),
-  nextRetryAt: z.string().optional()
-});
-
-export type WebhookEvent = z.infer<typeof WebhookEventSchema>;
-export type WebhookEndpoint = z.infer<typeof WebhookEndpointSchema>;
-export type WebhookDelivery = z.infer<typeof WebhookDeliverySchema>;
+export type WebhookHeaders = z.infer<typeof WebhookHeadersSchema>;
+export type UserSyncEvent = z.infer<typeof UserSyncEventSchema>;
+export type UserSyncPayload = z.infer<typeof UserSyncPayloadSchema>;
+export type UserActionEvent = z.infer<typeof UserActionEventSchema>;
+export type UserActionPayload = z.infer<typeof UserActionPayloadSchema>;
 ```
 
-### Signature Generation (`apps/data-service/src/services/webhook-signature.ts`)
+## Queries (`packages/data-ops/src/queries/webhook.ts`)
 
 ```typescript
-interface SignatureParams {
+import { eq } from "drizzle-orm";
+import { getDb } from "../database/setup";
+import { webhookLogs } from "../drizzle/schema";
+import { users } from "../drizzle/schema";
+import type { UserSyncPayload } from "../zod-schema/webhook";
+
+interface WebhookLogEntry {
   msgId: string;
-  timestamp: number;
-  payload: string;
-  secret: string;
+  eventType: string;
+  payload: Record<string, unknown>;
+  status?: string;
+  error?: string;
 }
 
-export async function generateSignature({
-  msgId,
-  timestamp,
-  payload,
-  secret
-}: SignatureParams): Promise<string> {
-  const signedContent = `${msgId}.${timestamp}.${payload}`;
+export async function insertWebhookLog(entry: WebhookLogEntry): Promise<void> {
+  const db = getDb();
+  await db
+    .insert(webhookLogs)
+    .values({
+      msgId: entry.msgId,
+      eventType: entry.eventType,
+      payload: entry.payload,
+      status: entry.status ?? "received",
+      error: entry.error,
+    })
+    .onConflictDoNothing();  // idempotent - duplicate msgId is a no-op
+}
 
-  const encoder = new TextEncoder();
-  const keyData = encoder.encode(secret);
-  const data = encoder.encode(signedContent);
+export async function updateWebhookLogStatus(
+  msgId: string,
+  status: string,
+  error?: string
+): Promise<void> {
+  const db = getDb();
+  await db
+    .update(webhookLogs)
+    .set({ status, error })
+    .where(eq(webhookLogs.msgId, msgId));
+}
 
-  const key = await crypto.subtle.importKey(
-    'raw',
-    keyData,
-    { name: 'HMAC', hash: 'SHA-256' },
-    false,
-    ['sign']
-  );
+export async function getWebhookLogByMsgId(msgId: string): Promise<boolean> {
+  const db = getDb();
+  const result = await db
+    .select()
+    .from(webhookLogs)
+    .where(eq(webhookLogs.msgId, msgId));
+  return result.length > 0;
+}
 
-  const signature = await crypto.subtle.sign('HMAC', key, data);
-  const base64Sig = btoa(String.fromCharCode(...new Uint8Array(signature)));
-
-  return `v1,${base64Sig}`;
+export async function upsertUser(data: UserSyncPayload): Promise<void> {
+  const db = getDb();
+  await db
+    .insert(users)
+    .values({
+      name: data.name,
+      surname: data.surname,
+      email: data.email,
+    })
+    .onConflictDoNothing();
 }
 ```
 
-### Signature Verification (`apps/data-service/src/services/webhook-verify.ts`)
+## Services (`apps/data-service/src/hono/services/`)
+
+### `webhook-verify.ts` - signature verification
 
 ```typescript
 interface VerifyParams {
   signature: string;
   msgId: string;
-  timestamp: number;
-  payload: string;
+  timestamp: string;
+  body: string;
   secret: string;
-  toleranceSeconds?: number;
 }
 
-export async function verifySignature({
+export async function verifyWebhookSignature({
   signature,
   msgId,
   timestamp,
-  payload,
+  body,
   secret,
-  toleranceSeconds = 300 // 5 min default
 }: VerifyParams): Promise<boolean> {
-  // Check timestamp tolerance (replay attack prevention)
   const now = Math.floor(Date.now() / 1000);
-  if (Math.abs(now - timestamp) > toleranceSeconds) {
-    return false;
-  }
+  if (Math.abs(now - Number(timestamp)) > 300) return false;  // 5 min tolerance
 
-  // Extract signatures (supports key rotation)
-  const signatures = signature.split(' ').map(s => s.trim());
+  const signedContent = `${msgId}.${timestamp}.${body}`;
+  const encoder = new TextEncoder();
 
-  // Verify any signature matches
+  const key = await crypto.subtle.importKey(
+    "raw",
+    encoder.encode(secret),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"]
+  );
+
+  const expected = await crypto.subtle.sign("HMAC", key, encoder.encode(signedContent));
+  const expectedB64 = btoa(String.fromCharCode(...new Uint8Array(expected)));
+
+  // supports key rotation: header may contain multiple space-separated signatures
+  const signatures = signature.split(" ");
   for (const sig of signatures) {
-    if (!sig.startsWith('v1,')) continue;
-
-    const expectedSig = await generateSignature({
-      msgId,
-      timestamp,
-      payload,
-      secret
-    });
-
-    // Constant-time comparison
-    if (constantTimeEqual(sig, expectedSig)) {
-      return true;
-    }
+    if (!sig.startsWith("v1,")) continue;
+    if (constantTimeEqual(sig, `v1,${expectedB64}`)) return true;
   }
 
   return false;
@@ -180,7 +212,6 @@ export async function verifySignature({
 
 function constantTimeEqual(a: string, b: string): boolean {
   if (a.length !== b.length) return false;
-
   let result = 0;
   for (let i = 0; i < a.length; i++) {
     result |= a.charCodeAt(i) ^ b.charCodeAt(i);
@@ -189,152 +220,147 @@ function constantTimeEqual(a: string, b: string): boolean {
 }
 ```
 
-### Webhook Sender (`apps/data-service/src/services/webhook-sender.ts`)
+### `webhook-service.ts` - business logic for each event type
 
 ```typescript
-import { generateSignature } from './webhook-signature';
-import type { WebhookEvent, WebhookEndpoint } from '@repo/data-ops/zod-schema/webhook';
+import { HTTPException } from "hono/http-exception";
+import {
+  insertWebhookLog,
+  updateWebhookLogStatus,
+  getWebhookLogByMsgId,
+  upsertUser,
+} from "@repo/data-ops/queries/webhook";
+import type { UserSyncPayload, UserActionPayload } from "@repo/data-ops/zod-schema/webhook";
 
-interface SendWebhookParams {
-  event: WebhookEvent;
-  endpoint: WebhookEndpoint;
+interface WebhookContext {
+  msgId: string;
+  eventType: string;
 }
 
-interface RetryConfig {
-  maxAttempts: number;
-  delays: number[];  // ms: [0, 5000, 300000, 1800000, ...]
-}
+export async function handleUserSync(
+  ctx: WebhookContext,
+  data: UserSyncPayload
+): Promise<void> {
+  // idempotency check - already processed this msgId
+  if (await getWebhookLogByMsgId(ctx.msgId)) return;
 
-const DEFAULT_RETRY: RetryConfig = {
-  maxAttempts: 7,
-  delays: [0, 5000, 300000, 1800000, 7200000, 21600000, 86400000]
-};
-
-export async function sendWebhook({
-  event,
-  endpoint
-}: SendWebhookParams): Promise<void> {
-  const msgId = crypto.randomUUID();
-  const timestamp = Math.floor(Date.now() / 1000);
-  const payload = JSON.stringify(event);
-
-  const signature = await generateSignature({
-    msgId,
-    timestamp,
-    payload,
-    secret: endpoint.secret
+  await insertWebhookLog({
+    msgId: ctx.msgId,
+    eventType: ctx.eventType,
+    payload: data as unknown as Record<string, unknown>,
   });
 
-  await deliverWithRetry({
-    url: endpoint.url,
-    headers: {
-      'Content-Type': 'application/json',
-      'webhook-id': msgId,
-      'webhook-timestamp': String(timestamp),
-      'webhook-signature': signature
-    },
-    body: payload
-  });
-}
-
-interface DeliveryParams {
-  url: string;
-  headers: Record<string, string>;
-  body: string;
-  attempt?: number;
-  config?: RetryConfig;
-}
-
-async function deliverWithRetry({
-  url,
-  headers,
-  body,
-  attempt = 0,
-  config = DEFAULT_RETRY
-}: DeliveryParams): Promise<void> {
   try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers,
-      body,
-      signal: AbortSignal.timeout(30000) // 30s timeout
-    });
-
-    if (response.status === 410) {
-      // Endpoint disabled, don't retry
-      throw new Error('Endpoint disabled (410 Gone)');
-    }
-
-    if (response.status >= 200 && response.status < 300) {
-      return; // Success
-    }
-
-    // Retry on failure
-    if (attempt < config.maxAttempts - 1) {
-      const delay = config.delays[attempt + 1];
-      await scheduleRetry({ url, headers, body, attempt: attempt + 1, config }, delay);
-    } else {
-      throw new Error(`Webhook delivery failed after ${config.maxAttempts} attempts`);
-    }
+    await upsertUser(data);
+    await updateWebhookLogStatus(ctx.msgId, "processed");
   } catch (error) {
-    if (attempt < config.maxAttempts - 1) {
-      const delay = config.delays[attempt + 1];
-      await scheduleRetry({ url, headers, body, attempt: attempt + 1, config }, delay);
-    } else {
-      throw error;
-    }
+    await updateWebhookLogStatus(
+      ctx.msgId,
+      "failed",
+      error instanceof Error ? error.message : "unknown error"
+    );
+    throw new HTTPException(500, { message: "Failed to sync user" });
   }
 }
 
-async function scheduleRetry(params: DeliveryParams, delayMs: number): Promise<void> {
-  // In production: use Durable Objects or Queue
-  // For sample: simple setTimeout
-  return new Promise((resolve) => {
-    setTimeout(async () => {
-      await deliverWithRetry(params);
-      resolve();
-    }, delayMs);
+export async function handleUserAction(
+  ctx: WebhookContext,
+  data: UserActionPayload
+): Promise<void> {
+  if (await getWebhookLogByMsgId(ctx.msgId)) return;
+
+  await insertWebhookLog({
+    msgId: ctx.msgId,
+    eventType: ctx.eventType,
+    payload: data as unknown as Record<string, unknown>,
   });
+
+  try {
+    // TODO: enqueue to CF Queue for async processing
+    // env.MY_QUEUE.send({ type: ctx.eventType, data });
+
+    // TODO: or trigger CF Workflow
+    // const instance = await env.MY_WORKFLOW.create({ params: { ... } });
+
+    await updateWebhookLogStatus(ctx.msgId, "processed");
+  } catch (error) {
+    await updateWebhookLogStatus(
+      ctx.msgId,
+      "failed",
+      error instanceof Error ? error.message : "unknown error"
+    );
+    throw new HTTPException(500, { message: "Failed to handle user action" });
+  }
 }
 ```
 
-### Webhook Handler (Consumer Example)
+## Handler (`apps/data-service/src/hono/handlers/webhook-handlers.ts`)
+
+Signature verification runs as the first middleware on the router. The raw body must be read before Zod parses it (needed for signature computation). Each route then validates the parsed body against its event schema.
 
 ```typescript
-import { Hono } from 'hono';
-import { verifySignature } from '../services/webhook-verify';
+import { Hono } from "hono";
+import { zValidator } from "@hono/zod-validator";
+import { HTTPException } from "hono/http-exception";
+import { UserSyncEventSchema, UserActionEventSchema } from "@repo/data-ops/zod-schema/webhook";
+import { verifyWebhookSignature } from "../services/webhook-verify";
+import * as webhookService from "../services/webhook-service";
 
 const webhooks = new Hono<{ Bindings: Env }>();
 
-webhooks.post('/receive', async (c) => {
-  const signature = c.req.header('webhook-signature');
-  const msgId = c.req.header('webhook-id');
-  const timestampStr = c.req.header('webhook-timestamp');
+// signature verification middleware - applies to all /webhooks/* routes
+webhooks.use("*", async (c, next) => {
+  const msgId = c.req.header("webhook-id");
+  const timestamp = c.req.header("webhook-timestamp");
+  const signature = c.req.header("webhook-signature");
 
-  if (!signature || !msgId || !timestampStr) {
-    return c.json({ error: 'Missing webhook headers' }, 400);
+  if (!msgId || !timestamp || !signature) {
+    throw new HTTPException(400, { message: "Missing webhook headers" });
   }
 
-  const timestamp = parseInt(timestampStr, 10);
-  const payload = await c.req.text();
+  // read raw body, store for both signature check and downstream parsing
+  const body = await c.req.text();
+  c.set("webhookBody", body);
+  c.set("webhookMsgId", msgId);
+  c.set("webhookTimestamp", timestamp);
 
-  const isValid = await verifySignature({
+  const valid = await verifyWebhookSignature({
     signature,
     msgId,
     timestamp,
-    payload,
-    secret: c.env.WEBHOOK_SECRET
+    body,
+    secret: c.env.WEBHOOK_SECRET,
   });
 
-  if (!isValid) {
-    return c.json({ error: 'Invalid signature' }, 401);
+  if (!valid) {
+    throw new HTTPException(401, { message: "Invalid signature" });
   }
 
-  // Process webhook (check idempotency using msgId)
-  const event = JSON.parse(payload);
+  await next();
+});
 
-  // Your business logic here
-  console.log('Webhook received:', event.type);
+// user.sync - syncs user data, stores in DB, logs the call
+webhooks.post("/user.sync", async (c) => {
+  const body = c.get("webhookBody");
+  const event = UserSyncEventSchema.parse(JSON.parse(body));
+
+  await webhookService.handleUserSync(
+    { msgId: c.get("webhookMsgId"), eventType: event.type },
+    event.data
+  );
+
+  return c.json({ received: true });
+});
+
+// user.action - receives action event, logs to DB, queue-ready
+webhooks.post("/user.action", async (c) => {
+  const body = c.get("webhookBody");
+  const event = UserActionEventSchema.parse(JSON.parse(body));
+
+  await webhookService.handleUserAction(
+    { msgId: c.get("webhookMsgId"), eventType: event.type },
+    event.data
+  );
 
   return c.json({ received: true });
 });
@@ -342,102 +368,106 @@ webhooks.post('/receive', async (c) => {
 export default webhooks;
 ```
 
-### Simple Webhook Endpoint (No Crypto)
-
-For internal/trusted sources where signature verification isn't required.
+## Wire-up (`apps/data-service/src/hono/app.ts`)
 
 ```typescript
-import { Hono } from 'hono';
-import { zValidator } from '@hono/zod-validator';
-import { TypedWebhookEventSchema } from '@repo/data-ops/zod-schema/webhook';
+import webhooks from "./handlers/webhook-handlers";
 
-const webhooks = new Hono<{ Bindings: Env }>();
-
-webhooks.post(
-  '/events',
-  zValidator('json', TypedWebhookEventSchema),
-  async (c) => {
-    const event = c.req.valid('json');
-
-    switch (event.type) {
-      case 'user.created':
-        // event.data is typed as { userId, email, createdAt }
-        await handleUserCreated(event.data);
-        break;
-      case 'user.updated':
-        // event.data is typed as { userId, changes }
-        await handleUserUpdated(event.data);
-        break;
-    }
-
-    return c.json({ received: true });
-  }
-);
-
-async function handleUserCreated(data: { userId: string; email: string; createdAt: string }) {
-  console.log('User created:', data.userId);
-}
-
-async function handleUserUpdated(data: { userId: string; changes: Record<string, unknown> }) {
-  console.log('User updated:', data.userId);
-}
-
-export default webhooks;
+App.route("/webhooks", webhooks);
 ```
-
-**When to use:**
-- Internal service-to-service communication
-- Trusted webhook providers (Stripe, GitHub with IP allowlist)
-- Development/testing environments
-
-**When to use full verification:**
-- Public-facing webhook endpoints
-- Untrusted or unknown sources
-- Production with external integrations
 
 ## File Structure
 
 ```
-apps/data-service/src/
-├── hono/
-│   ├── app.ts                          # Add: App.route('/webhooks', webhooks)
-│   └── handlers/
-│       └── webhook-handlers.ts         # Consumer endpoint
-└── services/
-    ├── webhook-signature.ts            # Sign/verify logic
-    ├── webhook-verify.ts               # Verification helper
-    └── webhook-sender.ts               # Send + retry logic
+packages/data-ops/src/
+├── drizzle/
+│   └── schema.ts                  # Add: webhookLogs table
+├── zod-schema/
+│   └── webhook.ts                 # New: event schemas + types
+└── queries/
+    └── webhook.ts                 # New: log insert/update, upsertUser
 
-packages/data-ops/src/zod-schema/
-└── webhook.ts                          # Schemas + types
+apps/data-service/src/hono/
+├── app.ts                         # Add: App.route('/webhooks', webhooks)
+├── handlers/
+│   └── webhook-handlers.ts        # New: verify middleware + route handlers
+└── services/
+    ├── webhook-verify.ts          # New: HMAC-SHA256 verification
+    └── webhook-service.ts         # New: handleUserSync, handleUserAction
 ```
 
-## Security Considerations
-
-- **Constant-time comparison**: Prevents timing attacks
-- **Timestamp validation**: Prevents replay attacks (5 min tolerance)
-- **HTTPS only**: Encrypt payload in transit
-- **Unique secrets per endpoint**: Isolate credential exposure
-- **Idempotency**: Use webhook-id to dedupe processing
-- **Key rotation**: Support multiple signatures in header
-
-## Production Enhancements
-
-- Use Cloudflare Queues or Durable Objects for retry scheduling
-- Store delivery attempts in database
-- Expose API for manual retry
-- Add endpoint management CRUD
-- Event filtering per endpoint
-- Delivery status dashboard
-- Rate limiting per endpoint
-
 ## Environment Variables
+
+Add to `.dev.vars`:
 
 ```
 WEBHOOK_SECRET=whsec_your-secret-key-here
 ```
 
+Run `pnpm run cf-typegen` after adding.
+
+## Testing with curl
+
+Generate a valid signature first. This script computes it using the same algorithm the sender uses:
+
+```bash
+# Generate signature for a test payload
+MSG_ID=$(uuidgen)
+TIMESTAMP=$(date +%s)
+BODY='{"type":"user.sync","data":{"userId":"ext-123","email":"alice@example.com","name":"Alice","surname":"Smith"}}'
+SECRET="whsec_your-secret-key-here"
+
+SIGNED_CONTENT="${MSG_ID}.${TIMESTAMP}.${BODY}"
+SIGNATURE="v1,$(echo -n "$SIGNED_CONTENT" | openssl dgst -sha256 -hmac "$SECRET" -binary | base64)"
+
+# user.sync
+curl -X POST http://localhost:8787/webhooks/user.sync \
+  -H "Content-Type: application/json" \
+  -H "webhook-id: $MSG_ID" \
+  -H "webhook-timestamp: $TIMESTAMP" \
+  -H "webhook-signature: $SIGNATURE" \
+  -d "$BODY"
+
+# Expected: {"received":true}
+```
+
+```bash
+# user.action
+MSG_ID=$(uuidgen)
+TIMESTAMP=$(date +%s)
+BODY='{"type":"user.action","data":{"userId":"ext-123","action":"login","metadata":{"ip":"1.2.3.4"}}}'
+SECRET="whsec_your-secret-key-here"
+
+SIGNED_CONTENT="${MSG_ID}.${TIMESTAMP}.${BODY}"
+SIGNATURE="v1,$(echo -n "$SIGNED_CONTENT" | openssl dgst -sha256 -hmac "$SECRET" -binary | base64)"
+
+curl -X POST http://localhost:8787/webhooks/user.action \
+  -H "Content-Type: application/json" \
+  -H "webhook-id: $MSG_ID" \
+  -H "webhook-timestamp: $TIMESTAMP" \
+  -H "webhook-signature: $SIGNATURE" \
+  -d "$BODY"
+
+# Expected: {"received":true}
+```
+
+Missing or invalid signature returns 401. Missing headers returns 400. Duplicate `webhook-id` is silently accepted (idempotent no-op, returns 200).
+
+## Migration Steps
+
+1. Add `webhookLogs` to `packages/data-ops/src/drizzle/schema.ts`
+2. `pnpm run drizzle:dev:generate && pnpm run drizzle:dev:migrate`
+3. Create `packages/data-ops/src/zod-schema/webhook.ts`
+4. Create `packages/data-ops/src/queries/webhook.ts`
+5. `pnpm --filter @repo/data-ops build`
+6. Create `apps/data-service/src/hono/services/webhook-verify.ts`
+7. Create `apps/data-service/src/hono/services/webhook-service.ts`
+8. Create `apps/data-service/src/hono/handlers/webhook-handlers.ts`
+9. Wire route in `apps/data-service/src/hono/app.ts`
+10. Add `WEBHOOK_SECRET` to `.dev.vars`
+
 ## References
 
 - [Standard Webhooks Spec](https://github.com/standard-webhooks/standard-webhooks)
-- [Cloudflare Web Crypto API](https://developers.cloudflare.com/workers/runtime-apis/web-crypto/)
+- `docs/001-user-api-endpoints.md` - handler/service/query pattern reference
+- `packages/data-ops/CLAUDE.md` - new table workflow

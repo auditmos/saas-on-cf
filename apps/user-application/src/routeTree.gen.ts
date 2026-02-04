@@ -13,12 +13,28 @@ import { Route as DemoRouteRouteImport } from './routes/demo/route'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DemoIndexRouteImport } from './routes/demo/index'
-import { Route as DemoUsersListApiRouteImport } from './routes/demo/users-list-api'
-import { Route as DemoUserUpdateDirectRouteImport } from './routes/demo/user-update-direct'
-import { Route as DemoUserDetailDirectRouteImport } from './routes/demo/user-detail-direct'
-import { Route as DemoUserDeleteDirectRouteImport } from './routes/demo/user-delete-direct'
-import { Route as DemoUserCreateBindingRouteImport } from './routes/demo/user-create-binding'
+import { Route as DemoDirectRouteRouteImport } from './routes/demo/direct/route'
+import { Route as DemoBindingRouteRouteImport } from './routes/demo/binding/route'
+import { Route as DemoApiRouteRouteImport } from './routes/demo/api/route'
+import { Route as DemoDirectIndexRouteImport } from './routes/demo/direct/index'
+import { Route as DemoBindingIndexRouteImport } from './routes/demo/binding/index'
+import { Route as DemoApiIndexRouteImport } from './routes/demo/api/index'
 import { Route as AuthAppIndexRouteImport } from './routes/_auth/app/index'
+import { Route as DemoDirectUpdateRouteImport } from './routes/demo/direct/update'
+import { Route as DemoDirectReadRouteImport } from './routes/demo/direct/read'
+import { Route as DemoDirectListRouteImport } from './routes/demo/direct/list'
+import { Route as DemoDirectDeleteRouteImport } from './routes/demo/direct/delete'
+import { Route as DemoDirectCreateRouteImport } from './routes/demo/direct/create'
+import { Route as DemoBindingUpdateRouteImport } from './routes/demo/binding/update'
+import { Route as DemoBindingReadRouteImport } from './routes/demo/binding/read'
+import { Route as DemoBindingListRouteImport } from './routes/demo/binding/list'
+import { Route as DemoBindingDeleteRouteImport } from './routes/demo/binding/delete'
+import { Route as DemoBindingCreateRouteImport } from './routes/demo/binding/create'
+import { Route as DemoApiUpdateRouteImport } from './routes/demo/api/update'
+import { Route as DemoApiReadRouteImport } from './routes/demo/api/read'
+import { Route as DemoApiListRouteImport } from './routes/demo/api/list'
+import { Route as DemoApiDeleteRouteImport } from './routes/demo/api/delete'
+import { Route as DemoApiCreateRouteImport } from './routes/demo/api/create'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth.$'
 
 const DemoRouteRoute = DemoRouteRouteImport.update({
@@ -40,35 +56,115 @@ const DemoIndexRoute = DemoIndexRouteImport.update({
   path: '/',
   getParentRoute: () => DemoRouteRoute,
 } as any)
-const DemoUsersListApiRoute = DemoUsersListApiRouteImport.update({
-  id: '/users-list-api',
-  path: '/users-list-api',
+const DemoDirectRouteRoute = DemoDirectRouteRouteImport.update({
+  id: '/direct',
+  path: '/direct',
   getParentRoute: () => DemoRouteRoute,
 } as any)
-const DemoUserUpdateDirectRoute = DemoUserUpdateDirectRouteImport.update({
-  id: '/user-update-direct',
-  path: '/user-update-direct',
+const DemoBindingRouteRoute = DemoBindingRouteRouteImport.update({
+  id: '/binding',
+  path: '/binding',
   getParentRoute: () => DemoRouteRoute,
 } as any)
-const DemoUserDetailDirectRoute = DemoUserDetailDirectRouteImport.update({
-  id: '/user-detail-direct',
-  path: '/user-detail-direct',
+const DemoApiRouteRoute = DemoApiRouteRouteImport.update({
+  id: '/api',
+  path: '/api',
   getParentRoute: () => DemoRouteRoute,
 } as any)
-const DemoUserDeleteDirectRoute = DemoUserDeleteDirectRouteImport.update({
-  id: '/user-delete-direct',
-  path: '/user-delete-direct',
-  getParentRoute: () => DemoRouteRoute,
+const DemoDirectIndexRoute = DemoDirectIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DemoDirectRouteRoute,
 } as any)
-const DemoUserCreateBindingRoute = DemoUserCreateBindingRouteImport.update({
-  id: '/user-create-binding',
-  path: '/user-create-binding',
-  getParentRoute: () => DemoRouteRoute,
+const DemoBindingIndexRoute = DemoBindingIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DemoBindingRouteRoute,
+} as any)
+const DemoApiIndexRoute = DemoApiIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DemoApiRouteRoute,
 } as any)
 const AuthAppIndexRoute = AuthAppIndexRouteImport.update({
   id: '/app/',
   path: '/app/',
   getParentRoute: () => AuthRouteRoute,
+} as any)
+const DemoDirectUpdateRoute = DemoDirectUpdateRouteImport.update({
+  id: '/update',
+  path: '/update',
+  getParentRoute: () => DemoDirectRouteRoute,
+} as any)
+const DemoDirectReadRoute = DemoDirectReadRouteImport.update({
+  id: '/read',
+  path: '/read',
+  getParentRoute: () => DemoDirectRouteRoute,
+} as any)
+const DemoDirectListRoute = DemoDirectListRouteImport.update({
+  id: '/list',
+  path: '/list',
+  getParentRoute: () => DemoDirectRouteRoute,
+} as any)
+const DemoDirectDeleteRoute = DemoDirectDeleteRouteImport.update({
+  id: '/delete',
+  path: '/delete',
+  getParentRoute: () => DemoDirectRouteRoute,
+} as any)
+const DemoDirectCreateRoute = DemoDirectCreateRouteImport.update({
+  id: '/create',
+  path: '/create',
+  getParentRoute: () => DemoDirectRouteRoute,
+} as any)
+const DemoBindingUpdateRoute = DemoBindingUpdateRouteImport.update({
+  id: '/update',
+  path: '/update',
+  getParentRoute: () => DemoBindingRouteRoute,
+} as any)
+const DemoBindingReadRoute = DemoBindingReadRouteImport.update({
+  id: '/read',
+  path: '/read',
+  getParentRoute: () => DemoBindingRouteRoute,
+} as any)
+const DemoBindingListRoute = DemoBindingListRouteImport.update({
+  id: '/list',
+  path: '/list',
+  getParentRoute: () => DemoBindingRouteRoute,
+} as any)
+const DemoBindingDeleteRoute = DemoBindingDeleteRouteImport.update({
+  id: '/delete',
+  path: '/delete',
+  getParentRoute: () => DemoBindingRouteRoute,
+} as any)
+const DemoBindingCreateRoute = DemoBindingCreateRouteImport.update({
+  id: '/create',
+  path: '/create',
+  getParentRoute: () => DemoBindingRouteRoute,
+} as any)
+const DemoApiUpdateRoute = DemoApiUpdateRouteImport.update({
+  id: '/update',
+  path: '/update',
+  getParentRoute: () => DemoApiRouteRoute,
+} as any)
+const DemoApiReadRoute = DemoApiReadRouteImport.update({
+  id: '/read',
+  path: '/read',
+  getParentRoute: () => DemoApiRouteRoute,
+} as any)
+const DemoApiListRoute = DemoApiListRouteImport.update({
+  id: '/list',
+  path: '/list',
+  getParentRoute: () => DemoApiRouteRoute,
+} as any)
+const DemoApiDeleteRoute = DemoApiDeleteRouteImport.update({
+  id: '/delete',
+  path: '/delete',
+  getParentRoute: () => DemoApiRouteRoute,
+} as any)
+const DemoApiCreateRoute = DemoApiCreateRouteImport.update({
+  id: '/create',
+  path: '/create',
+  getParentRoute: () => DemoApiRouteRoute,
 } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
@@ -79,77 +175,167 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/demo': typeof DemoRouteRouteWithChildren
-  '/demo/user-create-binding': typeof DemoUserCreateBindingRoute
-  '/demo/user-delete-direct': typeof DemoUserDeleteDirectRoute
-  '/demo/user-detail-direct': typeof DemoUserDetailDirectRoute
-  '/demo/user-update-direct': typeof DemoUserUpdateDirectRoute
-  '/demo/users-list-api': typeof DemoUsersListApiRoute
+  '/demo/api': typeof DemoApiRouteRouteWithChildren
+  '/demo/binding': typeof DemoBindingRouteRouteWithChildren
+  '/demo/direct': typeof DemoDirectRouteRouteWithChildren
   '/demo/': typeof DemoIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/demo/api/create': typeof DemoApiCreateRoute
+  '/demo/api/delete': typeof DemoApiDeleteRoute
+  '/demo/api/list': typeof DemoApiListRoute
+  '/demo/api/read': typeof DemoApiReadRoute
+  '/demo/api/update': typeof DemoApiUpdateRoute
+  '/demo/binding/create': typeof DemoBindingCreateRoute
+  '/demo/binding/delete': typeof DemoBindingDeleteRoute
+  '/demo/binding/list': typeof DemoBindingListRoute
+  '/demo/binding/read': typeof DemoBindingReadRoute
+  '/demo/binding/update': typeof DemoBindingUpdateRoute
+  '/demo/direct/create': typeof DemoDirectCreateRoute
+  '/demo/direct/delete': typeof DemoDirectDeleteRoute
+  '/demo/direct/list': typeof DemoDirectListRoute
+  '/demo/direct/read': typeof DemoDirectReadRoute
+  '/demo/direct/update': typeof DemoDirectUpdateRoute
   '/app': typeof AuthAppIndexRoute
+  '/demo/api/': typeof DemoApiIndexRoute
+  '/demo/binding/': typeof DemoBindingIndexRoute
+  '/demo/direct/': typeof DemoDirectIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/demo/user-create-binding': typeof DemoUserCreateBindingRoute
-  '/demo/user-delete-direct': typeof DemoUserDeleteDirectRoute
-  '/demo/user-detail-direct': typeof DemoUserDetailDirectRoute
-  '/demo/user-update-direct': typeof DemoUserUpdateDirectRoute
-  '/demo/users-list-api': typeof DemoUsersListApiRoute
   '/demo': typeof DemoIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/demo/api/create': typeof DemoApiCreateRoute
+  '/demo/api/delete': typeof DemoApiDeleteRoute
+  '/demo/api/list': typeof DemoApiListRoute
+  '/demo/api/read': typeof DemoApiReadRoute
+  '/demo/api/update': typeof DemoApiUpdateRoute
+  '/demo/binding/create': typeof DemoBindingCreateRoute
+  '/demo/binding/delete': typeof DemoBindingDeleteRoute
+  '/demo/binding/list': typeof DemoBindingListRoute
+  '/demo/binding/read': typeof DemoBindingReadRoute
+  '/demo/binding/update': typeof DemoBindingUpdateRoute
+  '/demo/direct/create': typeof DemoDirectCreateRoute
+  '/demo/direct/delete': typeof DemoDirectDeleteRoute
+  '/demo/direct/list': typeof DemoDirectListRoute
+  '/demo/direct/read': typeof DemoDirectReadRoute
+  '/demo/direct/update': typeof DemoDirectUpdateRoute
   '/app': typeof AuthAppIndexRoute
+  '/demo/api': typeof DemoApiIndexRoute
+  '/demo/binding': typeof DemoBindingIndexRoute
+  '/demo/direct': typeof DemoDirectIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteRouteWithChildren
   '/demo': typeof DemoRouteRouteWithChildren
-  '/demo/user-create-binding': typeof DemoUserCreateBindingRoute
-  '/demo/user-delete-direct': typeof DemoUserDeleteDirectRoute
-  '/demo/user-detail-direct': typeof DemoUserDetailDirectRoute
-  '/demo/user-update-direct': typeof DemoUserUpdateDirectRoute
-  '/demo/users-list-api': typeof DemoUsersListApiRoute
+  '/demo/api': typeof DemoApiRouteRouteWithChildren
+  '/demo/binding': typeof DemoBindingRouteRouteWithChildren
+  '/demo/direct': typeof DemoDirectRouteRouteWithChildren
   '/demo/': typeof DemoIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/demo/api/create': typeof DemoApiCreateRoute
+  '/demo/api/delete': typeof DemoApiDeleteRoute
+  '/demo/api/list': typeof DemoApiListRoute
+  '/demo/api/read': typeof DemoApiReadRoute
+  '/demo/api/update': typeof DemoApiUpdateRoute
+  '/demo/binding/create': typeof DemoBindingCreateRoute
+  '/demo/binding/delete': typeof DemoBindingDeleteRoute
+  '/demo/binding/list': typeof DemoBindingListRoute
+  '/demo/binding/read': typeof DemoBindingReadRoute
+  '/demo/binding/update': typeof DemoBindingUpdateRoute
+  '/demo/direct/create': typeof DemoDirectCreateRoute
+  '/demo/direct/delete': typeof DemoDirectDeleteRoute
+  '/demo/direct/list': typeof DemoDirectListRoute
+  '/demo/direct/read': typeof DemoDirectReadRoute
+  '/demo/direct/update': typeof DemoDirectUpdateRoute
   '/_auth/app/': typeof AuthAppIndexRoute
+  '/demo/api/': typeof DemoApiIndexRoute
+  '/demo/binding/': typeof DemoBindingIndexRoute
+  '/demo/direct/': typeof DemoDirectIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/demo'
-    | '/demo/user-create-binding'
-    | '/demo/user-delete-direct'
-    | '/demo/user-detail-direct'
-    | '/demo/user-update-direct'
-    | '/demo/users-list-api'
+    | '/demo/api'
+    | '/demo/binding'
+    | '/demo/direct'
     | '/demo/'
     | '/api/auth/$'
+    | '/demo/api/create'
+    | '/demo/api/delete'
+    | '/demo/api/list'
+    | '/demo/api/read'
+    | '/demo/api/update'
+    | '/demo/binding/create'
+    | '/demo/binding/delete'
+    | '/demo/binding/list'
+    | '/demo/binding/read'
+    | '/demo/binding/update'
+    | '/demo/direct/create'
+    | '/demo/direct/delete'
+    | '/demo/direct/list'
+    | '/demo/direct/read'
+    | '/demo/direct/update'
     | '/app'
+    | '/demo/api/'
+    | '/demo/binding/'
+    | '/demo/direct/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/demo/user-create-binding'
-    | '/demo/user-delete-direct'
-    | '/demo/user-detail-direct'
-    | '/demo/user-update-direct'
-    | '/demo/users-list-api'
     | '/demo'
     | '/api/auth/$'
+    | '/demo/api/create'
+    | '/demo/api/delete'
+    | '/demo/api/list'
+    | '/demo/api/read'
+    | '/demo/api/update'
+    | '/demo/binding/create'
+    | '/demo/binding/delete'
+    | '/demo/binding/list'
+    | '/demo/binding/read'
+    | '/demo/binding/update'
+    | '/demo/direct/create'
+    | '/demo/direct/delete'
+    | '/demo/direct/list'
+    | '/demo/direct/read'
+    | '/demo/direct/update'
     | '/app'
+    | '/demo/api'
+    | '/demo/binding'
+    | '/demo/direct'
   id:
     | '__root__'
     | '/'
     | '/_auth'
     | '/demo'
-    | '/demo/user-create-binding'
-    | '/demo/user-delete-direct'
-    | '/demo/user-detail-direct'
-    | '/demo/user-update-direct'
-    | '/demo/users-list-api'
+    | '/demo/api'
+    | '/demo/binding'
+    | '/demo/direct'
     | '/demo/'
     | '/api/auth/$'
+    | '/demo/api/create'
+    | '/demo/api/delete'
+    | '/demo/api/list'
+    | '/demo/api/read'
+    | '/demo/api/update'
+    | '/demo/binding/create'
+    | '/demo/binding/delete'
+    | '/demo/binding/list'
+    | '/demo/binding/read'
+    | '/demo/binding/update'
+    | '/demo/direct/create'
+    | '/demo/direct/delete'
+    | '/demo/direct/list'
+    | '/demo/direct/read'
+    | '/demo/direct/update'
     | '/_auth/app/'
+    | '/demo/api/'
+    | '/demo/binding/'
+    | '/demo/direct/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -189,40 +375,47 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoIndexRouteImport
       parentRoute: typeof DemoRouteRoute
     }
-    '/demo/users-list-api': {
-      id: '/demo/users-list-api'
-      path: '/users-list-api'
-      fullPath: '/demo/users-list-api'
-      preLoaderRoute: typeof DemoUsersListApiRouteImport
+    '/demo/direct': {
+      id: '/demo/direct'
+      path: '/direct'
+      fullPath: '/demo/direct'
+      preLoaderRoute: typeof DemoDirectRouteRouteImport
       parentRoute: typeof DemoRouteRoute
     }
-    '/demo/user-update-direct': {
-      id: '/demo/user-update-direct'
-      path: '/user-update-direct'
-      fullPath: '/demo/user-update-direct'
-      preLoaderRoute: typeof DemoUserUpdateDirectRouteImport
+    '/demo/binding': {
+      id: '/demo/binding'
+      path: '/binding'
+      fullPath: '/demo/binding'
+      preLoaderRoute: typeof DemoBindingRouteRouteImport
       parentRoute: typeof DemoRouteRoute
     }
-    '/demo/user-detail-direct': {
-      id: '/demo/user-detail-direct'
-      path: '/user-detail-direct'
-      fullPath: '/demo/user-detail-direct'
-      preLoaderRoute: typeof DemoUserDetailDirectRouteImport
+    '/demo/api': {
+      id: '/demo/api'
+      path: '/api'
+      fullPath: '/demo/api'
+      preLoaderRoute: typeof DemoApiRouteRouteImport
       parentRoute: typeof DemoRouteRoute
     }
-    '/demo/user-delete-direct': {
-      id: '/demo/user-delete-direct'
-      path: '/user-delete-direct'
-      fullPath: '/demo/user-delete-direct'
-      preLoaderRoute: typeof DemoUserDeleteDirectRouteImport
-      parentRoute: typeof DemoRouteRoute
+    '/demo/direct/': {
+      id: '/demo/direct/'
+      path: '/'
+      fullPath: '/demo/direct/'
+      preLoaderRoute: typeof DemoDirectIndexRouteImport
+      parentRoute: typeof DemoDirectRouteRoute
     }
-    '/demo/user-create-binding': {
-      id: '/demo/user-create-binding'
-      path: '/user-create-binding'
-      fullPath: '/demo/user-create-binding'
-      preLoaderRoute: typeof DemoUserCreateBindingRouteImport
-      parentRoute: typeof DemoRouteRoute
+    '/demo/binding/': {
+      id: '/demo/binding/'
+      path: '/'
+      fullPath: '/demo/binding/'
+      preLoaderRoute: typeof DemoBindingIndexRouteImport
+      parentRoute: typeof DemoBindingRouteRoute
+    }
+    '/demo/api/': {
+      id: '/demo/api/'
+      path: '/'
+      fullPath: '/demo/api/'
+      preLoaderRoute: typeof DemoApiIndexRouteImport
+      parentRoute: typeof DemoApiRouteRoute
     }
     '/_auth/app/': {
       id: '/_auth/app/'
@@ -230,6 +423,111 @@ declare module '@tanstack/react-router' {
       fullPath: '/app'
       preLoaderRoute: typeof AuthAppIndexRouteImport
       parentRoute: typeof AuthRouteRoute
+    }
+    '/demo/direct/update': {
+      id: '/demo/direct/update'
+      path: '/update'
+      fullPath: '/demo/direct/update'
+      preLoaderRoute: typeof DemoDirectUpdateRouteImport
+      parentRoute: typeof DemoDirectRouteRoute
+    }
+    '/demo/direct/read': {
+      id: '/demo/direct/read'
+      path: '/read'
+      fullPath: '/demo/direct/read'
+      preLoaderRoute: typeof DemoDirectReadRouteImport
+      parentRoute: typeof DemoDirectRouteRoute
+    }
+    '/demo/direct/list': {
+      id: '/demo/direct/list'
+      path: '/list'
+      fullPath: '/demo/direct/list'
+      preLoaderRoute: typeof DemoDirectListRouteImport
+      parentRoute: typeof DemoDirectRouteRoute
+    }
+    '/demo/direct/delete': {
+      id: '/demo/direct/delete'
+      path: '/delete'
+      fullPath: '/demo/direct/delete'
+      preLoaderRoute: typeof DemoDirectDeleteRouteImport
+      parentRoute: typeof DemoDirectRouteRoute
+    }
+    '/demo/direct/create': {
+      id: '/demo/direct/create'
+      path: '/create'
+      fullPath: '/demo/direct/create'
+      preLoaderRoute: typeof DemoDirectCreateRouteImport
+      parentRoute: typeof DemoDirectRouteRoute
+    }
+    '/demo/binding/update': {
+      id: '/demo/binding/update'
+      path: '/update'
+      fullPath: '/demo/binding/update'
+      preLoaderRoute: typeof DemoBindingUpdateRouteImport
+      parentRoute: typeof DemoBindingRouteRoute
+    }
+    '/demo/binding/read': {
+      id: '/demo/binding/read'
+      path: '/read'
+      fullPath: '/demo/binding/read'
+      preLoaderRoute: typeof DemoBindingReadRouteImport
+      parentRoute: typeof DemoBindingRouteRoute
+    }
+    '/demo/binding/list': {
+      id: '/demo/binding/list'
+      path: '/list'
+      fullPath: '/demo/binding/list'
+      preLoaderRoute: typeof DemoBindingListRouteImport
+      parentRoute: typeof DemoBindingRouteRoute
+    }
+    '/demo/binding/delete': {
+      id: '/demo/binding/delete'
+      path: '/delete'
+      fullPath: '/demo/binding/delete'
+      preLoaderRoute: typeof DemoBindingDeleteRouteImport
+      parentRoute: typeof DemoBindingRouteRoute
+    }
+    '/demo/binding/create': {
+      id: '/demo/binding/create'
+      path: '/create'
+      fullPath: '/demo/binding/create'
+      preLoaderRoute: typeof DemoBindingCreateRouteImport
+      parentRoute: typeof DemoBindingRouteRoute
+    }
+    '/demo/api/update': {
+      id: '/demo/api/update'
+      path: '/update'
+      fullPath: '/demo/api/update'
+      preLoaderRoute: typeof DemoApiUpdateRouteImport
+      parentRoute: typeof DemoApiRouteRoute
+    }
+    '/demo/api/read': {
+      id: '/demo/api/read'
+      path: '/read'
+      fullPath: '/demo/api/read'
+      preLoaderRoute: typeof DemoApiReadRouteImport
+      parentRoute: typeof DemoApiRouteRoute
+    }
+    '/demo/api/list': {
+      id: '/demo/api/list'
+      path: '/list'
+      fullPath: '/demo/api/list'
+      preLoaderRoute: typeof DemoApiListRouteImport
+      parentRoute: typeof DemoApiRouteRoute
+    }
+    '/demo/api/delete': {
+      id: '/demo/api/delete'
+      path: '/delete'
+      fullPath: '/demo/api/delete'
+      preLoaderRoute: typeof DemoApiDeleteRouteImport
+      parentRoute: typeof DemoApiRouteRoute
+    }
+    '/demo/api/create': {
+      id: '/demo/api/create'
+      path: '/create'
+      fullPath: '/demo/api/create'
+      preLoaderRoute: typeof DemoApiCreateRouteImport
+      parentRoute: typeof DemoApiRouteRoute
     }
     '/api/auth/$': {
       id: '/api/auth/$'
@@ -253,21 +551,82 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
   AuthRouteRouteChildren,
 )
 
+interface DemoApiRouteRouteChildren {
+  DemoApiCreateRoute: typeof DemoApiCreateRoute
+  DemoApiDeleteRoute: typeof DemoApiDeleteRoute
+  DemoApiListRoute: typeof DemoApiListRoute
+  DemoApiReadRoute: typeof DemoApiReadRoute
+  DemoApiUpdateRoute: typeof DemoApiUpdateRoute
+  DemoApiIndexRoute: typeof DemoApiIndexRoute
+}
+
+const DemoApiRouteRouteChildren: DemoApiRouteRouteChildren = {
+  DemoApiCreateRoute: DemoApiCreateRoute,
+  DemoApiDeleteRoute: DemoApiDeleteRoute,
+  DemoApiListRoute: DemoApiListRoute,
+  DemoApiReadRoute: DemoApiReadRoute,
+  DemoApiUpdateRoute: DemoApiUpdateRoute,
+  DemoApiIndexRoute: DemoApiIndexRoute,
+}
+
+const DemoApiRouteRouteWithChildren = DemoApiRouteRoute._addFileChildren(
+  DemoApiRouteRouteChildren,
+)
+
+interface DemoBindingRouteRouteChildren {
+  DemoBindingCreateRoute: typeof DemoBindingCreateRoute
+  DemoBindingDeleteRoute: typeof DemoBindingDeleteRoute
+  DemoBindingListRoute: typeof DemoBindingListRoute
+  DemoBindingReadRoute: typeof DemoBindingReadRoute
+  DemoBindingUpdateRoute: typeof DemoBindingUpdateRoute
+  DemoBindingIndexRoute: typeof DemoBindingIndexRoute
+}
+
+const DemoBindingRouteRouteChildren: DemoBindingRouteRouteChildren = {
+  DemoBindingCreateRoute: DemoBindingCreateRoute,
+  DemoBindingDeleteRoute: DemoBindingDeleteRoute,
+  DemoBindingListRoute: DemoBindingListRoute,
+  DemoBindingReadRoute: DemoBindingReadRoute,
+  DemoBindingUpdateRoute: DemoBindingUpdateRoute,
+  DemoBindingIndexRoute: DemoBindingIndexRoute,
+}
+
+const DemoBindingRouteRouteWithChildren =
+  DemoBindingRouteRoute._addFileChildren(DemoBindingRouteRouteChildren)
+
+interface DemoDirectRouteRouteChildren {
+  DemoDirectCreateRoute: typeof DemoDirectCreateRoute
+  DemoDirectDeleteRoute: typeof DemoDirectDeleteRoute
+  DemoDirectListRoute: typeof DemoDirectListRoute
+  DemoDirectReadRoute: typeof DemoDirectReadRoute
+  DemoDirectUpdateRoute: typeof DemoDirectUpdateRoute
+  DemoDirectIndexRoute: typeof DemoDirectIndexRoute
+}
+
+const DemoDirectRouteRouteChildren: DemoDirectRouteRouteChildren = {
+  DemoDirectCreateRoute: DemoDirectCreateRoute,
+  DemoDirectDeleteRoute: DemoDirectDeleteRoute,
+  DemoDirectListRoute: DemoDirectListRoute,
+  DemoDirectReadRoute: DemoDirectReadRoute,
+  DemoDirectUpdateRoute: DemoDirectUpdateRoute,
+  DemoDirectIndexRoute: DemoDirectIndexRoute,
+}
+
+const DemoDirectRouteRouteWithChildren = DemoDirectRouteRoute._addFileChildren(
+  DemoDirectRouteRouteChildren,
+)
+
 interface DemoRouteRouteChildren {
-  DemoUserCreateBindingRoute: typeof DemoUserCreateBindingRoute
-  DemoUserDeleteDirectRoute: typeof DemoUserDeleteDirectRoute
-  DemoUserDetailDirectRoute: typeof DemoUserDetailDirectRoute
-  DemoUserUpdateDirectRoute: typeof DemoUserUpdateDirectRoute
-  DemoUsersListApiRoute: typeof DemoUsersListApiRoute
+  DemoApiRouteRoute: typeof DemoApiRouteRouteWithChildren
+  DemoBindingRouteRoute: typeof DemoBindingRouteRouteWithChildren
+  DemoDirectRouteRoute: typeof DemoDirectRouteRouteWithChildren
   DemoIndexRoute: typeof DemoIndexRoute
 }
 
 const DemoRouteRouteChildren: DemoRouteRouteChildren = {
-  DemoUserCreateBindingRoute: DemoUserCreateBindingRoute,
-  DemoUserDeleteDirectRoute: DemoUserDeleteDirectRoute,
-  DemoUserDetailDirectRoute: DemoUserDetailDirectRoute,
-  DemoUserUpdateDirectRoute: DemoUserUpdateDirectRoute,
-  DemoUsersListApiRoute: DemoUsersListApiRoute,
+  DemoApiRouteRoute: DemoApiRouteRouteWithChildren,
+  DemoBindingRouteRoute: DemoBindingRouteRouteWithChildren,
+  DemoDirectRouteRoute: DemoDirectRouteRouteWithChildren,
   DemoIndexRoute: DemoIndexRoute,
 }
 
