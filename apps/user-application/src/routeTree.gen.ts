@@ -16,6 +16,7 @@ import { Route as DemoIndexRouteImport } from './routes/demo/index'
 import { Route as DemoUsersListApiRouteImport } from './routes/demo/users-list-api'
 import { Route as DemoUserUpdateDirectRouteImport } from './routes/demo/user-update-direct'
 import { Route as DemoUserDetailDirectRouteImport } from './routes/demo/user-detail-direct'
+import { Route as DemoUserDeleteDirectRouteImport } from './routes/demo/user-delete-direct'
 import { Route as DemoUserCreateBindingRouteImport } from './routes/demo/user-create-binding'
 import { Route as AuthAppIndexRouteImport } from './routes/_auth/app/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth.$'
@@ -54,6 +55,11 @@ const DemoUserDetailDirectRoute = DemoUserDetailDirectRouteImport.update({
   path: '/user-detail-direct',
   getParentRoute: () => DemoRouteRoute,
 } as any)
+const DemoUserDeleteDirectRoute = DemoUserDeleteDirectRouteImport.update({
+  id: '/user-delete-direct',
+  path: '/user-delete-direct',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
 const DemoUserCreateBindingRoute = DemoUserCreateBindingRouteImport.update({
   id: '/user-create-binding',
   path: '/user-create-binding',
@@ -74,6 +80,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/demo': typeof DemoRouteRouteWithChildren
   '/demo/user-create-binding': typeof DemoUserCreateBindingRoute
+  '/demo/user-delete-direct': typeof DemoUserDeleteDirectRoute
   '/demo/user-detail-direct': typeof DemoUserDetailDirectRoute
   '/demo/user-update-direct': typeof DemoUserUpdateDirectRoute
   '/demo/users-list-api': typeof DemoUsersListApiRoute
@@ -84,6 +91,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/demo/user-create-binding': typeof DemoUserCreateBindingRoute
+  '/demo/user-delete-direct': typeof DemoUserDeleteDirectRoute
   '/demo/user-detail-direct': typeof DemoUserDetailDirectRoute
   '/demo/user-update-direct': typeof DemoUserUpdateDirectRoute
   '/demo/users-list-api': typeof DemoUsersListApiRoute
@@ -97,6 +105,7 @@ export interface FileRoutesById {
   '/_auth': typeof AuthRouteRouteWithChildren
   '/demo': typeof DemoRouteRouteWithChildren
   '/demo/user-create-binding': typeof DemoUserCreateBindingRoute
+  '/demo/user-delete-direct': typeof DemoUserDeleteDirectRoute
   '/demo/user-detail-direct': typeof DemoUserDetailDirectRoute
   '/demo/user-update-direct': typeof DemoUserUpdateDirectRoute
   '/demo/users-list-api': typeof DemoUsersListApiRoute
@@ -110,6 +119,7 @@ export interface FileRouteTypes {
     | '/'
     | '/demo'
     | '/demo/user-create-binding'
+    | '/demo/user-delete-direct'
     | '/demo/user-detail-direct'
     | '/demo/user-update-direct'
     | '/demo/users-list-api'
@@ -120,6 +130,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/demo/user-create-binding'
+    | '/demo/user-delete-direct'
     | '/demo/user-detail-direct'
     | '/demo/user-update-direct'
     | '/demo/users-list-api'
@@ -132,6 +143,7 @@ export interface FileRouteTypes {
     | '/_auth'
     | '/demo'
     | '/demo/user-create-binding'
+    | '/demo/user-delete-direct'
     | '/demo/user-detail-direct'
     | '/demo/user-update-direct'
     | '/demo/users-list-api'
@@ -198,6 +210,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoUserDetailDirectRouteImport
       parentRoute: typeof DemoRouteRoute
     }
+    '/demo/user-delete-direct': {
+      id: '/demo/user-delete-direct'
+      path: '/user-delete-direct'
+      fullPath: '/demo/user-delete-direct'
+      preLoaderRoute: typeof DemoUserDeleteDirectRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
     '/demo/user-create-binding': {
       id: '/demo/user-create-binding'
       path: '/user-create-binding'
@@ -236,6 +255,7 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 
 interface DemoRouteRouteChildren {
   DemoUserCreateBindingRoute: typeof DemoUserCreateBindingRoute
+  DemoUserDeleteDirectRoute: typeof DemoUserDeleteDirectRoute
   DemoUserDetailDirectRoute: typeof DemoUserDetailDirectRoute
   DemoUserUpdateDirectRoute: typeof DemoUserUpdateDirectRoute
   DemoUsersListApiRoute: typeof DemoUsersListApiRoute
@@ -244,6 +264,7 @@ interface DemoRouteRouteChildren {
 
 const DemoRouteRouteChildren: DemoRouteRouteChildren = {
   DemoUserCreateBindingRoute: DemoUserCreateBindingRoute,
+  DemoUserDeleteDirectRoute: DemoUserDeleteDirectRoute,
   DemoUserDetailDirectRoute: DemoUserDetailDirectRoute,
   DemoUserUpdateDirectRoute: DemoUserUpdateDirectRoute,
   DemoUsersListApiRoute: DemoUsersListApiRoute,

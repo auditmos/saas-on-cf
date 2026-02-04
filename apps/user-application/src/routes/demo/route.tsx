@@ -35,6 +35,12 @@ function DemoLayout() {
             >
               PUT User (Server→data-ops)
             </Link>
+            <Link
+              to="/demo/user-delete-direct"
+              className="text-sm hover:underline [&.active]:font-bold"
+            >
+              DELETE User (Server→data-ops)
+            </Link>
           </nav>
         </div>
       </header>

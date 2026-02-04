@@ -28,6 +28,20 @@ function DemoIndexPage() {
       pattern: 'Pattern B',
       ssr: true,
     },
+    {
+      title: 'PUT User - Server → data-ops',
+      description: 'Server function updates via data-ops directly, with optimistic UI',
+      href: '/demo/user-update-direct' as const,
+      pattern: 'Pattern C',
+      ssr: true,
+    },
+    {
+      title: 'DELETE User - Server → data-ops',
+      description: 'Server function deletes via data-ops with confirmation dialog',
+      href: '/demo/user-delete-direct' as const,
+      pattern: 'Pattern C',
+      ssr: false,
+    },
   ];
 
   return (

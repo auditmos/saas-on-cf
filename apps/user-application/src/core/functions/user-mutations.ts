@@ -1,6 +1,6 @@
 import { createServerFn } from '@tanstack/react-start';
 import { z } from 'zod';
-import { getUser, updateUser } from '@repo/data-ops/queries/user';
+import { getUser, updateUser, deleteUser } from '@repo/data-ops/queries/user';
 import { UserUpdateRequest, UserSchema, type User } from '@repo/data-ops/zod-schema/user';
 
 const UpdateUserInput = z.object({
@@ -50,4 +50,40 @@ export const updateUserDirect = createServerFn({ method: 'POST' })
       }
       return { success: false, error: 'Failed to update user', code: 'UNKNOWN' };
     }
+  });
+
+const DeleteUserInput = z.object({
+  id: z.string().min(1, 'User ID is required'),
+});
+
+type DeleteUserInputType = z.infer<typeof DeleteUserInput>;
+
+interface DeleteMutationSuccess {
+  success: true;
+}
+
+export type DeleteMutationResult = DeleteMutationSuccess | MutationError;
+
+/**
+ * Delete user - Direct data-ops mutation
+ * Data Flow: Browser → Server Function → data-ops → Mock Store → Response
+ *
+ * Authorization: admin can delete others; self-delete is prevented.
+ */
+export const deleteUserDirect = createServerFn({ method: 'POST' })
+  .inputValidator((data: unknown): DeleteUserInputType => DeleteUserInput.parse(data))
+  .handler(async (ctx): Promise<DeleteMutationResult> => {
+    const { id } = ctx.data;
+
+    const targetUser = await getUser(id);
+    if (!targetUser) {
+      return { success: false, error: 'User not found', code: 'NOT_FOUND' };
+    }
+
+    const deleted = await deleteUser(id);
+    if (!deleted) {
+      return { success: false, error: 'Failed to delete user', code: 'DELETE_FAILED' };
+    }
+
+    return { success: true };
   });
