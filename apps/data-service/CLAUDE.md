@@ -1,0 +1,71 @@
+# data-service
+
+Cloudflare Worker API exposing data-ops queries via Hono REST endpoints.
+
+## Stack
+
+- Hono (Cloudflare Workers adapter)
+- WorkerEntrypoint class pattern
+- Consumes `@repo/data-ops` for DB queries and Zod schemas
+
+## Structure
+
+```
+src/
+├── index.ts              # Worker entrypoint, initializes DB
+├── hono/
+│   ├── app.ts            # Hono app, middleware chain, routes
+│   ├── handlers/         # Route handlers (thin, delegate to services)
+│   ├── services/         # Business logic, calls data-ops queries
+│   ├── middleware/       # request-id, cors, auth, rate-limiter, error-handler
+│   └── utils/            # ApiError class, error helpers
+├── scheduled/            # Cron triggers
+├── queues/               # Queue consumers
+├── durable-objects/      # Durable Objects
+└── workflows/            # Workflows
+```
+
+## Patterns
+
+**Handlers → Services → data-ops queries**
+- Handlers: validation, auth middleware, call service, return response
+- Services: error handling (HTTPException), call data-ops queries
+- Queries: defined in `@repo/data-ops/queries/*`
+
+**Middleware order** (in app.ts):
+1. `requestId()` - generates/passes correlation ID
+2. `onError` - global error handler
+3. `cors` - CORS headers
+4. Route-specific: `authMiddleware`, `rateLimiter`, `zValidator`
+
+**Zod validation**: use `zValidator('param' | 'query' | 'json', Schema)`
+
+**Error handling**: throw `HTTPException` from services, handled by `onErrorHandler`
+
+## Endpoints
+
+- `GET /health/live` - liveness (instant 200)
+- `GET /health/ready` - readiness (checks DB)
+- `GET|POST|PUT|DELETE /users/*` - CRUD (POST/PUT/DELETE require Bearer token)
+
+## Dev
+
+```bash
+pnpm run dev              # local dev server
+pnpm run deploy:dev       # deploy to dev
+pnpm run deploy:staging   # deploy to staging
+pnpm run deploy:prod      # deploy to production
+```
+
+## Env vars
+
+Required in `.dev.vars` (local) or Cloudflare dashboard (remote):
+- `DATABASE_HOST`, `DATABASE_USERNAME`, `DATABASE_PASSWORD`
+- `API_TOKEN` - Bearer token for protected endpoints
+- `CLOUDFLARE_ENV` - dev | staging | production
+- `ALLOWED_ORIGINS` - comma-separated origins (prod/staging only)
+
+## Don't
+
+- Put DB queries here - add to `@repo/data-ops/queries`
+- Forget to rebuild data-ops after schema changes (`pnpm --filter @repo/data-ops build`)

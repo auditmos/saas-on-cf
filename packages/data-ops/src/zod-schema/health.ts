@@ -4,17 +4,25 @@ import { z } from 'zod';
 // Response Schemas
 // ============================================
 
-export const HealthCheckResponseSchema = z.object({
-  status: z.string(),
+export const DatabaseStatusSchema = z.enum(['connected', 'disconnected']);
+
+export const LivenessResponseSchema = z.object({
+  status: z.literal('ok'),
+  time: z.string(),
+});
+
+export const ReadinessResponseSchema = z.object({
+  status: z.enum(['ok', 'degraded']),
   env: z.string(),
   service: z.string(),
   time: z.string(),
-  message: z.string(),
-  version: z.string()
+  database: DatabaseStatusSchema,
 });
 
 // ============================================
 // Types
 // ============================================
 
-export type HealthCheckResponse = z.infer<typeof HealthCheckResponseSchema>;
+export type DatabaseStatus = z.infer<typeof DatabaseStatusSchema>;
+export type LivenessResponse = z.infer<typeof LivenessResponseSchema>;
+export type ReadinessResponse = z.infer<typeof ReadinessResponseSchema>;

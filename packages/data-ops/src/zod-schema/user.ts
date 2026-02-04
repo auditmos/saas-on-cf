@@ -38,6 +38,10 @@ export const PaginationRequestSchema = z.object({
   offset: z.coerce.number().min(0).default(0)
 });
 
+export const IdParamSchema = z.object({
+  id: z.string().uuid('Invalid ID format')
+});
+
 // ============================================
 // Response Schemas
 // ============================================

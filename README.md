@@ -51,6 +51,15 @@ Validation schemas using Zod.
 - Forms
 - DTOs
 
+**Naming conventions:**
+
+| Purpose      | Suffix         | Example                 |
+|--------------|----------------|-------------------------|
+| Domain model | Schema         | UserSchema              |
+| Request      | RequestSchema  | UserCreateRequestSchema |
+| Response     | ResponseSchema | UserListResponseSchema  |
+| Type         | no suffix      | User, UserCreateInput   |
+
 **Purpose**: Type-safe contracts between frontend/backend. Validates data shape at runtime.
 
 Example: `user.ts` exports `UserSchema` schema.

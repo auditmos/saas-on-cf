@@ -1,74 +1,56 @@
 import { Context } from 'hono';
+import { HTTPException } from 'hono/http-exception';
 import { ApiError, createErrorResponse, isError } from '../utils/error-handling';
+import type { ContentfulStatusCode } from 'hono/utils/http-status';
 
-/**
- * Valid HTTP status codes that Hono accepts
- */
-const VALID_STATUS_CODES = [
-  200, 201, 202, 204, 206, 207, 208, 226,
-  300, 301, 302, 303, 304, 305, 306, 307, 308,
-  400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 418, 421, 422, 423, 424, 425, 426, 428, 429, 431, 451,
-  500, 501, 502, 503, 504, 505, 506, 507, 508, 510, 511
-] as const;
-
-type ValidStatusCode = typeof VALID_STATUS_CODES[number];
-
-/**
- * Converts a number to a valid HTTP status code
- * Falls back to 500 if the code is not valid
- */
-function toValidStatusCode(code: number): ValidStatusCode {
-  if (VALID_STATUS_CODES.includes(code as ValidStatusCode)) {
-    return code as ValidStatusCode;
-  }
+function toContentfulStatusCode(code: number): ContentfulStatusCode {
+  if (code >= 400 && code <= 599) return code as ContentfulStatusCode;
   return 500;
 }
 
-/**
- * Error handler middleware for Hono
- * Handles all errors and returns appropriate JSON responses
- */
-export function errorHandler() {
-  return async (c: Context, next: () => Promise<void>) => {
-    try {
-      await next();
-    } catch (e: unknown) {
-      console.error('Request error:', e);
-      
-      if (e instanceof ApiError) {
-        c.status(toValidStatusCode(e.statusCode));
-        return c.json(createErrorResponse(e));
-      }
-      
-      if (isError(e)) {
-        c.status(500);
-        return c.json(createErrorResponse(e));
-      }
-      
-      c.status(500);
-      return c.json(createErrorResponse(e));
-    }
+function getHttpStatusMessage(status: number): string {
+  const messages: Record<number, string> = {
+    400: 'Bad Request',
+    401: 'Unauthorized',
+    403: 'Forbidden',
+    404: 'Not Found',
+    409: 'Conflict',
+    429: 'Too Many Requests',
+    500: 'Internal Server Error',
   };
+  return messages[status] || 'Error';
 }
 
-/**
- * Error handler for Hono onError hook
- * This is the preferred way to handle errors in Hono
- */
-export function onErrorHandler(err: unknown, c: Context) {
-  console.error('Request error:', err);
-  
+async function getHttpExceptionMessage(e: HTTPException): Promise<string> {
+  if (e.message) return e.message;
+  try {
+    const res = e.getResponse();
+    return await res.text() || getHttpStatusMessage(e.status);
+  } catch {
+    return getHttpStatusMessage(e.status);
+  }
+}
+
+export async function onErrorHandler(err: unknown, c: Context) {
+  const requestId = c.get('requestId') || 'unknown';
+
+  if (err instanceof HTTPException) {
+    const msg = await getHttpExceptionMessage(err);
+    c.header('x-request-id', requestId);
+    return c.json({ error: msg, requestId }, toContentfulStatusCode(err.status));
+  }
+
+  console.error(`[${requestId}] Error:`, err);
+
+  c.header('x-request-id', requestId);
+
   if (err instanceof ApiError) {
-    c.status(toValidStatusCode(err.statusCode));
-    return c.json(createErrorResponse(err));
+    return c.json(createErrorResponse(err), toContentfulStatusCode(err.statusCode));
   }
-  
-  if (isError(err)) {
-    c.status(500);
-    return c.json(createErrorResponse(err));
-  }
-  
-  c.status(500);
-  return c.json(createErrorResponse(err));
-}
 
+  if (isError(err)) {
+    return c.json(createErrorResponse(err), 500);
+  }
+
+  return c.json({ error: 'Internal server error' }, 500);
+}

@@ -1,18 +1,28 @@
 import { Hono } from 'hono';
-import type { HealthCheckResponse } from '@repo/data-ops/zod-schema/responses/health';
+import type { LivenessResponse, ReadinessResponse } from '@repo/data-ops/zod-schema/health';
+import { checkDatabase } from '../services/health-service';
+import { rateLimiter } from '../middleware/rate-limiter';
 
 const health = new Hono<{ Bindings: Env }>();
 
-health.get('/', (c) => {
-  const response: HealthCheckResponse = {
+health.get('/live', (c) => {
+  const response: LivenessResponse = {
     status: 'ok',
+    time: new Date().toISOString(),
+  };
+  return c.json(response);
+});
+
+health.get('/ready', rateLimiter({ windowMs: 60000, maxRequests: 10 }), async (c) => {
+  const dbStatus = await checkDatabase();
+  const response: ReadinessResponse = {
+    status: dbStatus === 'connected' ? 'ok' : 'degraded',
     env: c.env.CLOUDFLARE_ENV,
     service: 'saas-on-cf',
     time: new Date().toISOString(),
-    message: 'Service healthy',
-    version: '0.0.1',
+    database: dbStatus,
   };
-  return c.json(response);
+  return c.json(response, dbStatus === 'connected' ? 200 : 503);
 });
 
 export default health;
