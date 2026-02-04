@@ -1,4 +1,29 @@
+import { sql } from 'drizzle-orm';
 import { initDatabase } from '../setup';
+import { users } from '../../drizzle/schema';
+
+const sampleUsers = [
+  { name: 'John', surname: 'Smith', email: 'john.smith@example.com' },
+  { name: 'Emma', surname: 'Johnson', email: 'emma.johnson@example.com' },
+  { name: 'Michael', surname: 'Williams', email: 'michael.williams@example.com' },
+  { name: 'Sarah', surname: 'Brown', email: 'sarah.brown@example.com' },
+  { name: 'James', surname: 'Jones', email: 'james.jones@example.com' },
+  { name: 'Emily', surname: 'Garcia', email: 'emily.garcia@example.com' },
+  { name: 'David', surname: 'Miller', email: 'david.miller@example.com' },
+  { name: 'Olivia', surname: 'Davis', email: 'olivia.davis@example.com' },
+  { name: 'Robert', surname: 'Martinez', email: 'robert.martinez@example.com' },
+  { name: 'Sophia', surname: 'Anderson', email: 'sophia.anderson@example.com' },
+  { name: 'William', surname: 'Taylor', email: 'william.taylor@example.com' },
+  { name: 'Ava', surname: 'Thomas', email: 'ava.thomas@example.com' },
+  { name: 'Joseph', surname: 'Moore', email: 'joseph.moore@example.com' },
+  { name: 'Isabella', surname: 'Jackson', email: 'isabella.jackson@example.com' },
+  { name: 'Charles', surname: 'White', email: 'charles.white@example.com' },
+  { name: 'Mia', surname: 'Harris', email: 'mia.harris@example.com' },
+  { name: 'Thomas', surname: 'Clark', email: 'thomas.clark@example.com' },
+  { name: 'Charlotte', surname: 'Lewis', email: 'charlotte.lewis@example.com' },
+  { name: 'Daniel', surname: 'Walker', email: 'daniel.walker@example.com' },
+  { name: 'Amelia', surname: 'Hall', email: 'amelia.hall@example.com' }
+];
 
 async function seedDb() {
   console.log('Initializing database connection...');
@@ -9,7 +34,15 @@ async function seedDb() {
     password: process.env.DATABASE_PASSWORD!
   });
 
+  console.log('Checking database connection...');
+  await db.execute(sql`SELECT 1`);
+  console.log('Database connection OK');
+
   console.log('\n[START] Seeding data...\n');
+
+  console.log('Seeding users...');
+  await db.insert(users).values(sampleUsers).onConflictDoNothing();
+  console.log(`Inserted ${sampleUsers.length} users`);
 
   console.log('\n[END] Seeding data...\n');
 

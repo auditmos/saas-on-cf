@@ -1,50 +1,55 @@
-import { mockUsers } from '../mocks/user-mock';
+import { eq, count } from 'drizzle-orm';
+import { getDb } from '../database/setup';
+import { users } from '../drizzle/schema';
 import type {
   User,
-  PaginationQuery,
-  UserListResponseData,
-  UserUpdateInput
+  PaginationRequest,
+  UserListResponse,
+  UserUpdateInput,
+  UserCreateInput
 } from '../zod-schema/user';
 
-/**
- * Get user by ID
- * Currently uses mock, will use Neon database later
- */
 export async function getUser(userId: string): Promise<User | null> {
-  return mockUsers.findById(userId) ?? null;
+  const db = getDb();
+  const result = await db.select().from(users).where(eq(users.id, userId));
+  return result[0] ?? null;
 }
 
-/**
- * Get paginated users
- */
-export async function getUsers(params: PaginationQuery): Promise<UserListResponseData> {
-  return mockUsers.getPaginated(params);
+export async function getUsers(params: PaginationRequest): Promise<UserListResponse> {
+  const db = getDb();
+  const [data, countResult] = await Promise.all([
+    db.select().from(users).limit(params.limit).offset(params.offset),
+    db.select({ total: count() }).from(users)
+  ]);
+  const total = countResult[0]?.total ?? 0;
+  return {
+    data,
+    pagination: {
+      total,
+      limit: params.limit,
+      offset: params.offset,
+      hasMore: params.offset + data.length < total
+    }
+  };
 }
 
-/**
- * Update user
- */
+export async function createUser(data: UserCreateInput): Promise<User> {
+  const db = getDb();
+  const [user] = await db.insert(users).values(data).returning();
+  return user!;
+}
+
 export async function updateUser(
   userId: string,
   data: UserUpdateInput
 ): Promise<User | null> {
-  const existing = mockUsers.findById(userId);
-  if (!existing) return null;
-
-  if (data.email && data.email !== existing.email) {
-    const emailExists = mockUsers.findByEmail(data.email);
-    if (emailExists) throw new Error('EMAIL_EXISTS');
-  }
-
-  return mockUsers.update(userId, data);
+  const db = getDb();
+  const result = await db.update(users).set(data).where(eq(users.id, userId)).returning();
+  return result[0] ?? null;
 }
 
-/**
- * Delete user
- */
 export async function deleteUser(userId: string): Promise<boolean> {
-  const user = mockUsers.findById(userId);
-  if (!user) return false;
-  mockUsers.delete(userId);
-  return true;
+  const db = getDb();
+  const result = await db.delete(users).where(eq(users.id, userId)).returning();
+  return result.length > 0;
 }
