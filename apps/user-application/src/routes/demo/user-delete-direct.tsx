@@ -1,9 +1,8 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import { getUsersDataOps } from '@/core/functions/user-queries';
 import { deleteUserDirect } from '@/core/functions/user-mutations';
-import { userKeys } from '@/lib/query-keys';
+import { usersListDataOpsQueryOptions, userKeys } from '@/lib/query-keys';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -16,18 +15,22 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 
+const pagination = { limit: 10, offset: 0 };
+
 export const Route = createFileRoute('/demo/user-delete-direct')({
   component: UserDeleteDirectDemo,
+  loader: async ({ context }) => {
+    await context.queryClient.ensureQueryData(usersListDataOpsQueryOptions(pagination));
+  },
 });
 
 function UserDeleteDirectDemo() {
   const queryClient = useQueryClient();
   const [deleteUserId, setDeleteUserId] = useState<string | null>(null);
-  const pagination = { limit: 10, offset: 0 };
 
   const { data, isLoading, error: fetchError } = useQuery({
-    queryKey: userKeys.list(pagination),
-    queryFn: () => getUsersDataOps({ data: pagination }),
+    ...usersListDataOpsQueryOptions(pagination),
+    placeholderData: (prev) => prev,
   });
 
   const deleteMutation = useMutation({
@@ -48,17 +51,13 @@ function UserDeleteDirectDemo() {
 
   return (
     <div className="space-y-6">
-      <Link to="/demo" className="text-sm text-muted-foreground hover:underline">
-        ← Back to demos
-      </Link>
       <div>
         <h2 className="text-2xl font-bold">DELETE User - Server → data-ops</h2>
         <p className="text-muted-foreground mt-1">
-          Server function directly deletes via data-ops package (mocks)
+          Server function directly deletes via data-ops package
         </p>
       </div>
 
-      {/* Data Flow */}
       <Card>
         <CardHeader>
           <CardTitle>Data Flow</CardTitle>
@@ -124,7 +123,6 @@ Response → Invalidate queries → UI updates`}
         </CardContent>
       </Card>
 
-      {/* Interactive Demo */}
       <Card>
         <CardHeader>
           <CardTitle>Interactive Demo - Delete User</CardTitle>
@@ -196,7 +194,6 @@ Response → Invalidate queries → UI updates`}
         </CardContent>
       </Card>
 
-      {/* Confirmation Dialog */}
       <Dialog open={!!deleteUserId} onOpenChange={() => setDeleteUserId(null)}>
         <DialogContent>
           <DialogHeader>
@@ -236,23 +233,20 @@ Response → Invalidate queries → UI updates`}
         </DialogContent>
       </Dialog>
 
-      {/* Code Reference */}
       <Card>
         <CardHeader>
           <CardTitle>Key Implementation</CardTitle>
         </CardHeader>
         <CardContent>
           <pre className="bg-muted p-4 rounded text-sm overflow-x-auto">
-{`// Server function - direct data-ops delete
-export const deleteUserDirect = createServerFn({ method: 'POST' })
-  .inputValidator((data) => DeleteUserInput.parse(data))
-  .handler(async (ctx) => {
-    const targetUser = await getUser(ctx.data.id);
-    if (!targetUser) return { success: false, error: 'Not found', code: 'NOT_FOUND' };
-
-    const deleted = await deleteUser(ctx.data.id);
-    return deleted ? { success: true } : { success: false, error: 'Failed', code: 'DELETE_FAILED' };
-  });
+{`// SSR with centralized query options
+export const Route = createFileRoute('/demo/user-delete-direct')({
+  loader: async ({ context }) => {
+    await context.queryClient.ensureQueryData(
+      usersListDataOpsQueryOptions(pagination)
+    );
+  },
+});
 
 // Client - mutation with confirmation pattern
 const deleteMutation = useMutation({
@@ -260,15 +254,14 @@ const deleteMutation = useMutation({
   onSuccess: (result) => {
     if (result.success) {
       queryClient.invalidateQueries({ queryKey: userKeys.lists() });
-      setDeleteUserId(null); // close dialog
+      setDeleteUserId(null);
     }
   },
 });
 
 // Confirmation gate: state drives dialog open/close
 <Dialog open={!!deleteUserId} onOpenChange={() => setDeleteUserId(null)}>
-  ...
-  <Button variant="destructive" onClick={() => deleteMutation.mutate(deleteUserId)}>
+  <Button onClick={() => deleteMutation.mutate(deleteUserId)}>
     Delete
   </Button>
 </Dialog>`}

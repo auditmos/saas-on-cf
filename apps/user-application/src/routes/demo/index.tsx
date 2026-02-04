@@ -16,7 +16,7 @@ function DemoIndexPage() {
     },
     {
       title: 'GET User - Server → data-ops',
-      description: 'Server function queries data-ops directly, bypassing API layer',
+      description: 'Server function queries data-ops directly with URL params',
       href: '/demo/user-detail-direct' as const,
       pattern: 'Pattern C',
       ssr: true,
@@ -26,11 +26,11 @@ function DemoIndexPage() {
       description: 'Server function calls data-service via Cloudflare service binding',
       href: '/demo/user-create-binding' as const,
       pattern: 'Pattern B',
-      ssr: true,
+      ssr: false,
     },
     {
       title: 'PUT User - Server → data-ops',
-      description: 'Server function updates via data-ops directly, with optimistic UI',
+      description: 'Server function updates via data-ops with optimistic UI',
       href: '/demo/user-update-direct' as const,
       pattern: 'Pattern C',
       ssr: true,
@@ -40,7 +40,7 @@ function DemoIndexPage() {
       description: 'Server function deletes via data-ops with confirmation dialog',
       href: '/demo/user-delete-direct' as const,
       pattern: 'Pattern C',
-      ssr: false,
+      ssr: true,
     },
   ];
 

@@ -254,18 +254,18 @@ const mutation = useMutation({
     if (result.success) {
       queryClient.invalidateQueries({ queryKey: userKeys.all });
       form.reset();
-    } else if (result.field) {
-      form.setFieldMeta(result.field, (prev) => ({
-        ...prev, errors: [result.error]
-      }));
     }
+    // Server errors shown via mutation.data.error in Alert
   },
 });
 
-// TanStack Form for validation
+// TanStack Form with onSubmit calling mutation
 const form = useForm({
   defaultValues: { name: '', email: '' },
-  onSubmit: ({ value }) => mutation.mutate(value),
+  onSubmit: ({ value }) => {
+    mutation.reset();
+    mutation.mutate(value);
+  },
 });
 
 // Field with client validation
@@ -275,12 +275,7 @@ const form = useForm({
     onChange: ({ value }) => !value ? 'Required' : undefined,
   }}
 >
-  {(field) => (
-    <Input
-      value={field.state.value}
-      onChange={(e) => field.handleChange(e.target.value)}
-    />
-  )}
+  {(field) => <Input ... />}
 </form.Field>
 
 // Button uses mutation.isPending

@@ -1,10 +1,9 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useForm } from '@tanstack/react-form';
-import { queryOptions, useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { z } from 'zod';
-import { getUserDataOps } from '@/core/functions/user-queries';
 import { updateUserDirect } from '@/core/functions/user-mutations';
-import { userKeys } from '@/lib/query-keys';
+import { userKeys, userDetailQueryOptions } from '@/lib/query-keys';
 import type { User } from '@repo/data-ops/zod-schema/user';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,13 +14,6 @@ const searchSchema = z.object({
   userId: z.string().default('1'),
   editing: z.boolean().default(false),
 });
-
-const userDetailQueryOptions = (id: string) =>
-  queryOptions({
-    queryKey: userKeys.detail(id),
-    queryFn: () => getUserDataOps({ data: { id } }),
-    staleTime: 1000 * 60,
-  });
 
 export const Route = createFileRoute('/demo/user-update-direct')({
   component: UserUpdateDirectDemo,
@@ -138,7 +130,7 @@ function UserUpdateDirectDemo() {
     ▼
 Server Function (updateUserDirect)
     │
-    │ 2. Auth middleware → Zod validation → Authorization
+    │ 2. Zod validation → existence check
     │
     ▼
 import { updateUser } from '@repo/data-ops/queries/user'
