@@ -7,48 +7,90 @@ paths:
 
 ## Connection Setup
 
-- Use `@neondatabase/serverless` for edge/serverless
-- Connection string from environment, never hardcode
-- Use `getDb()` factory for connection management
+- Singleton pattern: `initDatabase()` once in Worker entry, `getDb()` everywhere else
+- Connection string built internally from host/username/password
+- Uses `drizzle-orm/neon-http` adapter (Neon HTTP driver implicit)
 
 ```ts
-import { neon } from '@neondatabase/serverless'
+// packages/data-ops/src/database/setup.ts
 import { drizzle } from 'drizzle-orm/neon-http'
 
-export function getDb(connectionString: string) {
-  const sql = neon(connectionString)
-  return drizzle(sql, { schema })
+let db: ReturnType<typeof drizzle>
+
+export function initDatabase(connection: {
+  host: string
+  username: string
+  password: string
+}) {
+  if (db) return db
+  const connectionString = `postgres://${connection.username}:${connection.password}@${connection.host}`
+  db = drizzle(connectionString)
+  return db
+}
+
+export function getDb() {
+  if (!db) throw new Error('Database not initialized')
+  return db
 }
 ```
 
-## Environment Configuration
+## Initialization
 
-- Separate connection strings per environment
-- Use `DATABASE_URL` env var naming
-- Configure in `wrangler.jsonc` for CF Workers
+- Call `initDatabase()` in Worker constructor/entry point
+- DB env vars set via **Cloudflare dashboard**, not wrangler.jsonc
 
 ```ts
-// Access in worker
-const db = getDb(env.DATABASE_URL)
+// Worker entry (data-service or user-application)
+initDatabase({
+  host: env.DATABASE_HOST,
+  username: env.DATABASE_USERNAME,
+  password: env.DATABASE_PASSWORD,
+})
 ```
+
+## Environment Variables
+
+```bash
+DATABASE_HOST="ep-xxx.region.aws.neon.tech/neondb?sslmode=require"
+DATABASE_USERNAME="neondb_owner"
+DATABASE_PASSWORD="npg_xxx"
+```
+
+- HOST includes DB name, SSL params, and pooler config
+- Separate values per environment (dev/staging/production)
+
+## Query Layer
+
+- All queries call `getDb()` — never accept DB as parameter
+- Use Drizzle query builder (`select`, `insert`, `update`, `delete`)
+- Use `.returning()` for mutations
+
+```ts
+import { getDb } from '../database/setup'
+import { users } from '../drizzle/schema'
+
+export async function getUser(userId: string) {
+  const db = getDb()
+  const result = await db.select().from(users).where(eq(users.id, userId))
+  return result[0] ?? null
+}
+```
+
+## Migrations
+
+- Drizzle Kit with env-specific configs: `drizzle-{env}.config.ts`
+- Separate migration output dirs per env: `migrations/dev`, `migrations/staging`, `migrations/production`
+- Schema sources: `auth-schema.ts`, `schema.ts`, `relations.ts`
 
 ## Serverless Patterns
 
-- Neon autoscales—no connection pooling config needed
-- Each request gets fresh connection (stateless)
-- Queries execute at edge, close to users
-- Keep queries efficient—minimize round trips
-
-## Branching (Dev/Preview)
-
-- Use Neon branches for isolated dev/preview environments
-- Main branch = production
-- Create branches for feature development
-- Branches share compute, minimize costs
+- Neon pooler endpoint in HOST — no manual pool config
+- Singleton `db` cached per Worker isolate lifetime
+- Stateless per-request query execution at edge
 
 ## Best Practices
 
 - Avoid long-running transactions in serverless
-- Use single queries over multiple round trips
-- Leverage Drizzle's 1-query output for efficiency
-- Monitor query performance via Neon dashboard
+- Use `Promise.all()` for independent parallel queries
+- Use `.returning()` on insert/update/delete to avoid extra round trips
+- Use `.onConflictDoNothing()` for idempotent inserts (seeds)
