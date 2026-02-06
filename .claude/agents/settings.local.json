@@ -18,7 +18,8 @@
       "WebFetch(domain:orm.drizzle.team/docs/overview)",
       "WebFetch(domain:react.dev/reference/react)",
       "WebFetch(domain:neon.com/docs/introduction)",
-      "WebFetch(domain:developers.cloudflare.com/directory/)"
+      "WebFetch(domain:developers.cloudflare.com/directory)",
+      "WebFetch(domain:tweakcn.com)"
     ],
     "deny": [
       "Bash(rm -rf:*)",

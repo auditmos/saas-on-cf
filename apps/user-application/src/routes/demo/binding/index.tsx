@@ -42,7 +42,7 @@ data-ops queries → Neon Postgres`}
 
           <div className="grid md:grid-cols-2 gap-4">
             <div>
-              <h4 className="font-semibold text-green-700">Pros</h4>
+              <h4 className="font-semibold text-success-foreground">Pros</h4>
               <ul className="text-sm list-disc list-inside mt-2 space-y-1">
                 <li>Shared logic with data-service API</li>
                 <li>Internal network (no CORS)</li>
@@ -52,7 +52,7 @@ data-ops queries → Neon Postgres`}
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold text-red-700">Cons</h4>
+              <h4 className="font-semibold text-destructive">Cons</h4>
               <ul className="text-sm list-disc list-inside mt-2 space-y-1">
                 <li>Extra hop latency</li>
                 <li>Depends on data-service availability</li>
@@ -62,17 +62,17 @@ data-ops queries → Neon Postgres`}
             </div>
           </div>
 
-          <div className="bg-blue-50 dark:bg-blue-950 p-4 rounded">
+          <div className="bg-info/10 p-4 rounded">
             <h4 className="font-semibold">When to Use</h4>
             <p className="text-sm mt-1">Internal microservices, shared business logic, centralized validation</p>
           </div>
 
-          <div className="bg-amber-50 dark:bg-amber-950 p-4 rounded">
+          <div className="bg-warning/10 p-4 rounded">
             <h4 className="font-semibold">When NOT to Use</h4>
             <p className="text-sm mt-1">Need lowest latency, data-service down = app down</p>
           </div>
 
-          <div className="bg-purple-50 dark:bg-purple-950 p-4 rounded">
+          <div className="bg-accent/50 p-4 rounded">
             <h4 className="font-semibold">Service Binding Advantage</h4>
             <p className="text-sm mt-1">
               Hostname in URL is ignored - requests go directly to bound worker via Cloudflare's

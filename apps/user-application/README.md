@@ -521,6 +521,10 @@ Authentication UI components.
 ##### [`src/components/ui/`](./src/components/ui/)
 Shadcn/UI base components (buttons, cards, dialogs, etc.).
 
+**Theming:** Colors use oklch format (shadcn/ui standard). Custom status vars (`--success`, `--warning`, `--info`) are defined in `src/styles.css` alongside the standard shadcn palette. Use semantic theme classes (`text-destructive`, `bg-success/10`, `<Alert variant="success">`) instead of hardcoded Tailwind palette colors.
+
+**tweakcn themes:** Install via `cd apps/user-application && pnpm dlx shadcn@latest add <tweakcn-url>`. Custom status vars survive theme installs (tweakcn merges, doesn't replace). Adjust status color values after theme swap to match new palette.
+
 ##### [`src/components/layout/`](./src/components/layout/)
 Layout components (header, sidebar).
 

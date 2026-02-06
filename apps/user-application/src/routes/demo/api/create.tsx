@@ -67,7 +67,7 @@ Response → queryClient.invalidateQueries()`}
         </CardHeader>
         <CardContent className="space-y-4">
           {mutation.isSuccess && (
-            <Alert className="bg-green-50 border-green-200">
+            <Alert variant="success">
               <AlertTitle>Success</AlertTitle>
               <AlertDescription>
                 User "{mutation.data.name}" created (ID: {mutation.data.id})
@@ -111,7 +111,7 @@ Response → queryClient.invalidateQueries()`}
                     onBlur={field.handleBlur}
                   />
                   {field.state.meta.errors.map((error) => (
-                    <p key={String(error)} className="text-red-500 text-sm">{error}</p>
+                    <p key={String(error)} className="text-destructive text-sm">{error}</p>
                   ))}
                 </div>
               )}
@@ -134,7 +134,7 @@ Response → queryClient.invalidateQueries()`}
                     onBlur={field.handleBlur}
                   />
                   {field.state.meta.errors.map((error) => (
-                    <p key={String(error)} className="text-red-500 text-sm">{error}</p>
+                    <p key={String(error)} className="text-destructive text-sm">{error}</p>
                   ))}
                 </div>
               )}
@@ -161,7 +161,7 @@ Response → queryClient.invalidateQueries()`}
                     onBlur={field.handleBlur}
                   />
                   {field.state.meta.errors.map((error) => (
-                    <p key={String(error)} className="text-red-500 text-sm">{error}</p>
+                    <p key={String(error)} className="text-destructive text-sm">{error}</p>
                   ))}
                 </div>
               )}

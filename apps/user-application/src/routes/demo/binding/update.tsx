@@ -161,7 +161,7 @@ Response → Success: keep optimistic
           )}
 
           {updateMutation.data?.success && (
-            <Alert className="bg-green-50 border-green-200">
+            <Alert variant="success">
               <AlertTitle>Success</AlertTitle>
               <AlertDescription>User updated!</AlertDescription>
             </Alert>
@@ -191,7 +191,7 @@ Response → Success: keep optimistic
                           onBlur={field.handleBlur}
                         />
                         {field.state.meta.errors.map((err) => (
-                          <p key={String(err)} className="text-red-500 text-sm">{err}</p>
+                          <p key={String(err)} className="text-destructive text-sm">{err}</p>
                         ))}
                       </div>
                     )}
@@ -210,7 +210,7 @@ Response → Success: keep optimistic
                           onBlur={field.handleBlur}
                         />
                         {field.state.meta.errors.map((err) => (
-                          <p key={String(err)} className="text-red-500 text-sm">{err}</p>
+                          <p key={String(err)} className="text-destructive text-sm">{err}</p>
                         ))}
                       </div>
                     )}
@@ -235,7 +235,7 @@ Response → Success: keep optimistic
                           onBlur={field.handleBlur}
                         />
                         {field.state.meta.errors.map((err) => (
-                          <p key={String(err)} className="text-red-500 text-sm">{err}</p>
+                          <p key={String(err)} className="text-destructive text-sm">{err}</p>
                         ))}
                       </div>
                     )}

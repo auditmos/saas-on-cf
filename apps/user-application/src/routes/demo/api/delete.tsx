@@ -99,7 +99,7 @@ Response → Invalidate queries → UI refresh`}
           )}
 
           {successMessage && (
-            <Alert className="bg-green-50 border-green-200">
+            <Alert variant="success">
               <AlertTitle>Success</AlertTitle>
               <AlertDescription>{successMessage}</AlertDescription>
             </Alert>

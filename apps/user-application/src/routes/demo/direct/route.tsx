@@ -1,4 +1,5 @@
 import { createFileRoute, Outlet, Link } from '@tanstack/react-router';
+import { Badge } from '@/components/ui/badge';
 
 export const Route = createFileRoute('/demo/direct')({
   component: DirectLayout,
@@ -16,17 +17,17 @@ const operations = [
 function DirectLayout() {
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-        <span className="bg-green-100 text-green-800 px-2 py-0.5 rounded text-xs">SSR</span>
-        <span>Server Fn → data-ops → DB</span>
+      <div className="flex items-center gap-3">
+        <Badge variant="success">SSR</Badge>
+        <span className="text-sm font-mono text-muted-foreground">Server Fn → data-ops → DB</span>
       </div>
 
-      <nav className="flex gap-4 border-b pb-2">
+      <nav className="inline-flex items-center justify-center rounded-lg bg-muted p-[3px] h-9">
         {operations.map((op) => (
           <Link
             key={op.href}
             to={op.href}
-            className="text-sm hover:underline [&.active]:font-bold"
+            className="inline-flex items-center justify-center rounded-md px-3 py-1 text-sm font-medium text-foreground/60 transition-all hover:text-foreground [&.active]:bg-background [&.active]:text-foreground [&.active]:shadow-sm"
             activeOptions={{ exact: op.exact }}
           >
             {op.label}

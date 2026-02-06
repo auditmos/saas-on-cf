@@ -60,3 +60,11 @@ class ValidationError extends Error {
 - Group: external → internal → relative
 - Absolute imports via path aliases when configured
 - Avoid circular dependencies
+
+# Universal Cloudflare Rules
+
+- Use `wrangler.jsonc` instead of `wrangler.toml` for configuration
+
+# Universal Programming Rules
+
+- When I report a bug, don't start by trying to fix it. Instead, start by writing a test that reproduces the bug.

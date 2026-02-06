@@ -41,7 +41,7 @@ data-ops queries → Neon Postgres`}
 
           <div className="grid md:grid-cols-2 gap-4">
             <div>
-              <h4 className="font-semibold text-green-700">Pros</h4>
+              <h4 className="font-semibold text-success-foreground">Pros</h4>
               <ul className="text-sm list-disc list-inside mt-2 space-y-1">
                 <li>Standard HTTP - works from any client</li>
                 <li>Shared API with mobile apps</li>
@@ -51,7 +51,7 @@ data-ops queries → Neon Postgres`}
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold text-red-700">Cons</h4>
+              <h4 className="font-semibold text-destructive">Cons</h4>
               <ul className="text-sm list-disc list-inside mt-2 space-y-1">
                 <li>No SSR support</li>
                 <li>Client manages auth tokens</li>
@@ -62,17 +62,17 @@ data-ops queries → Neon Postgres`}
             </div>
           </div>
 
-          <div className="bg-blue-50 dark:bg-blue-950 p-4 rounded">
+          <div className="bg-info/10 p-4 rounded">
             <h4 className="font-semibold">When to Use</h4>
             <p className="text-sm mt-1">Mobile apps, third-party integrations, public API consumers</p>
           </div>
 
-          <div className="bg-amber-50 dark:bg-amber-950 p-4 rounded">
+          <div className="bg-warning/10 p-4 rounded">
             <h4 className="font-semibold">When NOT to Use</h4>
             <p className="text-sm mt-1">Need SSR, sensitive operations, internal-only features</p>
           </div>
 
-          <div className="bg-red-50 dark:bg-red-950 p-4 rounded">
+          <div className="bg-destructive/10 p-4 rounded">
             <h4 className="font-semibold">Security Note</h4>
             <p className="text-sm mt-1">
               API tokens used in browser are visible to users. Use this pattern for public data

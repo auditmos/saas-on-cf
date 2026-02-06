@@ -40,7 +40,7 @@ Neon Postgres`}
 
           <div className="grid md:grid-cols-2 gap-4">
             <div>
-              <h4 className="font-semibold text-green-700">Pros</h4>
+              <h4 className="font-semibold text-success-foreground">Pros</h4>
               <ul className="text-sm list-disc list-inside mt-2 space-y-1">
                 <li>Lowest latency (no extra hop)</li>
                 <li>Full transaction control</li>
@@ -50,7 +50,7 @@ Neon Postgres`}
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold text-red-700">Cons</h4>
+              <h4 className="font-semibold text-destructive">Cons</h4>
               <ul className="text-sm list-disc list-inside mt-2 space-y-1">
                 <li>Logic not shared with data-service API</li>
                 <li>No automatic rate limiting</li>
@@ -60,12 +60,12 @@ Neon Postgres`}
             </div>
           </div>
 
-          <div className="bg-blue-50 dark:bg-blue-950 p-4 rounded">
+          <div className="bg-info/10 p-4 rounded">
             <h4 className="font-semibold">When to Use</h4>
             <p className="text-sm mt-1">Performance-critical reads, complex transactions, SSR required</p>
           </div>
 
-          <div className="bg-amber-50 dark:bg-amber-950 p-4 rounded">
+          <div className="bg-warning/10 p-4 rounded">
             <h4 className="font-semibold">When NOT to Use</h4>
             <p className="text-sm mt-1">Need shared validation with external API, rate limiting required</p>
           </div>

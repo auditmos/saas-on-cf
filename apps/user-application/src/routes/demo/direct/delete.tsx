@@ -90,7 +90,7 @@ Response → Invalidate queries → UI refresh`}
           )}
 
           {deleteMutation.data?.success && (
-            <Alert className="bg-green-50 border-green-200">
+            <Alert variant="success">
               <AlertTitle>Success</AlertTitle>
               <AlertDescription>User deleted!</AlertDescription>
             </Alert>
