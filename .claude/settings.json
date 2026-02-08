@@ -19,7 +19,8 @@
       "WebFetch(domain:react.dev/reference/react)",
       "WebFetch(domain:neon.com/docs/introduction)",
       "WebFetch(domain:developers.cloudflare.com/directory)",
-      "WebFetch(domain:tweakcn.com)"
+      "WebFetch(domain:tweakcn.com)",
+      "mcp__ide__getDiagnostics"
     ],
     "deny": [
       "Bash(rm -rf:*)",
