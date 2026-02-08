@@ -84,7 +84,7 @@
     /**
 		* Remote / Production environment
 		*/
-    "prod": {
+    "production": {
       // "routes": [
       //   {
       //     "zone_name": "YOUR_DOMAIN.COM",

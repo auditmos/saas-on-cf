@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "deploy:stage": "wrangler deploy --env stage",
-    "deploy:prod": "wrangler deploy --env prod",
+    "deploy:stage": "wrangler deploy --env staging",
+    "deploy:prod": "wrangler deploy --env production",
     "dev": "wrangler dev --env dev --port 8788",
     "test": "vitest",
     "cf-typegen": "wrangler types --env-interface BaseEnv --env dev"
