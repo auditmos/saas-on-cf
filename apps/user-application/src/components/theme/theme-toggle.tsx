@@ -1,4 +1,3 @@
-import * as React from "react";
 import { Monitor, Moon, Sun, Check } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -35,8 +34,8 @@ export function ThemeToggle({
   const getCurrentIcon = () => {
     if (theme === "system") {
       return (
-        <Monitor 
-          className={`h-4 w-4 ${iconVariants.system} rotate-0 scale-100`}
+        <Monitor
+          className={`h-4 w-4 text-foreground ${iconVariants.system} rotate-0 scale-100`}
           aria-hidden="true" 
         />
       );
@@ -44,16 +43,16 @@ export function ThemeToggle({
     
     if (resolvedTheme === "dark") {
       return (
-        <Moon 
-          className={`h-4 w-4 ${iconVariants.moon} rotate-0 scale-100`}
+        <Moon
+          className={`h-4 w-4 text-foreground ${iconVariants.moon} rotate-0 scale-100`}
           aria-hidden="true" 
         />
       );
     }
     
     return (
-      <Sun 
-        className={`h-4 w-4 ${iconVariants.sun} rotate-0 scale-100`}
+      <Sun
+        className={`h-4 w-4 text-foreground ${iconVariants.sun} rotate-0 scale-100`}
         aria-hidden="true" 
       />
     );
