@@ -24,8 +24,8 @@ export default class extends WorkerEntrypoint<Env> {
 
 ## Env Bindings
 
-- Define `Env` interface with all bindings
-- Run `pnpm cf-typegen` to generate types from wrangler.jsonc
+- Run `pnpm cf-typegen` to generate types from wrangler.jsonc and environment variables
+- Above script modifies `Env` interface in **worker-configuration.d.ts**
 - Access via `this.env` or `c.env` (Hono)
 
 ```ts
@@ -41,7 +41,7 @@ interface Env {
 ## Secrets Management
 
 - Never hardcode secrets
-- Configure via `wrangler secret put SECRET_NAME`
+- Configure via `sync-secrets.sh`
 - Access same as env vars: `env.SECRET_NAME`
 - Use `.dev.vars` for local dev (gitignored)
 

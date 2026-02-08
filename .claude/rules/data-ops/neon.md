@@ -37,7 +37,7 @@ export function getDb() {
 ## Initialization
 
 - Call `initDatabase()` in Worker constructor/entry point
-- DB env vars set via **Cloudflare dashboard**, not wrangler.jsonc
+- DB env vars set via `.env.*` file on **user-application** and `.*.vars` file on **data-service** (sync with `sync-secrets.sh`), not wrangler.jsonc
 
 ```ts
 // Worker entry (data-service or user-application)

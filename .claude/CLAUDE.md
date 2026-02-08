@@ -43,6 +43,7 @@ Rules auto-load from `.claude/rules/`:
 │   └── better-auth.md
 ├── data-service/           # Backend API
 │   ├── hono.md
+│   ├── agent-sdk.md
 │   ├── cloudflare-workers.md
 │   ├── queues-workflows.md
 │   ├── durable-objects.md
