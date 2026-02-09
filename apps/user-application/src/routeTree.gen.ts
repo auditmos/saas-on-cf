@@ -195,7 +195,7 @@ export interface FileRoutesByFullPath {
   '/demo/direct/list': typeof DemoDirectListRoute
   '/demo/direct/read': typeof DemoDirectReadRoute
   '/demo/direct/update': typeof DemoDirectUpdateRoute
-  '/app': typeof AuthAppIndexRoute
+  '/app/': typeof AuthAppIndexRoute
   '/demo/api/': typeof DemoApiIndexRoute
   '/demo/binding/': typeof DemoBindingIndexRoute
   '/demo/direct/': typeof DemoDirectIndexRoute
@@ -279,7 +279,7 @@ export interface FileRouteTypes {
     | '/demo/direct/list'
     | '/demo/direct/read'
     | '/demo/direct/update'
-    | '/app'
+    | '/app/'
     | '/demo/api/'
     | '/demo/binding/'
     | '/demo/direct/'
@@ -357,7 +357,7 @@ declare module '@tanstack/react-router' {
     '/_auth': {
       id: '/_auth'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof AuthRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -420,7 +420,7 @@ declare module '@tanstack/react-router' {
     '/_auth/app/': {
       id: '/_auth/app/'
       path: '/app'
-      fullPath: '/app'
+      fullPath: '/app/'
       preLoaderRoute: typeof AuthAppIndexRouteImport
       parentRoute: typeof AuthRouteRoute
     }
