@@ -52,6 +52,7 @@ Rules auto-load from `.claude/rules/`:
     ├── tanstack.md
     ├── react.md
     ├── ui.md
+    ├── i18n.md
     └── auth.md
 ```
 
