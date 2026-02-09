@@ -19,13 +19,13 @@ importers:
     dependencies:
       '@hono/zod-validator':
         specifier: ^0.7.6
-        version: 0.7.6(hono@4.9.8)(zod@4.1.12)
+        version: 0.7.6(hono@4.11.9)(zod@4.1.12)
       '@repo/data-ops':
         specifier: workspace:*
         version: link:../../packages/data-ops
       hono:
-        specifier: ^4.8.3
-        version: 4.9.8
+        specifier: ^4.11.9
+        version: 4.11.9
     devDependencies:
       '@types/node':
         specifier: ^22.15.19
@@ -3638,8 +3638,8 @@ packages:
     resolution: {integrity: sha512-Xwwo44whKBVCYoliBQwaPvtd/2tYFkRQtXDWj1nackaV2JPXx3L0+Jvd8/qCJ2p+ML0/XVkJ2q+Mr+UVdpJK5w==}
     engines: {node: '>=12.0.0'}
 
-  hono@4.9.8:
-    resolution: {integrity: sha512-JW8Bb4RFWD9iOKxg5PbUarBYGM99IcxFl2FPBo2gSJO11jjUDqlP1Bmfyqt8Z/dGhIQ63PMA9LdcLefXyIasyg==}
+  hono@4.11.9:
+    resolution: {integrity: sha512-Eaw2YTGM6WOxA6CXbckaEvslr2Ne4NFsKrvc0v97JD5awbmeBLO5w9Ho9L9kmKonrwF9RJlW6BxT1PVv/agBHQ==}
     engines: {node: '>=16.9.0'}
 
   html-encoding-sniffer@4.0.0:
@@ -5818,9 +5818,9 @@ snapshots:
 
   '@hexagon/base64@1.1.28': {}
 
-  '@hono/zod-validator@0.7.6(hono@4.9.8)(zod@4.1.12)':
+  '@hono/zod-validator@0.7.6(hono@4.11.9)(zod@4.1.12)':
     dependencies:
-      hono: 4.9.8
+      hono: 4.11.9
       zod: 4.1.12
 
   '@img/colour@1.0.0': {}
@@ -8284,7 +8284,7 @@ snapshots:
 
   highlight.js@11.11.1: {}
 
-  hono@4.9.8: {}
+  hono@4.11.9: {}
 
   html-encoding-sniffer@4.0.0:
     dependencies:
