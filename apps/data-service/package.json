@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "deploy:stage": "wrangler deploy --env staging",
-    "deploy:prod": "wrangler deploy --env production",
+    "deploy:staging": "wrangler deploy --env staging",
+    "deploy:production": "wrangler deploy --env production",
     "dev": "wrangler dev --env dev --port 8788",
     "test": "vitest",
     "cf-typegen": "wrangler types --env-interface BaseEnv --env dev"
@@ -14,7 +14,7 @@
     "@types/node": "^22.15.19",
     "typescript": "^5.5.2",
     "vitest": "~3.2.0",
-    "wrangler": "^4.61.0"
+    "wrangler": "^4.63.0"
   },
   "dependencies": {
     "@hono/zod-validator": "^0.7.6",

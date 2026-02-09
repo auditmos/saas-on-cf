@@ -5,6 +5,7 @@
       "Bash(grep:*)",
       "Bash(find:*)",
       "Bash(awk:*)",
+      "Bash(ls:*)",
       "WebFetch(domain:tanstack.com/start/latest)",
       "WebFetch(domain:tanstack.com/router/latest)",
       "WebFetch(domain:tanstack.com/query/latest)",

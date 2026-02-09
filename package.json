@@ -5,17 +5,12 @@
   "scripts": {
     "setup": "pnpm i && pnpm run build:data-ops",
     "build:data-ops": "pnpm run --filter data-ops build",
-    
     "dev:user-application": "pnpm run --filter user-application dev",
-
     "deploy:staging:user-application": "pnpm run build:data-ops && pnpm run --filter user-application deploy:staging",
     "deploy:production:user-application": "pnpm run build:data-ops && pnpm run --filter user-application deploy:production",
-    
     "dev:data-service": "pnpm run --filter data-service dev",
-
     "deploy:staging:data-service": "pnpm run build:data-ops && pnpm run --filter data-service deploy:staging",
     "deploy:production:data-service": "pnpm run build:data-ops && pnpm run --filter data-service deploy:production",
-
     "seed:dev": "pnpm run --filter data-ops seed:dev",
     "seed:staging": "pnpm run --filter data-ops seed:staging",
     "seed:production": "pnpm run --filter data-ops seed:production"
@@ -23,7 +18,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@10.14.0",
+  "packageManager": "pnpm@10.29.2",
   "devDependencies": {
     "@types/node": "^22.18.12",
     "typescript": "^5.9.3"

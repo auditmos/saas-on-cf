@@ -56,8 +56,8 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250823.0",
-    "drizzle-kit": "^0.31.4",
-    "postgres": "^3.4.7",
+    "drizzle-kit": "^0.31.9",
+    "postgres": "^3.4.8",
     "tsc-alias": "^1.8.16",
     "tsx": "^4.21.0",
     "typescript": "^5.9.2"

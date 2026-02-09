@@ -129,7 +129,15 @@ Sample `.env` file with minimum number of values available - [.env.example](./pa
 
 ### Cloudflare Account Configuration
 
-If you want to deploy to a different Cloudflare account that is not logged in globally on your machine, prepare a `.env` file in the main directory with values from `.env.example`. This allows you to specify account credentials for deployment without changing your global Cloudflare configuration.
+To deploy to a Cloudflare account different from the one globally logged in on your machine:
+
+1. Copy the example env file in the root directory:
+   ```bash
+   cp .env.example .env
+   ```
+2. Fill in `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN` with values from the target account.
+
+This overrides global Cloudflare credentials for deployments without changing your machine-wide config.
 
 ### User Application
 
