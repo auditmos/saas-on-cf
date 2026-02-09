@@ -8,6 +8,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { authClient } from "@/lib/auth-client";
+import { useNavigate } from "@tanstack/react-router";
 import { LogOut, Palette } from "lucide-react";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 
@@ -17,9 +18,11 @@ interface AccountDialogProps {
 
 export function AccountDialog({ children }: AccountDialogProps) {
   const { data: session } = authClient.useSession();
+  const navigate = useNavigate();
 
   const signOut = async () => {
     await authClient.signOut();
+    navigate({ to: "/" });
   };
 
   if (!session) {
@@ -36,7 +39,7 @@ export function AccountDialog({ children }: AccountDialogProps) {
       <DialogTrigger asChild>
         {children}
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md text-foreground">
         <DialogHeader className="text-center pb-4">
           <DialogTitle>Account</DialogTitle>
         </DialogHeader>

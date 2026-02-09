@@ -3,17 +3,23 @@ import { betterAuth, type BetterAuthOptions } from "better-auth";
 export const createBetterAuth = (config: {
   database: BetterAuthOptions["database"];
   secret?: BetterAuthOptions["secret"];
-  socialProviders?: BetterAuthOptions["socialProviders"];
 }): ReturnType<typeof betterAuth> => {
   return betterAuth({
     database: config.database,
     secret: config.secret,
     emailAndPassword: {
-      enabled: false,
+      enabled: true,
     },
-    socialProviders: config.socialProviders,
     user: {
       modelName: "auth_user",
+      additionalFields: {
+        approved: {
+          type: "boolean",
+          required: true,
+          defaultValue: false,
+          input: false,
+        },
+      },
     },
     session: {
       modelName: "auth_session",

@@ -20,7 +20,7 @@ export function Modal({ trigger, children }: ModalProps) {
       <Dialog.Trigger asChild>{trigger}</Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/50" />
-        <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg">
+        <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-background text-foreground p-6 rounded-lg border">
           {children}
         </Dialog.Content>
       </Dialog.Portal>
@@ -37,19 +37,29 @@ export function Modal({ trigger, children }: ModalProps) {
 
 ```tsx
 <div className="flex flex-col gap-4 p-4 md:flex-row md:p-6">
-  <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+  <h1 className="text-2xl font-bold text-foreground">
     Title
   </h1>
 </div>
 ```
 
-## Dark Mode
+## Theme Awareness (REQUIRED)
 
-- Use `dark:` variant
-- Set `class="dark"` on html element
-- Use CSS variables for colors
+Every UI element MUST use theme-aware CSS variable classes. Never use hardcoded colors.
+
+- Text: `text-foreground`, `text-muted-foreground`, `text-primary`, `text-destructive`
+- Backgrounds: `bg-background`, `bg-muted`, `bg-card`, `bg-accent`
+- Borders: `border-border`, `border-input`
+- Never use `text-gray-*`, `text-white`, `text-black`, `bg-white`, `bg-gray-*` directly
+- Every `<pre>`, `<code>`, `<span>`, `<p>`, `<h1>`-`<h6>` must have explicit `text-foreground` or `text-muted-foreground` if not inside a themed parent
 
 ```tsx
+// Good - theme-aware
+<div className="bg-background text-foreground">
+  <p className="text-muted-foreground">Content</p>
+</div>
+
+// Bad - hardcoded colors
 <div className="bg-white dark:bg-gray-900">
   <p className="text-gray-900 dark:text-gray-100">Content</p>
 </div>
@@ -65,8 +75,8 @@ import { cva } from 'class-variance-authority'
 const button = cva('px-4 py-2 rounded font-medium', {
   variants: {
     intent: {
-      primary: 'bg-blue-600 text-white hover:bg-blue-700',
-      secondary: 'bg-gray-200 text-gray-900 hover:bg-gray-300',
+      primary: 'bg-primary text-primary-foreground hover:bg-primary/90',
+      secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
     },
     size: {
       sm: 'text-sm px-3 py-1',
@@ -108,7 +118,7 @@ export function Button({ intent, size, ...props }: ButtonProps) {
 
 ```tsx
 <button
-  className="focus:outline-none focus:ring-2 focus:ring-blue-500"
+  className="focus:outline-none focus:ring-2 focus:ring-ring"
   aria-label="Close dialog"
 >
   <XIcon />

@@ -1,11 +1,11 @@
 import type {
-  User,
-  UserListResponse,
+  Client,
+  ClientListResponse,
   PaginationRequest,
-  UserCreateInput,
-  UserUpdateInput,
-} from '@repo/data-ops/zod-schema/user';
-import { ErrorResponseSchema } from '@repo/data-ops/zod-schema/user';
+  ClientCreateInput,
+  ClientUpdateInput,
+} from '@repo/data-ops/zod-schema/client';
+import { ErrorResponseSchema } from '@repo/data-ops/zod-schema/client';
 
 const API_URL = import.meta.env.VITE_DATA_SERVICE_URL || 'http://localhost:8788';
 const API_TOKEN = import.meta.env.VITE_API_TOKEN;
@@ -41,56 +41,56 @@ const handleResponse = async <T>(response: Response): Promise<T> => {
   return response.json();
 };
 
-// GET User
-export async function fetchUser(id: string): Promise<User | null> {
-  const response = await fetch(`${API_URL}/users/${id}`, {
+// GET Client
+export async function fetchClient(id: string): Promise<Client | null> {
+  const response = await fetch(`${API_URL}/clients/${id}`, {
     method: 'GET',
     headers: getHeaders(),
   });
   if (response.status === 404) return null;
-  return handleResponse<User>(response);
+  return handleResponse<Client>(response);
 }
 
-// GET Users (paginated)
-export async function fetchUsers(params: PaginationRequest): Promise<UserListResponse> {
+// GET Clients (paginated)
+export async function fetchClients(params: PaginationRequest): Promise<ClientListResponse> {
   const searchParams = new URLSearchParams({
     limit: String(params.limit ?? 10),
     offset: String(params.offset ?? 0),
   });
 
-  const response = await fetch(`${API_URL}/users?${searchParams}`, {
+  const response = await fetch(`${API_URL}/clients?${searchParams}`, {
     method: 'GET',
     headers: getHeaders(),
   });
 
-  return handleResponse<UserListResponse>(response);
+  return handleResponse<ClientListResponse>(response);
 }
 
-// CREATE User
-export async function createUserApi(data: UserCreateInput): Promise<User> {
-  const response = await fetch(`${API_URL}/users`, {
+// CREATE Client
+export async function createClientApi(data: ClientCreateInput): Promise<Client> {
+  const response = await fetch(`${API_URL}/clients`, {
     method: 'POST',
     headers: getHeaders(),
     body: JSON.stringify(data),
   });
 
-  return handleResponse<User>(response);
+  return handleResponse<Client>(response);
 }
 
-// UPDATE User
-export async function updateUserApi(id: string, data: UserUpdateInput): Promise<User> {
-  const response = await fetch(`${API_URL}/users/${id}`, {
+// UPDATE Client
+export async function updateClientApi(id: string, data: ClientUpdateInput): Promise<Client> {
+  const response = await fetch(`${API_URL}/clients/${id}`, {
     method: 'PUT',
     headers: getHeaders(),
     body: JSON.stringify(data),
   });
 
-  return handleResponse<User>(response);
+  return handleResponse<Client>(response);
 }
 
-// DELETE User
-export async function deleteUserApi(id: string): Promise<void> {
-  const response = await fetch(`${API_URL}/users/${id}`, {
+// DELETE Client
+export async function deleteClientApi(id: string): Promise<void> {
+  const response = await fetch(`${API_URL}/clients/${id}`, {
     method: 'DELETE',
     headers: getHeaders(),
   });
@@ -100,7 +100,7 @@ export async function deleteUserApi(id: string): Promise<void> {
     const parsed = ErrorResponseSchema.safeParse(body);
     const errorData = parsed.success ? parsed.data : {};
     throw new ApiError(
-      errorData.message || 'Failed to delete user',
+      errorData.message || 'Failed to delete client',
       response.status,
       errorData.code
     );

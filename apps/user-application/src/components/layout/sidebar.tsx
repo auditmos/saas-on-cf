@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Home, Menu } from "lucide-react";
+import { Home, Menu, Globe } from "lucide-react";
 import { useNavigate, useRouterState } from "@tanstack/react-router";
 import { useState } from "react";
 
@@ -14,8 +14,13 @@ interface NavigationItem {
 
 const navigationItems: NavigationItem[] = [
   {
-    name: "Dashboard",
+    name: "Home",
     icon: Home,
+    href: "/",
+  },
+  {
+    name: "Dashboard",
+    icon: Globe,
     href: "/dashboard",
   },
 ];
@@ -53,16 +58,16 @@ export function Sidebar({ className }: SidebarProps) {
             onClick={() => setIsCollapsed(!isCollapsed)}
             className="h-8 w-8"
           >
-            <Menu className="h-4 w-4" />
+            <Menu className="h-4 w-4 text-foreground" />
           </Button>
         </div>
 
         <ScrollArea className="flex-1 px-3 py-4">
           <nav className="space-y-2">
             {navigationItems.map((item) => {
-              const isActive = currentPath === item.href || 
+              const isActive = currentPath === item.href ||
                 (item.href !== "/dashboard" && currentPath.startsWith(item.href));
-              
+
               return (
                 <Button
                   key={item.name}
@@ -92,26 +97,6 @@ export function Sidebar({ className }: SidebarProps) {
           </nav>
         </ScrollArea>
 
-        <div className="border-t border-border p-4">
-          <div
-            className={cn(
-              "flex items-center gap-3 rounded-lg px-3 py-2 bg-muted/50",
-              isCollapsed && "justify-center"
-            )}
-          >
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-medium">
-              U
-            </div>
-            {!isCollapsed && (
-              <div className="flex flex-col truncate">
-                <span className="text-sm font-medium text-foreground">User</span>
-                <span className="text-xs text-muted-foreground truncate">
-                  user@example.com
-                </span>
-              </div>
-            )}
-          </div>
-        </div>
       </div>
 
       {/* Mobile Sidebar Overlay */}

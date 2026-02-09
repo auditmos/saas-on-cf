@@ -1,8 +1,10 @@
-# User API Endpoints Design
+# Client API Endpoints Design
+
+> **Note:** Renamed from `users` → `clients` throughout codebase. Table `users` → `clients`, all schemas/queries/handlers/services renamed accordingly. Auth users live in `auth_user` table (Better Auth). Email/password auth with admin approval flow added.
 
 ## Overview
 
-REST API endpoints for user CRUD operations in data-service app. Uses mocked data from data-ops package with schema validation.
+REST API endpoints for client CRUD operations in data-service app. Uses Neon Postgres via data-ops package with schema validation.
 
 ## Goals
 

@@ -87,42 +87,69 @@ export const queryKeys = {
 
 ## Query - Mutations
 
+- `mutate()` = fire-and-forget. Use for in-place UI updates (success alerts, cache invalidation via `onSuccess` callback)
+- `mutateAsync()` = awaitable. Use inside `onSubmit` when you need to act after completion (navigate, redirect, reset form)
+
 ```ts
+// mutate — stay on page, show result
 const mutation = useMutation({
-  mutationFn: updateUser,
-  onSuccess: () => {
-    queryClient.invalidateQueries({ queryKey: queryKeys.users.all })
-  },
+  mutationFn: createClient,
+  onSuccess: () => queryClient.invalidateQueries({ queryKey: clientKeys.all }),
 })
+form.onSubmit: mutation.mutate(value)
+
+// mutateAsync — navigate after success
+form.onSubmit: async ({ value }) => {
+  const result = await mutation.mutateAsync(value)
+  navigate({ to: '/dashboard' })
+}
 ```
 
-## TanStack Form - Setup
+## TanStack Form - REQUIRED for All Forms
+
+Never use raw `useState` for form state. Always use `useForm` + `form.Field` + `form.Subscribe`.
+Pair with `useMutation` for async submissions.
 
 ```tsx
 import { useForm } from '@tanstack/react-form'
-import { zodValidator } from '@tanstack/zod-form-adapter'
+import { useMutation } from '@tanstack/react-query'
 
-function UserForm() {
+function CreateForm() {
+  const mutation = useMutation({
+    mutationFn: createClient,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: clientKeys.all }),
+  })
+
   const form = useForm({
     defaultValues: { name: '', email: '' },
-    validatorAdapter: zodValidator(),
     onSubmit: async ({ value }) => {
-      await createUser(value)
+      mutation.reset()
+      mutation.mutate(value)
     },
   })
 
   return (
     <form onSubmit={(e) => { e.preventDefault(); form.handleSubmit() }}>
+      {mutation.isError && <Alert variant="destructive">{mutation.error.message}</Alert>}
       <form.Field
         name="email"
-        validators={{ onChange: z.string().email() }}
-        children={(field) => (
-          <input
+        validators={{ onChange: ({ value }) => !value ? "Required" : undefined }}
+      >
+        {(field) => (
+          <Input
             value={field.state.value}
             onChange={(e) => field.handleChange(e.target.value)}
+            onBlur={field.handleBlur}
           />
         )}
-      />
+      </form.Field>
+      <form.Subscribe selector={(s) => s.canSubmit}>
+        {(canSubmit) => (
+          <Button disabled={!canSubmit || mutation.isPending}>
+            {mutation.isPending ? "Saving..." : "Save"}
+          </Button>
+        )}
+      </form.Subscribe>
     </form>
   )
 }

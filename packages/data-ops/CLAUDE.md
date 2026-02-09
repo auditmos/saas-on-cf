@@ -16,7 +16,7 @@ src/
 │   ├── schema.ts     # tables (edit this)
 │   ├── relations.ts  # joins config
 │   └── auth-schema.ts # auto-generated, don't edit
-├── queries/          # DB operations (getUser, createUser, etc)
+├── queries/          # DB operations (getClient, createClient, etc)
 ├── zod-schema/       # validation schemas
 ├── database/setup.ts # getDb() connection
 └── auth/             # Better Auth config
@@ -26,10 +26,10 @@ src/
 
 | Purpose | Suffix | Example |
 |---------|--------|---------|
-| Domain model | `Schema` | `UserSchema` |
-| Request | `RequestSchema` | `UserCreateRequestSchema` |
-| Response | `ResponseSchema` | `UserListResponseSchema` |
-| Type export | no suffix | `User`, `UserCreateInput` |
+| Domain model | `Schema` | `ClientSchema` |
+| Request | `RequestSchema` | `ClientCreateRequestSchema` |
+| Response | `ResponseSchema` | `ClientListResponseSchema` |
+| Type export | no suffix | `Client`, `ClientCreateInput` |
 
 ## Workflows
 

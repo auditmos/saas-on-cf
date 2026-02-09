@@ -1,6 +1,7 @@
+import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Github, Sparkles, Zap, Shield } from "lucide-react";
+import { ArrowRight, Sparkles, Zap, Shield } from "lucide-react";
 
 export function HeroSection() {
   return (
@@ -35,16 +36,11 @@ export function HeroSection() {
 
         <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
 
-          <Button variant="outline" size="lg" asChild>
-            <a
-              href="https://github.com/auditmos/saas-on-cf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center"
-            >
-              <Github className="mr-2 h-4 w-4" />
-              View on GitHub
-            </a>
+          <Button variant="default" size="lg" asChild>
+            <Link to="/dashboard" className="inline-flex items-center">
+              Go to Dashboard
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
           </Button>
         </div>
       </div>

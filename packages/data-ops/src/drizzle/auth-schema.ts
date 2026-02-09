@@ -11,6 +11,7 @@ export const auth_user = pgTable("auth_user", {
     .defaultNow()
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
+  approved: boolean("approved").default(false).notNull(),
 });
 
 export const auth_session = pgTable("auth_session", {

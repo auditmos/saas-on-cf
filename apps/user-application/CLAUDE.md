@@ -20,10 +20,9 @@ src/
 │   ├── _auth/                # Protected routes (require auth)
 │   ├── _static/              # Static content
 │   ├── api/                  # API handlers (Better Auth)
-│   └── demo/                 # Pattern demos (direct/binding/api)
 ├── core/
 │   ├── functions/            # Server functions
-│   │   └── users/            # User CRUD by pattern
+│   │   └── clients/          # Client CRUD by pattern
 │   │       ├── direct.ts     # → data-ops (DB)
 │   │       └── binding.ts    # → DATA_SERVICE.fetch
 │   └── middleware/           # Auth middleware
@@ -37,8 +36,8 @@ src/
 
 | Pattern | File | Flow | SSR |
 |---------|------|------|-----|
-| **Direct** | `core/functions/users/direct.ts` | Server Fn → data-ops → DB | Yes |
-| **Binding** | `core/functions/users/binding.ts` | Server Fn → `env.DATA_SERVICE.fetch` → data-service | Yes |
+| **Direct** | `core/functions/clients/direct.ts` | Server Fn → data-ops → DB | Yes |
+| **Binding** | `core/functions/clients/binding.ts` | Server Fn → `env.DATA_SERVICE.fetch` → data-service | Yes |
 | **API** | `lib/api-client.ts` | Browser → fetch → data-service HTTP | No |
 
 **Choose:**
@@ -53,7 +52,7 @@ import { env } from 'cloudflare:workers';
 
 // Internal call (hostname ignored)
 const response = await env.DATA_SERVICE.fetch(
-  new Request('https://data-service/users', {
+  new Request('https://data-service/clients', {
     headers: { Authorization: `Bearer ${env.DATA_SERVICE_API_TOKEN}` }
   })
 );
@@ -79,13 +78,13 @@ export const myFn = protectedFn
 ## TanStack Query Keys
 
 ```typescript
-import { userKeys, userDetailDirectQueryOptions } from '@/lib/query-keys';
+import { clientKeys, clientDetailDirectQueryOptions } from '@/lib/query-keys';
 
 // In route loader (SSR)
-await context.queryClient.ensureQueryData(userDetailDirectQueryOptions(id));
+await context.queryClient.ensureQueryData(clientDetailDirectQueryOptions(id));
 
 // In component
-const { data } = useQuery(userDetailDirectQueryOptions(id));
+const { data } = useQuery(clientDetailDirectQueryOptions(id));
 ```
 
 ## Dev
@@ -104,7 +103,6 @@ pnpm run deploy:prod      # deploy to production
 - `DATABASE_HOST`, `DATABASE_USERNAME`, `DATABASE_PASSWORD`
 - `BETTER_AUTH_SECRET`
 - `CLOUDFLARE_ENV` - dev | staging | production
-- `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` (optional, OAuth)
 - `VITE_DATA_SERVICE_URL` - public API URL (API pattern only)
 - `VITE_API_TOKEN` - client-side API auth (API pattern only)
 

@@ -15,6 +15,7 @@ async function getAuthContext() {
     auth: auth,
     userId: session.user.id,
     email: session.user.email,
+    approved: (session.user as Record<string, unknown>).approved as boolean,
   };
 }
 
@@ -22,6 +23,9 @@ export const protectedFunctionMiddleware = createMiddleware({
   type: "function",
 }).server(async ({ next }) => {
   const context = await getAuthContext();
+  if (!context.approved) {
+    throw new Error("Account pending approval");
+  }
   return next({ context });
 });
 
@@ -29,5 +33,8 @@ export const protectedRequestMiddleware = createMiddleware({
   type: "request",
 }).server(async ({ next }) => {
   const context = await getAuthContext();
+  if (!context.approved) {
+    throw new Error("Account pending approval");
+  }
   return next({ context });
 });

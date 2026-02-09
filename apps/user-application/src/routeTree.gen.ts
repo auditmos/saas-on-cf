@@ -9,37 +9,44 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as DemoRouteRouteImport } from './routes/demo/route'
+import { Route as SignupRouteImport } from './routes/signup'
+import { Route as SigninRouteImport } from './routes/signin'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as DemoIndexRouteImport } from './routes/demo/index'
-import { Route as DemoDirectRouteRouteImport } from './routes/demo/direct/route'
-import { Route as DemoBindingRouteRouteImport } from './routes/demo/binding/route'
-import { Route as DemoApiRouteRouteImport } from './routes/demo/api/route'
-import { Route as DemoDirectIndexRouteImport } from './routes/demo/direct/index'
-import { Route as DemoBindingIndexRouteImport } from './routes/demo/binding/index'
-import { Route as DemoApiIndexRouteImport } from './routes/demo/api/index'
+import { Route as AuthDashboardRouteRouteImport } from './routes/_auth/dashboard/route'
+import { Route as AuthDashboardIndexRouteImport } from './routes/_auth/dashboard/index'
 import { Route as AuthAppIndexRouteImport } from './routes/_auth/app/index'
-import { Route as DemoDirectUpdateRouteImport } from './routes/demo/direct/update'
-import { Route as DemoDirectReadRouteImport } from './routes/demo/direct/read'
-import { Route as DemoDirectListRouteImport } from './routes/demo/direct/list'
-import { Route as DemoDirectDeleteRouteImport } from './routes/demo/direct/delete'
-import { Route as DemoDirectCreateRouteImport } from './routes/demo/direct/create'
-import { Route as DemoBindingUpdateRouteImport } from './routes/demo/binding/update'
-import { Route as DemoBindingReadRouteImport } from './routes/demo/binding/read'
-import { Route as DemoBindingListRouteImport } from './routes/demo/binding/list'
-import { Route as DemoBindingDeleteRouteImport } from './routes/demo/binding/delete'
-import { Route as DemoBindingCreateRouteImport } from './routes/demo/binding/create'
-import { Route as DemoApiUpdateRouteImport } from './routes/demo/api/update'
-import { Route as DemoApiReadRouteImport } from './routes/demo/api/read'
-import { Route as DemoApiListRouteImport } from './routes/demo/api/list'
-import { Route as DemoApiDeleteRouteImport } from './routes/demo/api/delete'
-import { Route as DemoApiCreateRouteImport } from './routes/demo/api/create'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth.$'
+import { Route as AuthDashboardDirectRouteRouteImport } from './routes/_auth/dashboard/direct/route'
+import { Route as AuthDashboardBindingRouteRouteImport } from './routes/_auth/dashboard/binding/route'
+import { Route as AuthDashboardApiRouteRouteImport } from './routes/_auth/dashboard/api/route'
+import { Route as AuthDashboardDirectIndexRouteImport } from './routes/_auth/dashboard/direct/index'
+import { Route as AuthDashboardBindingIndexRouteImport } from './routes/_auth/dashboard/binding/index'
+import { Route as AuthDashboardApiIndexRouteImport } from './routes/_auth/dashboard/api/index'
+import { Route as AuthDashboardDirectUpdateRouteImport } from './routes/_auth/dashboard/direct/update'
+import { Route as AuthDashboardDirectReadRouteImport } from './routes/_auth/dashboard/direct/read'
+import { Route as AuthDashboardDirectListRouteImport } from './routes/_auth/dashboard/direct/list'
+import { Route as AuthDashboardDirectDeleteRouteImport } from './routes/_auth/dashboard/direct/delete'
+import { Route as AuthDashboardDirectCreateRouteImport } from './routes/_auth/dashboard/direct/create'
+import { Route as AuthDashboardBindingUpdateRouteImport } from './routes/_auth/dashboard/binding/update'
+import { Route as AuthDashboardBindingReadRouteImport } from './routes/_auth/dashboard/binding/read'
+import { Route as AuthDashboardBindingListRouteImport } from './routes/_auth/dashboard/binding/list'
+import { Route as AuthDashboardBindingDeleteRouteImport } from './routes/_auth/dashboard/binding/delete'
+import { Route as AuthDashboardBindingCreateRouteImport } from './routes/_auth/dashboard/binding/create'
+import { Route as AuthDashboardApiUpdateRouteImport } from './routes/_auth/dashboard/api/update'
+import { Route as AuthDashboardApiReadRouteImport } from './routes/_auth/dashboard/api/read'
+import { Route as AuthDashboardApiListRouteImport } from './routes/_auth/dashboard/api/list'
+import { Route as AuthDashboardApiDeleteRouteImport } from './routes/_auth/dashboard/api/delete'
+import { Route as AuthDashboardApiCreateRouteImport } from './routes/_auth/dashboard/api/create'
 
-const DemoRouteRoute = DemoRouteRouteImport.update({
-  id: '/demo',
-  path: '/demo',
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SigninRoute = SigninRouteImport.update({
+  id: '/signin',
+  path: '/signin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRouteRoute = AuthRouteRouteImport.update({
@@ -51,307 +58,344 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DemoIndexRoute = DemoIndexRouteImport.update({
+const AuthDashboardRouteRoute = AuthDashboardRouteRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+const AuthDashboardIndexRoute = AuthDashboardIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => DemoRouteRoute,
-} as any)
-const DemoDirectRouteRoute = DemoDirectRouteRouteImport.update({
-  id: '/direct',
-  path: '/direct',
-  getParentRoute: () => DemoRouteRoute,
-} as any)
-const DemoBindingRouteRoute = DemoBindingRouteRouteImport.update({
-  id: '/binding',
-  path: '/binding',
-  getParentRoute: () => DemoRouteRoute,
-} as any)
-const DemoApiRouteRoute = DemoApiRouteRouteImport.update({
-  id: '/api',
-  path: '/api',
-  getParentRoute: () => DemoRouteRoute,
-} as any)
-const DemoDirectIndexRoute = DemoDirectIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => DemoDirectRouteRoute,
-} as any)
-const DemoBindingIndexRoute = DemoBindingIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => DemoBindingRouteRoute,
-} as any)
-const DemoApiIndexRoute = DemoApiIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => DemoApiRouteRoute,
+  getParentRoute: () => AuthDashboardRouteRoute,
 } as any)
 const AuthAppIndexRoute = AuthAppIndexRouteImport.update({
   id: '/app/',
   path: '/app/',
   getParentRoute: () => AuthRouteRoute,
 } as any)
-const DemoDirectUpdateRoute = DemoDirectUpdateRouteImport.update({
-  id: '/update',
-  path: '/update',
-  getParentRoute: () => DemoDirectRouteRoute,
-} as any)
-const DemoDirectReadRoute = DemoDirectReadRouteImport.update({
-  id: '/read',
-  path: '/read',
-  getParentRoute: () => DemoDirectRouteRoute,
-} as any)
-const DemoDirectListRoute = DemoDirectListRouteImport.update({
-  id: '/list',
-  path: '/list',
-  getParentRoute: () => DemoDirectRouteRoute,
-} as any)
-const DemoDirectDeleteRoute = DemoDirectDeleteRouteImport.update({
-  id: '/delete',
-  path: '/delete',
-  getParentRoute: () => DemoDirectRouteRoute,
-} as any)
-const DemoDirectCreateRoute = DemoDirectCreateRouteImport.update({
-  id: '/create',
-  path: '/create',
-  getParentRoute: () => DemoDirectRouteRoute,
-} as any)
-const DemoBindingUpdateRoute = DemoBindingUpdateRouteImport.update({
-  id: '/update',
-  path: '/update',
-  getParentRoute: () => DemoBindingRouteRoute,
-} as any)
-const DemoBindingReadRoute = DemoBindingReadRouteImport.update({
-  id: '/read',
-  path: '/read',
-  getParentRoute: () => DemoBindingRouteRoute,
-} as any)
-const DemoBindingListRoute = DemoBindingListRouteImport.update({
-  id: '/list',
-  path: '/list',
-  getParentRoute: () => DemoBindingRouteRoute,
-} as any)
-const DemoBindingDeleteRoute = DemoBindingDeleteRouteImport.update({
-  id: '/delete',
-  path: '/delete',
-  getParentRoute: () => DemoBindingRouteRoute,
-} as any)
-const DemoBindingCreateRoute = DemoBindingCreateRouteImport.update({
-  id: '/create',
-  path: '/create',
-  getParentRoute: () => DemoBindingRouteRoute,
-} as any)
-const DemoApiUpdateRoute = DemoApiUpdateRouteImport.update({
-  id: '/update',
-  path: '/update',
-  getParentRoute: () => DemoApiRouteRoute,
-} as any)
-const DemoApiReadRoute = DemoApiReadRouteImport.update({
-  id: '/read',
-  path: '/read',
-  getParentRoute: () => DemoApiRouteRoute,
-} as any)
-const DemoApiListRoute = DemoApiListRouteImport.update({
-  id: '/list',
-  path: '/list',
-  getParentRoute: () => DemoApiRouteRoute,
-} as any)
-const DemoApiDeleteRoute = DemoApiDeleteRouteImport.update({
-  id: '/delete',
-  path: '/delete',
-  getParentRoute: () => DemoApiRouteRoute,
-} as any)
-const DemoApiCreateRoute = DemoApiCreateRouteImport.update({
-  id: '/create',
-  path: '/create',
-  getParentRoute: () => DemoApiRouteRoute,
-} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthDashboardDirectRouteRoute =
+  AuthDashboardDirectRouteRouteImport.update({
+    id: '/direct',
+    path: '/direct',
+    getParentRoute: () => AuthDashboardRouteRoute,
+  } as any)
+const AuthDashboardBindingRouteRoute =
+  AuthDashboardBindingRouteRouteImport.update({
+    id: '/binding',
+    path: '/binding',
+    getParentRoute: () => AuthDashboardRouteRoute,
+  } as any)
+const AuthDashboardApiRouteRoute = AuthDashboardApiRouteRouteImport.update({
+  id: '/api',
+  path: '/api',
+  getParentRoute: () => AuthDashboardRouteRoute,
+} as any)
+const AuthDashboardDirectIndexRoute =
+  AuthDashboardDirectIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthDashboardDirectRouteRoute,
+  } as any)
+const AuthDashboardBindingIndexRoute =
+  AuthDashboardBindingIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthDashboardBindingRouteRoute,
+  } as any)
+const AuthDashboardApiIndexRoute = AuthDashboardApiIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthDashboardApiRouteRoute,
+} as any)
+const AuthDashboardDirectUpdateRoute =
+  AuthDashboardDirectUpdateRouteImport.update({
+    id: '/update',
+    path: '/update',
+    getParentRoute: () => AuthDashboardDirectRouteRoute,
+  } as any)
+const AuthDashboardDirectReadRoute = AuthDashboardDirectReadRouteImport.update({
+  id: '/read',
+  path: '/read',
+  getParentRoute: () => AuthDashboardDirectRouteRoute,
+} as any)
+const AuthDashboardDirectListRoute = AuthDashboardDirectListRouteImport.update({
+  id: '/list',
+  path: '/list',
+  getParentRoute: () => AuthDashboardDirectRouteRoute,
+} as any)
+const AuthDashboardDirectDeleteRoute =
+  AuthDashboardDirectDeleteRouteImport.update({
+    id: '/delete',
+    path: '/delete',
+    getParentRoute: () => AuthDashboardDirectRouteRoute,
+  } as any)
+const AuthDashboardDirectCreateRoute =
+  AuthDashboardDirectCreateRouteImport.update({
+    id: '/create',
+    path: '/create',
+    getParentRoute: () => AuthDashboardDirectRouteRoute,
+  } as any)
+const AuthDashboardBindingUpdateRoute =
+  AuthDashboardBindingUpdateRouteImport.update({
+    id: '/update',
+    path: '/update',
+    getParentRoute: () => AuthDashboardBindingRouteRoute,
+  } as any)
+const AuthDashboardBindingReadRoute =
+  AuthDashboardBindingReadRouteImport.update({
+    id: '/read',
+    path: '/read',
+    getParentRoute: () => AuthDashboardBindingRouteRoute,
+  } as any)
+const AuthDashboardBindingListRoute =
+  AuthDashboardBindingListRouteImport.update({
+    id: '/list',
+    path: '/list',
+    getParentRoute: () => AuthDashboardBindingRouteRoute,
+  } as any)
+const AuthDashboardBindingDeleteRoute =
+  AuthDashboardBindingDeleteRouteImport.update({
+    id: '/delete',
+    path: '/delete',
+    getParentRoute: () => AuthDashboardBindingRouteRoute,
+  } as any)
+const AuthDashboardBindingCreateRoute =
+  AuthDashboardBindingCreateRouteImport.update({
+    id: '/create',
+    path: '/create',
+    getParentRoute: () => AuthDashboardBindingRouteRoute,
+  } as any)
+const AuthDashboardApiUpdateRoute = AuthDashboardApiUpdateRouteImport.update({
+  id: '/update',
+  path: '/update',
+  getParentRoute: () => AuthDashboardApiRouteRoute,
+} as any)
+const AuthDashboardApiReadRoute = AuthDashboardApiReadRouteImport.update({
+  id: '/read',
+  path: '/read',
+  getParentRoute: () => AuthDashboardApiRouteRoute,
+} as any)
+const AuthDashboardApiListRoute = AuthDashboardApiListRouteImport.update({
+  id: '/list',
+  path: '/list',
+  getParentRoute: () => AuthDashboardApiRouteRoute,
+} as any)
+const AuthDashboardApiDeleteRoute = AuthDashboardApiDeleteRouteImport.update({
+  id: '/delete',
+  path: '/delete',
+  getParentRoute: () => AuthDashboardApiRouteRoute,
+} as any)
+const AuthDashboardApiCreateRoute = AuthDashboardApiCreateRouteImport.update({
+  id: '/create',
+  path: '/create',
+  getParentRoute: () => AuthDashboardApiRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/demo': typeof DemoRouteRouteWithChildren
-  '/demo/api': typeof DemoApiRouteRouteWithChildren
-  '/demo/binding': typeof DemoBindingRouteRouteWithChildren
-  '/demo/direct': typeof DemoDirectRouteRouteWithChildren
-  '/demo/': typeof DemoIndexRoute
+  '/signin': typeof SigninRoute
+  '/signup': typeof SignupRoute
+  '/dashboard': typeof AuthDashboardRouteRouteWithChildren
+  '/dashboard/api': typeof AuthDashboardApiRouteRouteWithChildren
+  '/dashboard/binding': typeof AuthDashboardBindingRouteRouteWithChildren
+  '/dashboard/direct': typeof AuthDashboardDirectRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/demo/api/create': typeof DemoApiCreateRoute
-  '/demo/api/delete': typeof DemoApiDeleteRoute
-  '/demo/api/list': typeof DemoApiListRoute
-  '/demo/api/read': typeof DemoApiReadRoute
-  '/demo/api/update': typeof DemoApiUpdateRoute
-  '/demo/binding/create': typeof DemoBindingCreateRoute
-  '/demo/binding/delete': typeof DemoBindingDeleteRoute
-  '/demo/binding/list': typeof DemoBindingListRoute
-  '/demo/binding/read': typeof DemoBindingReadRoute
-  '/demo/binding/update': typeof DemoBindingUpdateRoute
-  '/demo/direct/create': typeof DemoDirectCreateRoute
-  '/demo/direct/delete': typeof DemoDirectDeleteRoute
-  '/demo/direct/list': typeof DemoDirectListRoute
-  '/demo/direct/read': typeof DemoDirectReadRoute
-  '/demo/direct/update': typeof DemoDirectUpdateRoute
   '/app/': typeof AuthAppIndexRoute
-  '/demo/api/': typeof DemoApiIndexRoute
-  '/demo/binding/': typeof DemoBindingIndexRoute
-  '/demo/direct/': typeof DemoDirectIndexRoute
+  '/dashboard/': typeof AuthDashboardIndexRoute
+  '/dashboard/api/create': typeof AuthDashboardApiCreateRoute
+  '/dashboard/api/delete': typeof AuthDashboardApiDeleteRoute
+  '/dashboard/api/list': typeof AuthDashboardApiListRoute
+  '/dashboard/api/read': typeof AuthDashboardApiReadRoute
+  '/dashboard/api/update': typeof AuthDashboardApiUpdateRoute
+  '/dashboard/binding/create': typeof AuthDashboardBindingCreateRoute
+  '/dashboard/binding/delete': typeof AuthDashboardBindingDeleteRoute
+  '/dashboard/binding/list': typeof AuthDashboardBindingListRoute
+  '/dashboard/binding/read': typeof AuthDashboardBindingReadRoute
+  '/dashboard/binding/update': typeof AuthDashboardBindingUpdateRoute
+  '/dashboard/direct/create': typeof AuthDashboardDirectCreateRoute
+  '/dashboard/direct/delete': typeof AuthDashboardDirectDeleteRoute
+  '/dashboard/direct/list': typeof AuthDashboardDirectListRoute
+  '/dashboard/direct/read': typeof AuthDashboardDirectReadRoute
+  '/dashboard/direct/update': typeof AuthDashboardDirectUpdateRoute
+  '/dashboard/api/': typeof AuthDashboardApiIndexRoute
+  '/dashboard/binding/': typeof AuthDashboardBindingIndexRoute
+  '/dashboard/direct/': typeof AuthDashboardDirectIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/demo': typeof DemoIndexRoute
+  '/signin': typeof SigninRoute
+  '/signup': typeof SignupRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/demo/api/create': typeof DemoApiCreateRoute
-  '/demo/api/delete': typeof DemoApiDeleteRoute
-  '/demo/api/list': typeof DemoApiListRoute
-  '/demo/api/read': typeof DemoApiReadRoute
-  '/demo/api/update': typeof DemoApiUpdateRoute
-  '/demo/binding/create': typeof DemoBindingCreateRoute
-  '/demo/binding/delete': typeof DemoBindingDeleteRoute
-  '/demo/binding/list': typeof DemoBindingListRoute
-  '/demo/binding/read': typeof DemoBindingReadRoute
-  '/demo/binding/update': typeof DemoBindingUpdateRoute
-  '/demo/direct/create': typeof DemoDirectCreateRoute
-  '/demo/direct/delete': typeof DemoDirectDeleteRoute
-  '/demo/direct/list': typeof DemoDirectListRoute
-  '/demo/direct/read': typeof DemoDirectReadRoute
-  '/demo/direct/update': typeof DemoDirectUpdateRoute
   '/app': typeof AuthAppIndexRoute
-  '/demo/api': typeof DemoApiIndexRoute
-  '/demo/binding': typeof DemoBindingIndexRoute
-  '/demo/direct': typeof DemoDirectIndexRoute
+  '/dashboard': typeof AuthDashboardIndexRoute
+  '/dashboard/api/create': typeof AuthDashboardApiCreateRoute
+  '/dashboard/api/delete': typeof AuthDashboardApiDeleteRoute
+  '/dashboard/api/list': typeof AuthDashboardApiListRoute
+  '/dashboard/api/read': typeof AuthDashboardApiReadRoute
+  '/dashboard/api/update': typeof AuthDashboardApiUpdateRoute
+  '/dashboard/binding/create': typeof AuthDashboardBindingCreateRoute
+  '/dashboard/binding/delete': typeof AuthDashboardBindingDeleteRoute
+  '/dashboard/binding/list': typeof AuthDashboardBindingListRoute
+  '/dashboard/binding/read': typeof AuthDashboardBindingReadRoute
+  '/dashboard/binding/update': typeof AuthDashboardBindingUpdateRoute
+  '/dashboard/direct/create': typeof AuthDashboardDirectCreateRoute
+  '/dashboard/direct/delete': typeof AuthDashboardDirectDeleteRoute
+  '/dashboard/direct/list': typeof AuthDashboardDirectListRoute
+  '/dashboard/direct/read': typeof AuthDashboardDirectReadRoute
+  '/dashboard/direct/update': typeof AuthDashboardDirectUpdateRoute
+  '/dashboard/api': typeof AuthDashboardApiIndexRoute
+  '/dashboard/binding': typeof AuthDashboardBindingIndexRoute
+  '/dashboard/direct': typeof AuthDashboardDirectIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteRouteWithChildren
-  '/demo': typeof DemoRouteRouteWithChildren
-  '/demo/api': typeof DemoApiRouteRouteWithChildren
-  '/demo/binding': typeof DemoBindingRouteRouteWithChildren
-  '/demo/direct': typeof DemoDirectRouteRouteWithChildren
-  '/demo/': typeof DemoIndexRoute
+  '/signin': typeof SigninRoute
+  '/signup': typeof SignupRoute
+  '/_auth/dashboard': typeof AuthDashboardRouteRouteWithChildren
+  '/_auth/dashboard/api': typeof AuthDashboardApiRouteRouteWithChildren
+  '/_auth/dashboard/binding': typeof AuthDashboardBindingRouteRouteWithChildren
+  '/_auth/dashboard/direct': typeof AuthDashboardDirectRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/demo/api/create': typeof DemoApiCreateRoute
-  '/demo/api/delete': typeof DemoApiDeleteRoute
-  '/demo/api/list': typeof DemoApiListRoute
-  '/demo/api/read': typeof DemoApiReadRoute
-  '/demo/api/update': typeof DemoApiUpdateRoute
-  '/demo/binding/create': typeof DemoBindingCreateRoute
-  '/demo/binding/delete': typeof DemoBindingDeleteRoute
-  '/demo/binding/list': typeof DemoBindingListRoute
-  '/demo/binding/read': typeof DemoBindingReadRoute
-  '/demo/binding/update': typeof DemoBindingUpdateRoute
-  '/demo/direct/create': typeof DemoDirectCreateRoute
-  '/demo/direct/delete': typeof DemoDirectDeleteRoute
-  '/demo/direct/list': typeof DemoDirectListRoute
-  '/demo/direct/read': typeof DemoDirectReadRoute
-  '/demo/direct/update': typeof DemoDirectUpdateRoute
   '/_auth/app/': typeof AuthAppIndexRoute
-  '/demo/api/': typeof DemoApiIndexRoute
-  '/demo/binding/': typeof DemoBindingIndexRoute
-  '/demo/direct/': typeof DemoDirectIndexRoute
+  '/_auth/dashboard/': typeof AuthDashboardIndexRoute
+  '/_auth/dashboard/api/create': typeof AuthDashboardApiCreateRoute
+  '/_auth/dashboard/api/delete': typeof AuthDashboardApiDeleteRoute
+  '/_auth/dashboard/api/list': typeof AuthDashboardApiListRoute
+  '/_auth/dashboard/api/read': typeof AuthDashboardApiReadRoute
+  '/_auth/dashboard/api/update': typeof AuthDashboardApiUpdateRoute
+  '/_auth/dashboard/binding/create': typeof AuthDashboardBindingCreateRoute
+  '/_auth/dashboard/binding/delete': typeof AuthDashboardBindingDeleteRoute
+  '/_auth/dashboard/binding/list': typeof AuthDashboardBindingListRoute
+  '/_auth/dashboard/binding/read': typeof AuthDashboardBindingReadRoute
+  '/_auth/dashboard/binding/update': typeof AuthDashboardBindingUpdateRoute
+  '/_auth/dashboard/direct/create': typeof AuthDashboardDirectCreateRoute
+  '/_auth/dashboard/direct/delete': typeof AuthDashboardDirectDeleteRoute
+  '/_auth/dashboard/direct/list': typeof AuthDashboardDirectListRoute
+  '/_auth/dashboard/direct/read': typeof AuthDashboardDirectReadRoute
+  '/_auth/dashboard/direct/update': typeof AuthDashboardDirectUpdateRoute
+  '/_auth/dashboard/api/': typeof AuthDashboardApiIndexRoute
+  '/_auth/dashboard/binding/': typeof AuthDashboardBindingIndexRoute
+  '/_auth/dashboard/direct/': typeof AuthDashboardDirectIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/demo'
-    | '/demo/api'
-    | '/demo/binding'
-    | '/demo/direct'
-    | '/demo/'
+    | '/signin'
+    | '/signup'
+    | '/dashboard'
+    | '/dashboard/api'
+    | '/dashboard/binding'
+    | '/dashboard/direct'
     | '/api/auth/$'
-    | '/demo/api/create'
-    | '/demo/api/delete'
-    | '/demo/api/list'
-    | '/demo/api/read'
-    | '/demo/api/update'
-    | '/demo/binding/create'
-    | '/demo/binding/delete'
-    | '/demo/binding/list'
-    | '/demo/binding/read'
-    | '/demo/binding/update'
-    | '/demo/direct/create'
-    | '/demo/direct/delete'
-    | '/demo/direct/list'
-    | '/demo/direct/read'
-    | '/demo/direct/update'
     | '/app/'
-    | '/demo/api/'
-    | '/demo/binding/'
-    | '/demo/direct/'
+    | '/dashboard/'
+    | '/dashboard/api/create'
+    | '/dashboard/api/delete'
+    | '/dashboard/api/list'
+    | '/dashboard/api/read'
+    | '/dashboard/api/update'
+    | '/dashboard/binding/create'
+    | '/dashboard/binding/delete'
+    | '/dashboard/binding/list'
+    | '/dashboard/binding/read'
+    | '/dashboard/binding/update'
+    | '/dashboard/direct/create'
+    | '/dashboard/direct/delete'
+    | '/dashboard/direct/list'
+    | '/dashboard/direct/read'
+    | '/dashboard/direct/update'
+    | '/dashboard/api/'
+    | '/dashboard/binding/'
+    | '/dashboard/direct/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/demo'
+    | '/signin'
+    | '/signup'
     | '/api/auth/$'
-    | '/demo/api/create'
-    | '/demo/api/delete'
-    | '/demo/api/list'
-    | '/demo/api/read'
-    | '/demo/api/update'
-    | '/demo/binding/create'
-    | '/demo/binding/delete'
-    | '/demo/binding/list'
-    | '/demo/binding/read'
-    | '/demo/binding/update'
-    | '/demo/direct/create'
-    | '/demo/direct/delete'
-    | '/demo/direct/list'
-    | '/demo/direct/read'
-    | '/demo/direct/update'
     | '/app'
-    | '/demo/api'
-    | '/demo/binding'
-    | '/demo/direct'
+    | '/dashboard'
+    | '/dashboard/api/create'
+    | '/dashboard/api/delete'
+    | '/dashboard/api/list'
+    | '/dashboard/api/read'
+    | '/dashboard/api/update'
+    | '/dashboard/binding/create'
+    | '/dashboard/binding/delete'
+    | '/dashboard/binding/list'
+    | '/dashboard/binding/read'
+    | '/dashboard/binding/update'
+    | '/dashboard/direct/create'
+    | '/dashboard/direct/delete'
+    | '/dashboard/direct/list'
+    | '/dashboard/direct/read'
+    | '/dashboard/direct/update'
+    | '/dashboard/api'
+    | '/dashboard/binding'
+    | '/dashboard/direct'
   id:
     | '__root__'
     | '/'
     | '/_auth'
-    | '/demo'
-    | '/demo/api'
-    | '/demo/binding'
-    | '/demo/direct'
-    | '/demo/'
+    | '/signin'
+    | '/signup'
+    | '/_auth/dashboard'
+    | '/_auth/dashboard/api'
+    | '/_auth/dashboard/binding'
+    | '/_auth/dashboard/direct'
     | '/api/auth/$'
-    | '/demo/api/create'
-    | '/demo/api/delete'
-    | '/demo/api/list'
-    | '/demo/api/read'
-    | '/demo/api/update'
-    | '/demo/binding/create'
-    | '/demo/binding/delete'
-    | '/demo/binding/list'
-    | '/demo/binding/read'
-    | '/demo/binding/update'
-    | '/demo/direct/create'
-    | '/demo/direct/delete'
-    | '/demo/direct/list'
-    | '/demo/direct/read'
-    | '/demo/direct/update'
     | '/_auth/app/'
-    | '/demo/api/'
-    | '/demo/binding/'
-    | '/demo/direct/'
+    | '/_auth/dashboard/'
+    | '/_auth/dashboard/api/create'
+    | '/_auth/dashboard/api/delete'
+    | '/_auth/dashboard/api/list'
+    | '/_auth/dashboard/api/read'
+    | '/_auth/dashboard/api/update'
+    | '/_auth/dashboard/binding/create'
+    | '/_auth/dashboard/binding/delete'
+    | '/_auth/dashboard/binding/list'
+    | '/_auth/dashboard/binding/read'
+    | '/_auth/dashboard/binding/update'
+    | '/_auth/dashboard/direct/create'
+    | '/_auth/dashboard/direct/delete'
+    | '/_auth/dashboard/direct/list'
+    | '/_auth/dashboard/direct/read'
+    | '/_auth/dashboard/direct/update'
+    | '/_auth/dashboard/api/'
+    | '/_auth/dashboard/binding/'
+    | '/_auth/dashboard/direct/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
-  DemoRouteRoute: typeof DemoRouteRouteWithChildren
+  SigninRoute: typeof SigninRoute
+  SignupRoute: typeof SignupRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/demo': {
-      id: '/demo'
-      path: '/demo'
-      fullPath: '/demo'
-      preLoaderRoute: typeof DemoRouteRouteImport
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signin': {
+      id: '/signin'
+      path: '/signin'
+      fullPath: '/signin'
+      preLoaderRoute: typeof SigninRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_auth': {
@@ -368,54 +412,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/demo/': {
-      id: '/demo/'
+    '/_auth/dashboard': {
+      id: '/_auth/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthDashboardRouteRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/_auth/dashboard/': {
+      id: '/_auth/dashboard/'
       path: '/'
-      fullPath: '/demo/'
-      preLoaderRoute: typeof DemoIndexRouteImport
-      parentRoute: typeof DemoRouteRoute
-    }
-    '/demo/direct': {
-      id: '/demo/direct'
-      path: '/direct'
-      fullPath: '/demo/direct'
-      preLoaderRoute: typeof DemoDirectRouteRouteImport
-      parentRoute: typeof DemoRouteRoute
-    }
-    '/demo/binding': {
-      id: '/demo/binding'
-      path: '/binding'
-      fullPath: '/demo/binding'
-      preLoaderRoute: typeof DemoBindingRouteRouteImport
-      parentRoute: typeof DemoRouteRoute
-    }
-    '/demo/api': {
-      id: '/demo/api'
-      path: '/api'
-      fullPath: '/demo/api'
-      preLoaderRoute: typeof DemoApiRouteRouteImport
-      parentRoute: typeof DemoRouteRoute
-    }
-    '/demo/direct/': {
-      id: '/demo/direct/'
-      path: '/'
-      fullPath: '/demo/direct/'
-      preLoaderRoute: typeof DemoDirectIndexRouteImport
-      parentRoute: typeof DemoDirectRouteRoute
-    }
-    '/demo/binding/': {
-      id: '/demo/binding/'
-      path: '/'
-      fullPath: '/demo/binding/'
-      preLoaderRoute: typeof DemoBindingIndexRouteImport
-      parentRoute: typeof DemoBindingRouteRoute
-    }
-    '/demo/api/': {
-      id: '/demo/api/'
-      path: '/'
-      fullPath: '/demo/api/'
-      preLoaderRoute: typeof DemoApiIndexRouteImport
-      parentRoute: typeof DemoApiRouteRoute
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof AuthDashboardIndexRouteImport
+      parentRoute: typeof AuthDashboardRouteRoute
     }
     '/_auth/app/': {
       id: '/_auth/app/'
@@ -424,111 +433,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAppIndexRouteImport
       parentRoute: typeof AuthRouteRoute
     }
-    '/demo/direct/update': {
-      id: '/demo/direct/update'
-      path: '/update'
-      fullPath: '/demo/direct/update'
-      preLoaderRoute: typeof DemoDirectUpdateRouteImport
-      parentRoute: typeof DemoDirectRouteRoute
-    }
-    '/demo/direct/read': {
-      id: '/demo/direct/read'
-      path: '/read'
-      fullPath: '/demo/direct/read'
-      preLoaderRoute: typeof DemoDirectReadRouteImport
-      parentRoute: typeof DemoDirectRouteRoute
-    }
-    '/demo/direct/list': {
-      id: '/demo/direct/list'
-      path: '/list'
-      fullPath: '/demo/direct/list'
-      preLoaderRoute: typeof DemoDirectListRouteImport
-      parentRoute: typeof DemoDirectRouteRoute
-    }
-    '/demo/direct/delete': {
-      id: '/demo/direct/delete'
-      path: '/delete'
-      fullPath: '/demo/direct/delete'
-      preLoaderRoute: typeof DemoDirectDeleteRouteImport
-      parentRoute: typeof DemoDirectRouteRoute
-    }
-    '/demo/direct/create': {
-      id: '/demo/direct/create'
-      path: '/create'
-      fullPath: '/demo/direct/create'
-      preLoaderRoute: typeof DemoDirectCreateRouteImport
-      parentRoute: typeof DemoDirectRouteRoute
-    }
-    '/demo/binding/update': {
-      id: '/demo/binding/update'
-      path: '/update'
-      fullPath: '/demo/binding/update'
-      preLoaderRoute: typeof DemoBindingUpdateRouteImport
-      parentRoute: typeof DemoBindingRouteRoute
-    }
-    '/demo/binding/read': {
-      id: '/demo/binding/read'
-      path: '/read'
-      fullPath: '/demo/binding/read'
-      preLoaderRoute: typeof DemoBindingReadRouteImport
-      parentRoute: typeof DemoBindingRouteRoute
-    }
-    '/demo/binding/list': {
-      id: '/demo/binding/list'
-      path: '/list'
-      fullPath: '/demo/binding/list'
-      preLoaderRoute: typeof DemoBindingListRouteImport
-      parentRoute: typeof DemoBindingRouteRoute
-    }
-    '/demo/binding/delete': {
-      id: '/demo/binding/delete'
-      path: '/delete'
-      fullPath: '/demo/binding/delete'
-      preLoaderRoute: typeof DemoBindingDeleteRouteImport
-      parentRoute: typeof DemoBindingRouteRoute
-    }
-    '/demo/binding/create': {
-      id: '/demo/binding/create'
-      path: '/create'
-      fullPath: '/demo/binding/create'
-      preLoaderRoute: typeof DemoBindingCreateRouteImport
-      parentRoute: typeof DemoBindingRouteRoute
-    }
-    '/demo/api/update': {
-      id: '/demo/api/update'
-      path: '/update'
-      fullPath: '/demo/api/update'
-      preLoaderRoute: typeof DemoApiUpdateRouteImport
-      parentRoute: typeof DemoApiRouteRoute
-    }
-    '/demo/api/read': {
-      id: '/demo/api/read'
-      path: '/read'
-      fullPath: '/demo/api/read'
-      preLoaderRoute: typeof DemoApiReadRouteImport
-      parentRoute: typeof DemoApiRouteRoute
-    }
-    '/demo/api/list': {
-      id: '/demo/api/list'
-      path: '/list'
-      fullPath: '/demo/api/list'
-      preLoaderRoute: typeof DemoApiListRouteImport
-      parentRoute: typeof DemoApiRouteRoute
-    }
-    '/demo/api/delete': {
-      id: '/demo/api/delete'
-      path: '/delete'
-      fullPath: '/demo/api/delete'
-      preLoaderRoute: typeof DemoApiDeleteRouteImport
-      parentRoute: typeof DemoApiRouteRoute
-    }
-    '/demo/api/create': {
-      id: '/demo/api/create'
-      path: '/create'
-      fullPath: '/demo/api/create'
-      preLoaderRoute: typeof DemoApiCreateRouteImport
-      parentRoute: typeof DemoApiRouteRoute
-    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -536,14 +440,251 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_auth/dashboard/direct': {
+      id: '/_auth/dashboard/direct'
+      path: '/direct'
+      fullPath: '/dashboard/direct'
+      preLoaderRoute: typeof AuthDashboardDirectRouteRouteImport
+      parentRoute: typeof AuthDashboardRouteRoute
+    }
+    '/_auth/dashboard/binding': {
+      id: '/_auth/dashboard/binding'
+      path: '/binding'
+      fullPath: '/dashboard/binding'
+      preLoaderRoute: typeof AuthDashboardBindingRouteRouteImport
+      parentRoute: typeof AuthDashboardRouteRoute
+    }
+    '/_auth/dashboard/api': {
+      id: '/_auth/dashboard/api'
+      path: '/api'
+      fullPath: '/dashboard/api'
+      preLoaderRoute: typeof AuthDashboardApiRouteRouteImport
+      parentRoute: typeof AuthDashboardRouteRoute
+    }
+    '/_auth/dashboard/direct/': {
+      id: '/_auth/dashboard/direct/'
+      path: '/'
+      fullPath: '/dashboard/direct/'
+      preLoaderRoute: typeof AuthDashboardDirectIndexRouteImport
+      parentRoute: typeof AuthDashboardDirectRouteRoute
+    }
+    '/_auth/dashboard/binding/': {
+      id: '/_auth/dashboard/binding/'
+      path: '/'
+      fullPath: '/dashboard/binding/'
+      preLoaderRoute: typeof AuthDashboardBindingIndexRouteImport
+      parentRoute: typeof AuthDashboardBindingRouteRoute
+    }
+    '/_auth/dashboard/api/': {
+      id: '/_auth/dashboard/api/'
+      path: '/'
+      fullPath: '/dashboard/api/'
+      preLoaderRoute: typeof AuthDashboardApiIndexRouteImport
+      parentRoute: typeof AuthDashboardApiRouteRoute
+    }
+    '/_auth/dashboard/direct/update': {
+      id: '/_auth/dashboard/direct/update'
+      path: '/update'
+      fullPath: '/dashboard/direct/update'
+      preLoaderRoute: typeof AuthDashboardDirectUpdateRouteImport
+      parentRoute: typeof AuthDashboardDirectRouteRoute
+    }
+    '/_auth/dashboard/direct/read': {
+      id: '/_auth/dashboard/direct/read'
+      path: '/read'
+      fullPath: '/dashboard/direct/read'
+      preLoaderRoute: typeof AuthDashboardDirectReadRouteImport
+      parentRoute: typeof AuthDashboardDirectRouteRoute
+    }
+    '/_auth/dashboard/direct/list': {
+      id: '/_auth/dashboard/direct/list'
+      path: '/list'
+      fullPath: '/dashboard/direct/list'
+      preLoaderRoute: typeof AuthDashboardDirectListRouteImport
+      parentRoute: typeof AuthDashboardDirectRouteRoute
+    }
+    '/_auth/dashboard/direct/delete': {
+      id: '/_auth/dashboard/direct/delete'
+      path: '/delete'
+      fullPath: '/dashboard/direct/delete'
+      preLoaderRoute: typeof AuthDashboardDirectDeleteRouteImport
+      parentRoute: typeof AuthDashboardDirectRouteRoute
+    }
+    '/_auth/dashboard/direct/create': {
+      id: '/_auth/dashboard/direct/create'
+      path: '/create'
+      fullPath: '/dashboard/direct/create'
+      preLoaderRoute: typeof AuthDashboardDirectCreateRouteImport
+      parentRoute: typeof AuthDashboardDirectRouteRoute
+    }
+    '/_auth/dashboard/binding/update': {
+      id: '/_auth/dashboard/binding/update'
+      path: '/update'
+      fullPath: '/dashboard/binding/update'
+      preLoaderRoute: typeof AuthDashboardBindingUpdateRouteImport
+      parentRoute: typeof AuthDashboardBindingRouteRoute
+    }
+    '/_auth/dashboard/binding/read': {
+      id: '/_auth/dashboard/binding/read'
+      path: '/read'
+      fullPath: '/dashboard/binding/read'
+      preLoaderRoute: typeof AuthDashboardBindingReadRouteImport
+      parentRoute: typeof AuthDashboardBindingRouteRoute
+    }
+    '/_auth/dashboard/binding/list': {
+      id: '/_auth/dashboard/binding/list'
+      path: '/list'
+      fullPath: '/dashboard/binding/list'
+      preLoaderRoute: typeof AuthDashboardBindingListRouteImport
+      parentRoute: typeof AuthDashboardBindingRouteRoute
+    }
+    '/_auth/dashboard/binding/delete': {
+      id: '/_auth/dashboard/binding/delete'
+      path: '/delete'
+      fullPath: '/dashboard/binding/delete'
+      preLoaderRoute: typeof AuthDashboardBindingDeleteRouteImport
+      parentRoute: typeof AuthDashboardBindingRouteRoute
+    }
+    '/_auth/dashboard/binding/create': {
+      id: '/_auth/dashboard/binding/create'
+      path: '/create'
+      fullPath: '/dashboard/binding/create'
+      preLoaderRoute: typeof AuthDashboardBindingCreateRouteImport
+      parentRoute: typeof AuthDashboardBindingRouteRoute
+    }
+    '/_auth/dashboard/api/update': {
+      id: '/_auth/dashboard/api/update'
+      path: '/update'
+      fullPath: '/dashboard/api/update'
+      preLoaderRoute: typeof AuthDashboardApiUpdateRouteImport
+      parentRoute: typeof AuthDashboardApiRouteRoute
+    }
+    '/_auth/dashboard/api/read': {
+      id: '/_auth/dashboard/api/read'
+      path: '/read'
+      fullPath: '/dashboard/api/read'
+      preLoaderRoute: typeof AuthDashboardApiReadRouteImport
+      parentRoute: typeof AuthDashboardApiRouteRoute
+    }
+    '/_auth/dashboard/api/list': {
+      id: '/_auth/dashboard/api/list'
+      path: '/list'
+      fullPath: '/dashboard/api/list'
+      preLoaderRoute: typeof AuthDashboardApiListRouteImport
+      parentRoute: typeof AuthDashboardApiRouteRoute
+    }
+    '/_auth/dashboard/api/delete': {
+      id: '/_auth/dashboard/api/delete'
+      path: '/delete'
+      fullPath: '/dashboard/api/delete'
+      preLoaderRoute: typeof AuthDashboardApiDeleteRouteImport
+      parentRoute: typeof AuthDashboardApiRouteRoute
+    }
+    '/_auth/dashboard/api/create': {
+      id: '/_auth/dashboard/api/create'
+      path: '/create'
+      fullPath: '/dashboard/api/create'
+      preLoaderRoute: typeof AuthDashboardApiCreateRouteImport
+      parentRoute: typeof AuthDashboardApiRouteRoute
+    }
   }
 }
 
+interface AuthDashboardApiRouteRouteChildren {
+  AuthDashboardApiCreateRoute: typeof AuthDashboardApiCreateRoute
+  AuthDashboardApiDeleteRoute: typeof AuthDashboardApiDeleteRoute
+  AuthDashboardApiListRoute: typeof AuthDashboardApiListRoute
+  AuthDashboardApiReadRoute: typeof AuthDashboardApiReadRoute
+  AuthDashboardApiUpdateRoute: typeof AuthDashboardApiUpdateRoute
+  AuthDashboardApiIndexRoute: typeof AuthDashboardApiIndexRoute
+}
+
+const AuthDashboardApiRouteRouteChildren: AuthDashboardApiRouteRouteChildren = {
+  AuthDashboardApiCreateRoute: AuthDashboardApiCreateRoute,
+  AuthDashboardApiDeleteRoute: AuthDashboardApiDeleteRoute,
+  AuthDashboardApiListRoute: AuthDashboardApiListRoute,
+  AuthDashboardApiReadRoute: AuthDashboardApiReadRoute,
+  AuthDashboardApiUpdateRoute: AuthDashboardApiUpdateRoute,
+  AuthDashboardApiIndexRoute: AuthDashboardApiIndexRoute,
+}
+
+const AuthDashboardApiRouteRouteWithChildren =
+  AuthDashboardApiRouteRoute._addFileChildren(
+    AuthDashboardApiRouteRouteChildren,
+  )
+
+interface AuthDashboardBindingRouteRouteChildren {
+  AuthDashboardBindingCreateRoute: typeof AuthDashboardBindingCreateRoute
+  AuthDashboardBindingDeleteRoute: typeof AuthDashboardBindingDeleteRoute
+  AuthDashboardBindingListRoute: typeof AuthDashboardBindingListRoute
+  AuthDashboardBindingReadRoute: typeof AuthDashboardBindingReadRoute
+  AuthDashboardBindingUpdateRoute: typeof AuthDashboardBindingUpdateRoute
+  AuthDashboardBindingIndexRoute: typeof AuthDashboardBindingIndexRoute
+}
+
+const AuthDashboardBindingRouteRouteChildren: AuthDashboardBindingRouteRouteChildren =
+  {
+    AuthDashboardBindingCreateRoute: AuthDashboardBindingCreateRoute,
+    AuthDashboardBindingDeleteRoute: AuthDashboardBindingDeleteRoute,
+    AuthDashboardBindingListRoute: AuthDashboardBindingListRoute,
+    AuthDashboardBindingReadRoute: AuthDashboardBindingReadRoute,
+    AuthDashboardBindingUpdateRoute: AuthDashboardBindingUpdateRoute,
+    AuthDashboardBindingIndexRoute: AuthDashboardBindingIndexRoute,
+  }
+
+const AuthDashboardBindingRouteRouteWithChildren =
+  AuthDashboardBindingRouteRoute._addFileChildren(
+    AuthDashboardBindingRouteRouteChildren,
+  )
+
+interface AuthDashboardDirectRouteRouteChildren {
+  AuthDashboardDirectCreateRoute: typeof AuthDashboardDirectCreateRoute
+  AuthDashboardDirectDeleteRoute: typeof AuthDashboardDirectDeleteRoute
+  AuthDashboardDirectListRoute: typeof AuthDashboardDirectListRoute
+  AuthDashboardDirectReadRoute: typeof AuthDashboardDirectReadRoute
+  AuthDashboardDirectUpdateRoute: typeof AuthDashboardDirectUpdateRoute
+  AuthDashboardDirectIndexRoute: typeof AuthDashboardDirectIndexRoute
+}
+
+const AuthDashboardDirectRouteRouteChildren: AuthDashboardDirectRouteRouteChildren =
+  {
+    AuthDashboardDirectCreateRoute: AuthDashboardDirectCreateRoute,
+    AuthDashboardDirectDeleteRoute: AuthDashboardDirectDeleteRoute,
+    AuthDashboardDirectListRoute: AuthDashboardDirectListRoute,
+    AuthDashboardDirectReadRoute: AuthDashboardDirectReadRoute,
+    AuthDashboardDirectUpdateRoute: AuthDashboardDirectUpdateRoute,
+    AuthDashboardDirectIndexRoute: AuthDashboardDirectIndexRoute,
+  }
+
+const AuthDashboardDirectRouteRouteWithChildren =
+  AuthDashboardDirectRouteRoute._addFileChildren(
+    AuthDashboardDirectRouteRouteChildren,
+  )
+
+interface AuthDashboardRouteRouteChildren {
+  AuthDashboardApiRouteRoute: typeof AuthDashboardApiRouteRouteWithChildren
+  AuthDashboardBindingRouteRoute: typeof AuthDashboardBindingRouteRouteWithChildren
+  AuthDashboardDirectRouteRoute: typeof AuthDashboardDirectRouteRouteWithChildren
+  AuthDashboardIndexRoute: typeof AuthDashboardIndexRoute
+}
+
+const AuthDashboardRouteRouteChildren: AuthDashboardRouteRouteChildren = {
+  AuthDashboardApiRouteRoute: AuthDashboardApiRouteRouteWithChildren,
+  AuthDashboardBindingRouteRoute: AuthDashboardBindingRouteRouteWithChildren,
+  AuthDashboardDirectRouteRoute: AuthDashboardDirectRouteRouteWithChildren,
+  AuthDashboardIndexRoute: AuthDashboardIndexRoute,
+}
+
+const AuthDashboardRouteRouteWithChildren =
+  AuthDashboardRouteRoute._addFileChildren(AuthDashboardRouteRouteChildren)
+
 interface AuthRouteRouteChildren {
+  AuthDashboardRouteRoute: typeof AuthDashboardRouteRouteWithChildren
   AuthAppIndexRoute: typeof AuthAppIndexRoute
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
+  AuthDashboardRouteRoute: AuthDashboardRouteRouteWithChildren,
   AuthAppIndexRoute: AuthAppIndexRoute,
 }
 
@@ -551,93 +692,11 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
   AuthRouteRouteChildren,
 )
 
-interface DemoApiRouteRouteChildren {
-  DemoApiCreateRoute: typeof DemoApiCreateRoute
-  DemoApiDeleteRoute: typeof DemoApiDeleteRoute
-  DemoApiListRoute: typeof DemoApiListRoute
-  DemoApiReadRoute: typeof DemoApiReadRoute
-  DemoApiUpdateRoute: typeof DemoApiUpdateRoute
-  DemoApiIndexRoute: typeof DemoApiIndexRoute
-}
-
-const DemoApiRouteRouteChildren: DemoApiRouteRouteChildren = {
-  DemoApiCreateRoute: DemoApiCreateRoute,
-  DemoApiDeleteRoute: DemoApiDeleteRoute,
-  DemoApiListRoute: DemoApiListRoute,
-  DemoApiReadRoute: DemoApiReadRoute,
-  DemoApiUpdateRoute: DemoApiUpdateRoute,
-  DemoApiIndexRoute: DemoApiIndexRoute,
-}
-
-const DemoApiRouteRouteWithChildren = DemoApiRouteRoute._addFileChildren(
-  DemoApiRouteRouteChildren,
-)
-
-interface DemoBindingRouteRouteChildren {
-  DemoBindingCreateRoute: typeof DemoBindingCreateRoute
-  DemoBindingDeleteRoute: typeof DemoBindingDeleteRoute
-  DemoBindingListRoute: typeof DemoBindingListRoute
-  DemoBindingReadRoute: typeof DemoBindingReadRoute
-  DemoBindingUpdateRoute: typeof DemoBindingUpdateRoute
-  DemoBindingIndexRoute: typeof DemoBindingIndexRoute
-}
-
-const DemoBindingRouteRouteChildren: DemoBindingRouteRouteChildren = {
-  DemoBindingCreateRoute: DemoBindingCreateRoute,
-  DemoBindingDeleteRoute: DemoBindingDeleteRoute,
-  DemoBindingListRoute: DemoBindingListRoute,
-  DemoBindingReadRoute: DemoBindingReadRoute,
-  DemoBindingUpdateRoute: DemoBindingUpdateRoute,
-  DemoBindingIndexRoute: DemoBindingIndexRoute,
-}
-
-const DemoBindingRouteRouteWithChildren =
-  DemoBindingRouteRoute._addFileChildren(DemoBindingRouteRouteChildren)
-
-interface DemoDirectRouteRouteChildren {
-  DemoDirectCreateRoute: typeof DemoDirectCreateRoute
-  DemoDirectDeleteRoute: typeof DemoDirectDeleteRoute
-  DemoDirectListRoute: typeof DemoDirectListRoute
-  DemoDirectReadRoute: typeof DemoDirectReadRoute
-  DemoDirectUpdateRoute: typeof DemoDirectUpdateRoute
-  DemoDirectIndexRoute: typeof DemoDirectIndexRoute
-}
-
-const DemoDirectRouteRouteChildren: DemoDirectRouteRouteChildren = {
-  DemoDirectCreateRoute: DemoDirectCreateRoute,
-  DemoDirectDeleteRoute: DemoDirectDeleteRoute,
-  DemoDirectListRoute: DemoDirectListRoute,
-  DemoDirectReadRoute: DemoDirectReadRoute,
-  DemoDirectUpdateRoute: DemoDirectUpdateRoute,
-  DemoDirectIndexRoute: DemoDirectIndexRoute,
-}
-
-const DemoDirectRouteRouteWithChildren = DemoDirectRouteRoute._addFileChildren(
-  DemoDirectRouteRouteChildren,
-)
-
-interface DemoRouteRouteChildren {
-  DemoApiRouteRoute: typeof DemoApiRouteRouteWithChildren
-  DemoBindingRouteRoute: typeof DemoBindingRouteRouteWithChildren
-  DemoDirectRouteRoute: typeof DemoDirectRouteRouteWithChildren
-  DemoIndexRoute: typeof DemoIndexRoute
-}
-
-const DemoRouteRouteChildren: DemoRouteRouteChildren = {
-  DemoApiRouteRoute: DemoApiRouteRouteWithChildren,
-  DemoBindingRouteRoute: DemoBindingRouteRouteWithChildren,
-  DemoDirectRouteRoute: DemoDirectRouteRouteWithChildren,
-  DemoIndexRoute: DemoIndexRoute,
-}
-
-const DemoRouteRouteWithChildren = DemoRouteRoute._addFileChildren(
-  DemoRouteRouteChildren,
-)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRouteRoute: AuthRouteRouteWithChildren,
-  DemoRouteRoute: DemoRouteRouteWithChildren,
+  SigninRoute: SigninRoute,
+  SignupRoute: SignupRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport

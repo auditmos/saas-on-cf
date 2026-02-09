@@ -25,25 +25,13 @@ interface NavigationItem {
 
 const navigationItems: NavigationItem[] = [
   { label: "Features", href: "/#features", scrollTo: "features" },
-  { label: "Demos", href: "/demo" },
-  {
-    label: "GitHub",
-    href: "https://github.com/auditmos/saas-on-cf",
-    isExternal: true,
-  },
+  { label: "Dashboard", href: "/dashboard" },
 ];
 
 export function NavigationBar() {
   const [isOpen, setIsOpen] = React.useState(false);
   const [isScrolled, setIsScrolled] = React.useState(false);
   const { data: session } = authClient.useSession();
-
-  const handleGoogleSignIn = async () => {
-    await authClient.signIn.social({
-      provider: "google",
-      callbackURL: "/app",
-    });
-  };
 
   const user = session?.user;
   const fallbackText = user?.name
@@ -102,7 +90,7 @@ export function NavigationBar() {
                   >
                     <span>{item.label}</span>
                     {item.label === "GitHub" ? (
-                      <Github className="h-4 w-4" />
+                      <Github className="h-4 w-4 text-foreground" />
                     ) : (
                       <ExternalLink className="h-4 w-4" />
                     )}
@@ -120,8 +108,18 @@ export function NavigationBar() {
               </div>
             ))}
 
-            {/* Theme Toggle */}
-            <div className="ml-2 pl-2 border-l border-border/30">
+            {/* GitHub + Theme Toggle */}
+            <div className="ml-2 pl-2 border-l border-border/30 flex items-center gap-1">
+              <Button variant="ghost" size="icon" asChild>
+                <a
+                  href="https://github.com/auditmos/saas-on-cf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Github className="h-4 w-4 text-foreground" />
+                  <span className="sr-only">GitHub</span>
+                </a>
+              </Button>
               <ThemeToggle variant="ghost" align="end" />
             </div>
           </div>
@@ -143,25 +141,33 @@ export function NavigationBar() {
                       {fallbackText}
                     </AvatarFallback>
                   </Avatar>
-                  <span className="text-sm font-medium">
+                  <span className="text-sm font-medium text-foreground">
                     {user?.name || "Account"}
                   </span>
                 </Button>
               </AccountDialog>
             ) : (
-              <Button
-                onClick={handleGoogleSignIn}
-                variant="default"
-                className="gap-2"
-              >
-                <LogIn className="h-4 w-4" />
-                Sign In
-              </Button>
+              <Link to="/signin">
+                <Button variant="default" className="gap-2">
+                  <LogIn className="h-4 w-4" />
+                  Sign In
+                </Button>
+              </Link>
             )}
           </div>
 
           {/* Mobile Menu Button + Theme Toggle */}
-          <div className="lg:hidden flex items-center space-x-2">
+          <div className="lg:hidden flex items-center space-x-1">
+            <Button variant="ghost" size="icon" asChild>
+              <a
+                href="https://github.com/auditmos/saas-on-cf"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Github className="h-4 w-4 text-foreground" />
+                <span className="sr-only">GitHub</span>
+              </a>
+            </Button>
             <ThemeToggle variant="ghost" align="end" />
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
@@ -200,7 +206,7 @@ export function NavigationBar() {
                         >
                           <span>{item.label}</span>
                           {item.label === "GitHub" ? (
-                            <Github className="h-4 w-4" />
+                            <Github className="h-4 w-4 text-foreground" />
                           ) : (
                             <ExternalLink className="h-4 w-4" />
                           )}
@@ -241,14 +247,15 @@ export function NavigationBar() {
                       </div>
                     </div>
                   ) : (
-                    <Button
-                      onClick={handleGoogleSignIn}
-                      variant="default"
-                      className="w-full gap-2"
-                    >
-                      <LogIn className="h-4 w-4" />
-                      Sign In with Google
-                    </Button>
+                    <Link to="/signin" onClick={() => setIsOpen(false)}>
+                      <Button
+                        variant="default"
+                        className="w-full gap-2"
+                      >
+                        <LogIn className="h-4 w-4" />
+                        Sign In
+                      </Button>
+                    </Link>
                   )}
                 </div>
               </SheetContent>

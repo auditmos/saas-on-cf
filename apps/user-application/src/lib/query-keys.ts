@@ -1,36 +1,36 @@
 import { queryOptions } from '@tanstack/react-query';
-import { fetchUser, fetchUsers } from './api-client';
-import { getUserDirect, getUsersDirect } from '@/core/functions/users/direct';
-import { getUserBinding, getUsersBinding } from '@/core/functions/users/binding';
+import { fetchClient, fetchClients } from './api-client';
+import { getClientDirect, getClientsDirect } from '@/core/functions/clients/direct';
+import { getClientBinding, getClientsBinding } from '@/core/functions/clients/binding';
 
 type PaginationParams = { limit: number; offset: number };
 
 // Base keys with pattern suffix
-export const userKeys = {
-  all: ['users'] as const,
-  lists: () => [...userKeys.all, 'list'] as const,
+export const clientKeys = {
+  all: ['clients'] as const,
+  lists: () => [...clientKeys.all, 'list'] as const,
   list: (params: PaginationParams, pattern: 'direct' | 'binding' | 'api') =>
-    [...userKeys.lists(), params, pattern] as const,
-  details: () => [...userKeys.all, 'detail'] as const,
+    [...clientKeys.lists(), params, pattern] as const,
+  details: () => [...clientKeys.all, 'detail'] as const,
   detail: (id: string, pattern: 'direct' | 'binding' | 'api') =>
-    [...userKeys.details(), id, pattern] as const,
+    [...clientKeys.details(), id, pattern] as const,
 };
 
 // ─────────────────────────────────────────────────────────────
 // DIRECT PATTERN - Server Fn → data-ops → DB
 // ─────────────────────────────────────────────────────────────
 
-export const userDetailDirectQueryOptions = (id: string) =>
+export const clientDetailDirectQueryOptions = (id: string) =>
   queryOptions({
-    queryKey: userKeys.detail(id, 'direct'),
-    queryFn: () => getUserDirect({ data: { id } }),
+    queryKey: clientKeys.detail(id, 'direct'),
+    queryFn: () => getClientDirect({ data: { id } }),
     staleTime: 1000 * 60,
   });
 
-export const usersListDirectQueryOptions = (params: PaginationParams) =>
+export const clientsListDirectQueryOptions = (params: PaginationParams) =>
   queryOptions({
-    queryKey: userKeys.list(params, 'direct'),
-    queryFn: () => getUsersDirect({ data: params }),
+    queryKey: clientKeys.list(params, 'direct'),
+    queryFn: () => getClientsDirect({ data: params }),
     placeholderData: (prev) => prev,
   });
 
@@ -38,17 +38,17 @@ export const usersListDirectQueryOptions = (params: PaginationParams) =>
 // BINDING PATTERN - Server Fn → DATA_SERVICE.fetch → data-service → DB
 // ─────────────────────────────────────────────────────────────
 
-export const userDetailBindingQueryOptions = (id: string) =>
+export const clientDetailBindingQueryOptions = (id: string) =>
   queryOptions({
-    queryKey: userKeys.detail(id, 'binding'),
-    queryFn: () => getUserBinding({ data: { id } }),
+    queryKey: clientKeys.detail(id, 'binding'),
+    queryFn: () => getClientBinding({ data: { id } }),
     staleTime: 1000 * 60,
   });
 
-export const usersListBindingQueryOptions = (params: PaginationParams) =>
+export const clientsListBindingQueryOptions = (params: PaginationParams) =>
   queryOptions({
-    queryKey: userKeys.list(params, 'binding'),
-    queryFn: () => getUsersBinding({ data: params }),
+    queryKey: clientKeys.list(params, 'binding'),
+    queryFn: () => getClientsBinding({ data: params }),
     placeholderData: (prev) => prev,
   });
 
@@ -56,16 +56,16 @@ export const usersListBindingQueryOptions = (params: PaginationParams) =>
 // API PATTERN - Browser → fetch → data-service HTTP
 // ─────────────────────────────────────────────────────────────
 
-export const userDetailApiQueryOptions = (id: string) =>
+export const clientDetailApiQueryOptions = (id: string) =>
   queryOptions({
-    queryKey: userKeys.detail(id, 'api'),
-    queryFn: () => fetchUser(id),
+    queryKey: clientKeys.detail(id, 'api'),
+    queryFn: () => fetchClient(id),
     staleTime: 1000 * 60,
   });
 
-export const usersListApiQueryOptions = (params: PaginationParams) =>
+export const clientsListApiQueryOptions = (params: PaginationParams) =>
   queryOptions({
-    queryKey: userKeys.list(params, 'api'),
-    queryFn: () => fetchUsers(params),
+    queryKey: clientKeys.list(params, 'api'),
+    queryFn: () => fetchClients(params),
     placeholderData: (prev) => prev,
   });

@@ -1,8 +1,8 @@
 import { sql } from 'drizzle-orm';
 import { initDatabase } from '../setup';
-import { users } from '../../drizzle/schema';
+import { clients } from '../../drizzle/schema';
 
-const sampleUsers = [
+const sampleClients = [
   { name: 'John', surname: 'Smith', email: 'john.smith@example.com' },
   { name: 'Emma', surname: 'Johnson', email: 'emma.johnson@example.com' },
   { name: 'Michael', surname: 'Williams', email: 'michael.williams@example.com' },
@@ -40,9 +40,9 @@ async function seedDb() {
 
   console.log('\n[START] Seeding data...\n');
 
-  console.log('Seeding users...');
-  await db.insert(users).values(sampleUsers).onConflictDoNothing();
-  console.log(`Inserted ${sampleUsers.length} users`);
+  console.log('Seeding clients...');
+  await db.insert(clients).values(sampleClients).onConflictDoNothing();
+  console.log(`Inserted ${sampleClients.length} clients`);
 
   console.log('\n[END] Seeding data...\n');
 
