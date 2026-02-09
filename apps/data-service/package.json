@@ -6,14 +6,11 @@
     "deploy:staging": "wrangler deploy --env staging",
     "deploy:production": "wrangler deploy --env production",
     "dev": "wrangler dev --env dev --port 8788",
-    "test": "vitest",
     "cf-typegen": "wrangler types --env-interface BaseEnv --env dev"
   },
   "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "^0.8.19",
     "@types/node": "^22.15.19",
     "typescript": "^5.5.2",
-    "vitest": "~3.2.0",
     "wrangler": "^4.63.0"
   },
   "dependencies": {
