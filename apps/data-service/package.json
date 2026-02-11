@@ -11,7 +11,7 @@
   "devDependencies": {
     "@types/node": "^22.15.19",
     "typescript": "^5.9.3",
-    "wrangler": "^4.63.0"
+    "wrangler": "^4.64.0"
   },
   "dependencies": {
     "@hono/zod-validator": "^0.7.6",

@@ -17,74 +17,21 @@ src/
 ├── router.tsx                # TanStack Router config
 ├── routes/                   # File-based routing
 │   ├── __root.tsx            # Root layout
+│   ├── index.tsx             # Landing page
+│   ├── faq/$categoryId.tsx   # Dynamic FAQ pages
 │   ├── _auth/                # Protected routes (require auth)
-│   ├── _static/              # Static content
-│   ├── api/                  # API handlers (Better Auth)
-├── core/
-│   ├── functions/            # Server functions
-│   │   └── clients/          # Client CRUD by pattern
-│   │       ├── direct.ts     # → data-ops (DB)
-│   │       └── binding.ts    # → DATA_SERVICE.fetch
-│   └── middleware/           # Auth middleware
+│   └── api/                  # API handlers (Better Auth)
 ├── lib/
-│   ├── api-client.ts         # Browser fetch → data-service
-│   └── query-keys.ts         # TanStack Query keys + options
+│   ├── utils.ts              # Shared utilities
+│   ├── auth-client.ts        # Better Auth client
+│   └── data-service.ts       # Service binding client (DATA_SERVICE)
 └── components/               # React components
-```
-
-## Data Access Patterns
-
-| Pattern | File | Flow | SSR |
-|---------|------|------|-----|
-| **Direct** | `core/functions/clients/direct.ts` | Server Fn → data-ops → DB | Yes |
-| **Binding** | `core/functions/clients/binding.ts` | Server Fn → `env.DATA_SERVICE.fetch` → data-service | Yes |
-| **API** | `lib/api-client.ts` | Browser → fetch → data-service HTTP | No |
-
-**Choose:**
-- Direct: auth, performance-critical, complex transactions
-- Binding: shared logic with external API, internal services
-- API: mobile apps, SPAs, third-party clients
-
-## Service Binding
-
-```typescript
-import { env } from 'cloudflare:workers';
-
-// Internal call (hostname ignored)
-const response = await env.DATA_SERVICE.fetch(
-  new Request('https://data-service/clients', {
-    headers: { Authorization: `Bearer ${env.DATA_SERVICE_API_TOKEN}` }
-  })
-);
-```
-
-Configured in `wrangler.jsonc` per environment.
-
-## Server Functions
-
-```typescript
-// With middleware
-import { protectedFunctionMiddleware } from '@/core/middleware/auth';
-
-const protectedFn = createServerFn().middleware([protectedFunctionMiddleware]);
-
-export const myFn = protectedFn
-  .validator((data) => MySchema.parse(data))
-  .handler(async ({ data, context }) => {
-    // context.session available
-  });
-```
-
-## TanStack Query Keys
-
-```typescript
-import { clientKeys, clientDetailDirectQueryOptions } from '@/lib/query-keys';
-
-// In route loader (SSR)
-await context.queryClient.ensureQueryData(clientDetailDirectQueryOptions(id));
-
-// In component
-const { data } = useQuery(clientDetailDirectQueryOptions(id));
+    ├── landing/              # Landing page sections
+    ├── faq/                  # FAQ page component
+    ├── navigation/           # Nav bar
+    ├── theme/                # Theme toggle + provider
+    ├── auth/                 # Auth components
+    └── ui/                   # Radix/shadcn primitives
 ```
 
 ## Dev
@@ -103,12 +50,29 @@ pnpm run deploy:prod      # deploy to production
 - `DATABASE_HOST`, `DATABASE_USERNAME`, `DATABASE_PASSWORD`
 - `BETTER_AUTH_SECRET`
 - `CLOUDFLARE_ENV` - dev | staging | production
-- `VITE_DATA_SERVICE_URL` - public API URL (API pattern only)
-- `VITE_API_TOKEN` - client-side API auth (API pattern only)
+- `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` (optional, OAuth)
+- `VITE_DATA_SERVICE_URL` - public API URL
+- `VITE_API_TOKEN` - client-side API auth
+
+## Service Binding (DATA_SERVICE)
+
+Use `fetchDataService()` from `lib/data-service.ts` for server-side calls to data-service via Worker service binding. Never call the public API URL from server code.
+
+```ts
+import { fetchDataService } from "@/lib/data-service";
+
+const response = await fetchDataService("/health/live");
+const data = await response.json();
+```
+
+- Server-only — uses `env` from `cloudflare:workers`
+- No HTTP/DNS overhead — internal Worker-to-Worker RPC
+- Health check: `GET /api/health` verifies binding, DB, and env
 
 ## Don't
 
 - Import `env` from 'cloudflare:workers' in client code (server only)
+- Call data-service via public URL from server code — use `fetchDataService()` instead
 - Put DB queries here - add to `@repo/data-ops/queries`
 - Skip `enabled: !!id` on detail queries (prevents empty ID fetches)
 - Use useState for URL-driven state - use `validateSearch` + `useNavigate`

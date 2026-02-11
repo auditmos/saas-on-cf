@@ -51,8 +51,8 @@
     "staging": {
       // "routes": [
       //   {
-      //     "zone_name": "YOUR_DOMAIN.COM",
-      //     "pattern": "staging.YOUR_DOMAIN.COM/api/*"
+      //     "pattern": "api-staging.YOUR_DOMAIN.COM",
+      //     "custom_domain": true
       //   }
       // ],
       "name": "saas-on-cf-ds-staging",
@@ -87,8 +87,8 @@
     "production": {
       // "routes": [
       //   {
-      //     "zone_name": "YOUR_DOMAIN.COM",
-      //     "pattern": "YOUR_DOMAIN.COM/api/*"
+      //     "pattern": "api.YOUR_DOMAIN.COM",
+      //     "custom_domain": true
       //   }
       // ],
       "name": "saas-on-cf-ds-production",
