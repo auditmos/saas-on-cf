@@ -53,6 +53,7 @@ Rules auto-load from `.claude/rules/`:
     ├── react.md
     ├── ui.md
     ├── i18n.md
+    ├── vite.md
     └── auth.md
 ```
 
