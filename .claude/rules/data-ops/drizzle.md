@@ -58,6 +58,24 @@ const user = await db.query.users.findFirst({
 - Run `drizzle:*:generate` then `drizzle:*:migrate`
 - Test migrations on dev/staging before production
 
+## Error Handling
+
+- Drizzle wraps DB errors in `DrizzleQueryError` — original Postgres error is in `error.cause`, NOT `error.message`
+- `error.message` = `"Failed query: <SQL>\nparams: <values>"` — never contains constraint info
+- Check `error.cause.code` for Postgres error codes (e.g. `23505` = unique violation)
+
+```ts
+function isUniqueViolation(error: unknown): boolean {
+  if (!(error instanceof Error)) return false;
+  const cause = error.cause;
+  if (cause instanceof Error) {
+    const pgCode = (cause as Error & { code?: string }).code;
+    if (pgCode === '23505') return true;
+  }
+  return false;
+}
+```
+
 ## Queries Module
 
 - Place reusable queries in `queries/*.ts`
