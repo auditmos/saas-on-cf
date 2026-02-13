@@ -68,6 +68,18 @@ const passwordSchema = z.string()
   .refine(p => /[0-9]/.test(p), 'Must contain number')
 ```
 
+## When Zod vs When Interface
+
+| Boundary | Use | Why |
+|----------|-----|-----|
+| External API responses | Zod schema + `z.infer` | Runtime data is untrusted — `safeParse` catches shape mismatches |
+| Internal service-to-service | Zod schema + `z.infer` | System boundary — validate at entry |
+| Internal module types (no I/O) | `interface` / `type` | No runtime data to validate, TS compiler is enough |
+| Request input (forms, params) | Zod schema + `z.infer` | User input is untrusted |
+
+- Derive types from schemas (`z.infer`), never duplicate as separate interfaces
+- External API fields: default to `.optional().default(fallback)` unless field is essential (id, name). External APIs return unpredictable shapes — strict schemas silently break as 502s
+
 ## Integration with Drizzle
 
 - Create separate Zod schemas for validation (don't derive from Drizzle)

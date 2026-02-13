@@ -11,7 +11,7 @@
     "deploy:staging": "pnpm run build:staging && wrangler deploy --env=''",
     "deploy:production": "pnpm run build:production && wrangler deploy --env=''",
     "serve": "vite preview",
-    "cf-typegen": "wrangler types --env-interface Env"
+    "cf-typegen": "wrangler types --env-interface Env --env dev"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.11",

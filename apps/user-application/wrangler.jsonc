@@ -9,6 +9,12 @@
     "enabled": true
   },
   "main": "./src/server.ts",
+  "services": [
+    {
+      "binding": "DATA_SERVICE",
+      "service": "saas-on-cf-ds-dev"
+    }
+  ],
   "env": {
     /** 
 		* Local / Development environment 
