@@ -17,6 +17,7 @@ export default {
 
     setAuth({
       secret: env.BETTER_AUTH_SECRET,
+      baseURL: env.BETTER_AUTH_BASE_URL,
       adapter: {
         drizzleDb: getDb(),
         provider: "pg",

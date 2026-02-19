@@ -151,12 +151,24 @@ You can also use your own domain names associated with Cloudflare account by add
 pnpm run deploy:staging:user-application
 ```
 
+Secrets synchronization
+
+```bash
+bash apps/user-application/sync-secrets.sh staging
+```
+
 This will deploy the [user-application](./apps/user-application/) to Cloudflare Workers into staging environment.
 
 #### Production Environment
 
 ```bash
 pnpm run deploy:production:user-application
+```
+
+Secrets synchronization
+
+```bash
+bash apps/user-application/sync-secrets.sh production
 ```
 
 This will deploy the [user-application](./apps/user-application/) to Cloudflare Workers into production environment.
@@ -173,12 +185,24 @@ You can also use your own domain names associated with Cloudflare account by add
 pnpm run deploy:staging:data-service
 ```
 
+Secrets synchronization
+
+```bash
+bash apps/data-service/sync-secrets.sh staging
+```
+
 This will deploy the [data-service](./apps/data-service/) to Cloudflare Workers into staging environment.
 
 #### Production Environment
 
 ```bash
 pnpm run deploy:production:data-service
+```
+
+Secrets synchronization
+
+```bash
+bash apps/data-service/sync-secrets.sh production
 ```
 
 This will deploy the [data-service](./apps/data-service/) to Cloudflare Workers into production environment.

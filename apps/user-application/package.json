@@ -60,6 +60,6 @@
     "typescript": "^5.9.3",
     "vite": "7.1.2",
     "web-vitals": "^4.2.4",
-    "wrangler": "^4.64.0"
+    "wrangler": "^4.66.0"
   }
 }

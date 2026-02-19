@@ -155,6 +155,18 @@ function CreateForm() {
 }
 ```
 
+## Route Tree Regeneration
+
+After adding/removing/renaming route files, `routeTree.gen.ts` must be regenerated:
+
+```bash
+cd apps/user-application && npx @tanstack/router-cli generate
+```
+
+- **DO NOT** use `npx tsr generate` — that's a tree-shaker, not the router codegen
+- Route tree is also auto-regenerated during `pnpm run dev` and `pnpm run build`
+- After regeneration, TS errors about unknown route paths resolve immediately
+
 ## SSR Patterns
 
 - Use loaders for initial data (SSR)
