@@ -27,6 +27,10 @@ pnpm run deploy:production:data-service
 pnpm run seed:dev
 pnpm run seed:staging
 pnpm run seed:production
+
+# Lint
+pnpm run lint                     # check all (formatting + linting)
+pnpm run lint:fix                 # auto-fix all
 ```
 
 ## Rules Structure
@@ -65,6 +69,13 @@ Rules with `paths:` frontmatter apply only when working with matching files.
 - When reviewing, auditing, or analyzing a feature—apply all changes (notes, status updates, findings) directly in the corresponding design doc
 - Never create separate md files for reviews/audits/analyses unless explicitly asked
 - Implementation must align with the spec in `/docs`; flag deviations inline in the doc
+
+## Linting
+
+- Run `pnpm run lint` after writing code to catch issues
+- Run `pnpm run lint:fix` to auto-fix formatting + safe lint fixes
+- Max 500 lines per source file. Split if exceeding
+- Biome config: `biome.json` (root). GritQL plugins: `plugins/*.grit`
 
 ## Key Patterns
 

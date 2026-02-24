@@ -1,15 +1,15 @@
 import { Hono } from "hono";
-import { requestId } from "./middleware/request-id";
+import clients from "./handlers/client-handlers";
+import health from "./handlers/health-handlers";
 import { createCorsMiddleware } from "./middleware/cors";
 import { onErrorHandler } from "./middleware/error-handler";
-import health from "./handlers/health-handlers";
-import clients from "./handlers/client-handlers";
+import { requestId } from "./middleware/request-id";
 
 export const App = new Hono<{ Bindings: Env }>();
 
-App.use('*', requestId());
+App.use("*", requestId());
 App.onError(onErrorHandler);
-App.use('*', createCorsMiddleware());
+App.use("*", createCorsMiddleware());
 
-App.route('/health', health);
-App.route('/clients', clients);
+App.route("/health", health);
+App.route("/clients", clients);

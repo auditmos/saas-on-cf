@@ -1,0 +1,5 @@
+language js
+
+pattern no_then_chains() { `$promise.then($callback)` => . }
+
+no_then_chains()

@@ -1,43 +1,43 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { useQuery } from '@tanstack/react-query';
-import { z } from 'zod';
-import { clientsListApiQueryOptions } from '@/lib/query-keys';
-import { ApiError } from '@/lib/api-client';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { useQuery } from "@tanstack/react-query";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { z } from "zod";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ApiError } from "@/lib/api-client";
+import { clientsListApiQueryOptions } from "@/lib/query-keys";
 
 const paginationSchema = z.object({
-  limit: z.number().default(5),
-  offset: z.number().default(0),
+	limit: z.number().default(5),
+	offset: z.number().default(0),
 });
 
-export const Route = createFileRoute('/_auth/dashboard/api/list')({
-  component: ApiListPage,
-  validateSearch: paginationSchema,
+export const Route = createFileRoute("/_auth/dashboard/api/list")({
+	component: ApiListPage,
+	validateSearch: paginationSchema,
 });
 
 function ApiListPage() {
-  const pagination = Route.useSearch();
-  const navigate = useNavigate();
+	const pagination = Route.useSearch();
+	const navigate = useNavigate();
 
-  const { data, isLoading, error, isFetching, refetch } = useQuery(
-    clientsListApiQueryOptions(pagination)
-  );
+	const { data, isLoading, error, isFetching, refetch } = useQuery(
+		clientsListApiQueryOptions(pagination),
+	);
 
-  return (
-    <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Data Flow</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <pre className="bg-muted p-4 rounded text-sm overflow-x-auto">
-{`Browser (React)
+	return (
+		<div className="space-y-6">
+			<Card>
+				<CardHeader>
+					<CardTitle>Data Flow</CardTitle>
+				</CardHeader>
+				<CardContent>
+					<pre className="bg-muted p-4 rounded text-sm overflow-x-auto">
+						{`Browser (React)
     │
     │ 1. useQuery calls fetchClients(params)
     ▼
-fetch('${import.meta.env.VITE_DATA_SERVICE_URL || 'http://localhost:8788'}/clients?limit=5&offset=0')
+fetch('${import.meta.env.VITE_DATA_SERVICE_URL || "http://localhost:8788"}/clients?limit=5&offset=0')
     │
     │ 2. HTTP GET (crosses public internet)
     ▼
@@ -48,104 +48,118 @@ data-service (Hono API)
 Response → React Query cache → Table render
 
 Note: No SSR - client sees loading state on initial render`}
-          </pre>
-        </CardContent>
-      </Card>
+					</pre>
+				</CardContent>
+			</Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Clients List</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {error && (
-            <Alert variant="destructive">
-              <AlertTitle>Error</AlertTitle>
-              <AlertDescription>
-                {error instanceof ApiError
-                  ? `${error.message} (${error.status})`
-                  : 'Failed to fetch clients. Is data-service running?'}
-              </AlertDescription>
-            </Alert>
-          )}
+			<Card>
+				<CardHeader>
+					<CardTitle>Clients List</CardTitle>
+				</CardHeader>
+				<CardContent className="space-y-4">
+					{error && (
+						<Alert variant="destructive">
+							<AlertTitle>Error</AlertTitle>
+							<AlertDescription>
+								{error instanceof ApiError
+									? `${error.message} (${error.status})`
+									: "Failed to fetch clients. Is data-service running?"}
+							</AlertDescription>
+						</Alert>
+					)}
 
-          {isLoading && (
-            <div className="flex items-center gap-2">
-              <div className="animate-spin h-4 w-4 border-2 border-primary border-t-transparent rounded-full" />
-              <span>Loading...</span>
-            </div>
-          )}
+					{isLoading && (
+						<div className="flex items-center gap-2">
+							<div className="animate-spin h-4 w-4 border-2 border-primary border-t-transparent rounded-full" />
+							<span>Loading...</span>
+						</div>
+					)}
 
-          {data && (
-            <>
-              <div className="border rounded">
-                <table className="w-full">
-                  <thead className="bg-muted">
-                    <tr>
-                      <th className="text-left p-2">ID</th>
-                      <th className="text-left p-2">Name</th>
-                      <th className="text-left p-2">Surname</th>
-                      <th className="text-left p-2">Email</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {data.data.map((client) => (
-                      <tr key={client.id} className="border-t">
-                        <td className="p-2 font-mono text-sm">{client.id}</td>
-                        <td className="p-2">{client.name}</td>
-                        <td className="p-2">{client.surname}</td>
-                        <td className="p-2">{client.email}</td>
-                      </tr>
-                    ))}
-                    {data.data.length === 0 && (
-                      <tr>
-                        <td colSpan={4} className="p-4 text-center text-muted-foreground">
-                          No clients found
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
+					{data && (
+						<>
+							<div className="border rounded">
+								<table className="w-full">
+									<thead className="bg-muted">
+										<tr>
+											<th className="text-left p-2">ID</th>
+											<th className="text-left p-2">Name</th>
+											<th className="text-left p-2">Surname</th>
+											<th className="text-left p-2">Email</th>
+										</tr>
+									</thead>
+									<tbody>
+										{data.data.map((client) => (
+											<tr key={client.id} className="border-t">
+												<td className="p-2 font-mono text-sm">{client.id}</td>
+												<td className="p-2">{client.name}</td>
+												<td className="p-2">{client.surname}</td>
+												<td className="p-2">{client.email}</td>
+											</tr>
+										))}
+										{data.data.length === 0 && (
+											<tr>
+												<td colSpan={4} className="p-4 text-center text-muted-foreground">
+													No clients found
+												</td>
+											</tr>
+										)}
+									</tbody>
+								</table>
+							</div>
 
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">
-                  Showing {pagination.offset + 1} - {pagination.offset + data.data.length} of {data.pagination.total}
-                </span>
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    disabled={pagination.offset === 0}
-                    onClick={() => navigate({ to: '/dashboard/api/list', search: { ...pagination, offset: Math.max(0, pagination.offset - pagination.limit) } })}
-                  >
-                    Previous
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    disabled={!data.pagination.hasMore}
-                    onClick={() => navigate({ to: '/dashboard/api/list', search: { ...pagination, offset: pagination.offset + pagination.limit } })}
-                  >
-                    Next
-                  </Button>
-                </div>
-              </div>
-            </>
-          )}
+							<div className="flex items-center justify-between">
+								<span className="text-sm text-muted-foreground">
+									Showing {pagination.offset + 1} - {pagination.offset + data.data.length} of{" "}
+									{data.pagination.total}
+								</span>
+								<div className="flex gap-2">
+									<Button
+										variant="outline"
+										size="sm"
+										disabled={pagination.offset === 0}
+										onClick={() =>
+											navigate({
+												to: "/dashboard/api/list",
+												search: {
+													...pagination,
+													offset: Math.max(0, pagination.offset - pagination.limit),
+												},
+											})
+										}
+									>
+										Previous
+									</Button>
+									<Button
+										variant="outline"
+										size="sm"
+										disabled={!data.pagination.hasMore}
+										onClick={() =>
+											navigate({
+												to: "/dashboard/api/list",
+												search: { ...pagination, offset: pagination.offset + pagination.limit },
+											})
+										}
+									>
+										Next
+									</Button>
+								</div>
+							</div>
+						</>
+					)}
 
-          <Button onClick={() => refetch()} disabled={isFetching}>
-            {isFetching ? 'Refetching...' : 'Refetch'}
-          </Button>
-        </CardContent>
-      </Card>
+					<Button onClick={() => refetch()} disabled={isFetching}>
+						{isFetching ? "Refetching..." : "Refetch"}
+					</Button>
+				</CardContent>
+			</Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Key Code</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <pre className="bg-muted p-4 rounded text-sm overflow-x-auto">
-{`// lib/api-client.ts
+			<Card>
+				<CardHeader>
+					<CardTitle>Key Code</CardTitle>
+				</CardHeader>
+				<CardContent>
+					<pre className="bg-muted p-4 rounded text-sm overflow-x-auto">
+						{`// lib/api-client.ts
 export async function fetchClients(params: PaginationRequest): Promise<ClientListResponse> {
   const searchParams = new URLSearchParams({
     limit: String(params.limit ?? 10),
@@ -161,9 +175,9 @@ export async function fetchClients(params: PaginationRequest): Promise<ClientLis
 // Component - simple client-side usage
 const [pagination, setPagination] = useState({ limit: 5, offset: 0 });
 const { data } = useQuery(clientsListApiQueryOptions(pagination));`}
-          </pre>
-        </CardContent>
-      </Card>
-    </div>
-  );
+					</pre>
+				</CardContent>
+			</Card>
+		</div>
+	);
 }

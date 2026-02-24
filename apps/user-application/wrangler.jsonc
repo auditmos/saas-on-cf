@@ -1,68 +1,66 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "saas-on-cf-ua",
-  "compatibility_date": "2025-09-02",
-  "compatibility_flags": [
-    "nodejs_compat"
-  ],
-  "observability": {
-    "enabled": true
-  },
-  "main": "./src/server.ts",
-  "services": [
-    {
-      "binding": "DATA_SERVICE",
-      "service": "saas-on-cf-ds-dev"
-    }
-  ],
-  "env": {
-    /** 
-		* Local / Development environment 
-		*/
-    "dev": {
-      "name": "saas-on-cf-ua-dev",
-      "services": [
-        {
-          "binding": "DATA_SERVICE",
-          "service": "saas-on-cf-ds-dev"
-        }
-      ]
-    },
-    /** 
-		* Remote / Staging environment 
-		*/
-    "staging": {
-      "name": "saas-on-cf-ua-staging",
-      // "routes": [
-      //   {
-      //     "custom_domain": true,
-      //     "pattern": "staging.YOUR_DOMAIN.COM"
-      //   }
-      // ],
-      "services": [
-        {
-          "binding": "DATA_SERVICE",
-          "service": "saas-on-cf-ds-staging"
-        }
-      ]
-    },
-    /** 
-		* Remote / Production environment 
-		*/
-    "production": {
-      "name": "saas-on-cf-ua-production",
-      // "routes": [
-      //   {
-      //     "custom_domain": true,
-      //     "pattern": "YOUR_DOMAIN.COM"
-      //   }
-      // ],
-      "services": [
-        {
-          "binding": "DATA_SERVICE",
-          "service": "saas-on-cf-ds-production"
-        }
-      ]
-    },
-  }
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "saas-on-cf-ua",
+	"compatibility_date": "2025-09-02",
+	"compatibility_flags": ["nodejs_compat"],
+	"observability": {
+		"enabled": true
+	},
+	"main": "./src/server.ts",
+	"services": [
+		{
+			"binding": "DATA_SERVICE",
+			"service": "saas-on-cf-ds-dev"
+		}
+	],
+	"env": {
+		/**
+		 * Local / Development environment
+		 */
+		"dev": {
+			"name": "saas-on-cf-ua-dev",
+			"services": [
+				{
+					"binding": "DATA_SERVICE",
+					"service": "saas-on-cf-ds-dev"
+				}
+			]
+		},
+		/**
+		 * Remote / Staging environment
+		 */
+		"staging": {
+			"name": "saas-on-cf-ua-staging",
+			// "routes": [
+			//   {
+			//     "custom_domain": true,
+			//     "pattern": "staging.YOUR_DOMAIN.COM"
+			//   }
+			// ],
+			"services": [
+				{
+					"binding": "DATA_SERVICE",
+					"service": "saas-on-cf-ds-staging"
+				}
+			]
+		},
+		/**
+		 * Remote / Production environment
+		 */
+		"production": {
+			"name": "saas-on-cf-ua-production",
+			// "routes": [
+			//   {
+			//     "custom_domain": true,
+			//     "pattern": "YOUR_DOMAIN.COM"
+			//   }
+			// ],
+			"services": [
+				{
+					"binding": "DATA_SERVICE",
+					"service": "saas-on-cf-ds-production"
+				}
+			]
+		}
+	}
 }

@@ -1,0 +1,5 @@
+language js
+
+pattern no_raw_throw() { `throw new Error($msg)` => . }
+
+no_raw_throw()

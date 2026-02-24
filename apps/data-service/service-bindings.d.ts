@@ -1,9 +1,9 @@
 interface ExampleWorkflowParmas {
-  dataToPassIn;
+	dataToPassIn;
 }
 
 interface ExampleQueueMessage {
-  messageData;
+	messageData;
 }
 
 interface Env extends Cloudflare.Env {}

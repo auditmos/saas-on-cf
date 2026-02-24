@@ -1,2 +1,1 @@
-export async function handleQueue(batch: MessageBatch<ExampleQueueMessage>, env: Env) {
-}
+export async function handleQueue(_batch: MessageBatch<ExampleQueueMessage>, _env: Env) {}

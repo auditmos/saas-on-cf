@@ -1,2 +1,5 @@
-export async function handleScheduled(controller: ScheduledController, env: Env, ctx: ExecutionContext) {
-}
+export async function handleScheduled(
+	_controller: ScheduledController,
+	_env: Env,
+	_ctx: ExecutionContext,
+) {}

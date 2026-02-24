@@ -1,0 +1,14 @@
+language js
+
+pattern no_todo_comments() {
+	or {
+		`// TODO$msg` => .,
+		`// FIXME$msg` => .,
+		`// HACK$msg` => .,
+		`// todo$msg` => .,
+		`// fixme$msg` => .,
+		`// hack$msg` => .
+	}
+}
+
+no_todo_comments()

@@ -1,0 +1,10 @@
+language js
+
+pattern no_ts_ignore() {
+	or {
+		`// @ts-ignore` => .,
+		`// @ts-expect-error` => .
+	}
+}
+
+no_ts_ignore()

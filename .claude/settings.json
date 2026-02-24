@@ -1,32 +1,30 @@
 {
-  "permissions": {
-    "allow": [
-      "Bash(cat:*)",
-      "Bash(grep:*)",
-      "Bash(find:*)",
-      "Bash(awk:*)",
-      "Bash(ls:*)",
-      "WebFetch(domain:tanstack.com/start/latest)",
-      "WebFetch(domain:tanstack.com/router/latest)",
-      "WebFetch(domain:tanstack.com/query/latest)",
-      "WebFetch(domain:tanstack.com/form/latest)",
-      "WebFetch(domain:ui.shadcn.com/docs)",
-      "WebFetch(domain:hono.dev/docs/getting-started/cloudflare-workers)",
-      "WebFetch(domain:better-auth.com/docs/introduction)",
-      "WebFetch(domain:pnpm.io/workspaces)",
-      "WebFetch(domain:tailwindcss.com/docs/installation/using-vite)",
-      "WebFetch(domain:vite.dev/guide/)",
-      "WebFetch(domain:orm.drizzle.team/docs/overview)",
-      "WebFetch(domain:react.dev/reference/react)",
-      "WebFetch(domain:neon.com/docs/introduction)",
-      "WebFetch(domain:developers.cloudflare.com/directory)",
-      "WebFetch(domain:tweakcn.com)",
-      "mcp__ide__getDiagnostics"
-    ],
-    "deny": [
-      "Bash(rm -rf:*)",
-      "Read(./.env)",
-      "Read(./.env.*)"
-    ]
-  }
+	"permissions": {
+		"allow": [
+			"Bash(pnpm view:*)",
+			"Bash(tail:*)",
+			"Bash(cat:*)",
+			"Bash(grep:*)",
+			"Bash(find:*)",
+			"Bash(awk:*)",
+			"Bash(ls:*)",
+			"WebFetch(domain:tanstack.com/start/latest)",
+			"WebFetch(domain:tanstack.com/router/latest)",
+			"WebFetch(domain:tanstack.com/query/latest)",
+			"WebFetch(domain:tanstack.com/form/latest)",
+			"WebFetch(domain:ui.shadcn.com/docs)",
+			"WebFetch(domain:hono.dev/docs/getting-started/cloudflare-workers)",
+			"WebFetch(domain:better-auth.com/docs/introduction)",
+			"WebFetch(domain:pnpm.io/workspaces)",
+			"WebFetch(domain:tailwindcss.com/docs/installation/using-vite)",
+			"WebFetch(domain:vite.dev/guide/)",
+			"WebFetch(domain:orm.drizzle.team/docs/overview)",
+			"WebFetch(domain:react.dev/reference/react)",
+			"WebFetch(domain:neon.com/docs/introduction)",
+			"WebFetch(domain:developers.cloudflare.com/directory)",
+			"WebFetch(domain:tweakcn.com)",
+			"mcp__ide__getDiagnostics"
+		],
+		"deny": ["Bash(rm -rf:*)", "Read(./.env)", "Read(./.env.*)"]
+	}
 }

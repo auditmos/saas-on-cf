@@ -1,22 +1,22 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 // ============================================
 // Response Schemas
 // ============================================
 
-export const DatabaseStatusSchema = z.enum(['connected', 'disconnected']);
+export const DatabaseStatusSchema = z.enum(["connected", "disconnected"]);
 
 export const LivenessResponseSchema = z.object({
-  status: z.literal('ok'),
-  time: z.string(),
+	status: z.literal("ok"),
+	time: z.string(),
 });
 
 export const ReadinessResponseSchema = z.object({
-  status: z.enum(['ok', 'degraded']),
-  env: z.string(),
-  service: z.string(),
-  time: z.string(),
-  database: DatabaseStatusSchema,
+	status: z.enum(["ok", "degraded"]),
+	env: z.string(),
+	service: z.string(),
+	time: z.string(),
+	database: DatabaseStatusSchema,
 });
 
 // ============================================
