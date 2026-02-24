@@ -80,6 +80,22 @@ const passwordSchema = z.string()
 - Derive types from schemas (`z.infer`), never duplicate as separate interfaces
 - External API fields: default to `.optional().default(fallback)` unless field is essential (id, name). External APIs return unpredictable shapes — strict schemas silently break as 502s
 
+## Serialization Boundary (TanStack Start)
+
+Zod types that cross server→client boundary via `createServerFn` get JSON-serialized. TanStack Start maps `unknown` → `{}` internally, causing type incompatibility.
+
+- **Never** use `z.unknown()` in schemas consumed by server functions
+- Use `z.json()` for arbitrary JSON blobs (produces `JsonValue` — fully serializable)
+- Use `z.string().datetime()` or `z.coerce.date()` for dates (JSON serializes `Date` as ISO string)
+
+```ts
+// Bad — breaks createServerFn return type
+rawResponse: z.unknown()
+
+// Good — JsonValue is serialization-safe
+rawResponse: z.json().nullable()
+```
+
 ## Integration with Drizzle
 
 - Create separate Zod schemas for validation (don't derive from Drizzle)

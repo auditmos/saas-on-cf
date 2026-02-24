@@ -48,6 +48,31 @@ class ValidationError extends Error {
 - Constants: `UPPER_SNAKE_CASE` for true constants
 - Files: `kebab-case.ts`
 
+## Array Access
+
+- Always guard `array[i]` access — it returns `T | undefined`
+- Use `for...of` when index isn't needed
+- When index IS needed, add a guard:
+
+```ts
+// Bad
+for (let i = 0; i < items.length; i++) {
+  doSomething(items[i].name) // possibly undefined
+}
+
+// Good
+for (const item of items) {
+  doSomething(item.name)
+}
+
+// Good (when index needed)
+for (let i = 0; i < items.length; i++) {
+  const item = items[i]
+  if (!item) continue
+  doSomething(item.name)
+}
+```
+
 ## Async Patterns
 
 - Prefer `async/await` over `.then()` chains

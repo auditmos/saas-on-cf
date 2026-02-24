@@ -167,6 +167,35 @@ cd apps/user-application && npx @tanstack/router-cli generate
 - Route tree is also auto-regenerated during `pnpm run dev` and `pnpm run build`
 - After regeneration, TS errors about unknown route paths resolve immediately
 
+## Router — Search Params Callbacks
+
+`validateSearch` schemas with `.default()` produce required fields in output type, but Router provides optional fields in the `prev` callback. Always provide fallback defaults:
+
+```ts
+// Bad — prev.limit is number | undefined, not number
+navigate({ search: (prev) => ({ ...prev, ...updates }) })
+
+// Good — explicit defaults
+navigate({
+  search: (prev) => ({
+    limit: prev.limit ?? 20,
+    offset: prev.offset ?? 0,
+    status: prev.status,
+    ...updates,
+  }),
+})
+```
+
+## Form — Schema Alignment
+
+Form `defaultValues` must include all required fields from the mutation's input schema. If a Zod schema has `.default()` (e.g. `active: z.boolean().default(true)`), the **output** type makes it required. Pass it explicitly in `onSubmit`:
+
+```ts
+// Schema: active: z.boolean().optional().default(true) → output type has active: boolean
+// Form onSubmit must include it:
+mutation.mutate({ ...value, active: true })
+```
+
 ## SSR Patterns
 
 - Use loaders for initial data (SSR)
