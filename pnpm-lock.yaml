@@ -28,8 +28,8 @@ importers:
         version: 4.12.2
     devDependencies:
       '@types/node':
-        specifier: ^22.15.19
-        version: 22.18.6
+        specifier: ^22.18.12
+        version: 22.18.12
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
@@ -170,8 +170,8 @@ importers:
         specifier: ^7.3.1
         version: 7.3.1(@types/node@22.18.12)(jiti@2.6.1)(lightningcss@1.31.1)(terser@5.43.1)(tsx@4.21.0)(yaml@2.8.1)
       web-vitals:
-        specifier: ^4.2.4
-        version: 4.2.4
+        specifier: ^5.1.0
+        version: 5.1.0
       wrangler:
         specifier: ^4.68.0
         version: 4.68.0(@cloudflare/workers-types@4.20260303.0)
@@ -2510,9 +2510,6 @@ packages:
   '@types/node@22.18.12':
     resolution: {integrity: sha512-BICHQ67iqxQGFSzfCFTT7MRQ5XcBjG5aeKh5Ok38UBbPe5fxTyE+aHFxwVrGyr8GNlqFMLKD1D3P2K/1ks8tog==}
 
-  '@types/node@22.18.6':
-    resolution: {integrity: sha512-r8uszLPpeIWbNKtvWRt/DbVi5zbqZyj1PTmhRMqBMvDnaz1QpmSKujUtJLrqGZeoM8v72MfYggDceY4K1itzWQ==}
-
   '@types/node@25.3.0':
     resolution: {integrity: sha512-4K3bqJpXpqfg2XKGK9bpDTc6xO/xoUP/RBWS7AtRMug6zZFaRekiLzjVtAoZMquxoAbzBvy5nxQ7veS5eYzf8A==}
 
@@ -4253,8 +4250,8 @@ packages:
     resolution: {integrity: sha512-o8qghlI8NZHU1lLPrpi2+Uq7abh4GGPpYANlalzWxyWteJOCsr/P+oPBA49TOLu5FTZO4d3F9MnWJfiMo4BkmA==}
     engines: {node: '>=18'}
 
-  web-vitals@4.2.4:
-    resolution: {integrity: sha512-r4DIlprAGwJ7YM11VZp4R884m0Vmgr6EAKe3P+kO0PPj3Unqyvv59rczf6UiGcb9Z8QxZVcqKNwv/g0WNdWwsw==}
+  web-vitals@5.1.0:
+    resolution: {integrity: sha512-ArI3kx5jI0atlTtmV0fWU3fjpLmq/nD3Zr1iFFlJLaqa5wLBkUSzINwBPySCX/8jRyjlmy1Volw1kz1g9XE4Jg==}
 
   webidl-conversions@7.0.0:
     resolution: {integrity: sha512-VwddBukDzu71offAQR975unBIGqfKZpM+8ZX6ySk8nYhVoo5CYaZyzt3YBvYtRtO+aoGlqxPg/B87NGVZ/fu6g==}
@@ -6454,10 +6451,6 @@ snapshots:
   '@types/ms@2.1.0': {}
 
   '@types/node@22.18.12':
-    dependencies:
-      undici-types: 6.21.0
-
-  '@types/node@22.18.6':
     dependencies:
       undici-types: 6.21.0
 
@@ -8716,7 +8709,7 @@ snapshots:
       xml-name-validator: 5.0.0
     optional: true
 
-  web-vitals@4.2.4: {}
+  web-vitals@5.1.0: {}
 
   webidl-conversions@7.0.0:
     optional: true

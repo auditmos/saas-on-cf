@@ -9,7 +9,7 @@
     "cf-typegen": "wrangler types --env-interface BaseEnv --env dev"
   },
   "devDependencies": {
-    "@types/node": "^22.15.19",
+    "@types/node": "^22.18.12",
     "typescript": "^5.9.3",
     "wrangler": "^4.68.0"
   },
