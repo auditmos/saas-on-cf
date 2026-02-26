@@ -5,6 +5,10 @@ paths:
 
 # Vite & Cloudflare Vite Plugin Rules
 
+## JSON Response Parsing (Critical)
+
+Never use shared Zod schemas with `z.date()` to parse JSON from data-service — JSON serializes dates as ISO strings. Use `z.coerce.date()`, `z.string().datetime()`, or minimal pick schemas.
+
 ## Env Vars — `.env` files (NOT `.dev.vars`)
 
 user-application uses `.env` approach. If `.dev.vars` exists, `.env` is ignored — never mix both.
@@ -62,6 +66,3 @@ env.DATA_SERVICE.fetch(
 - Never put secrets in `vars` in wrangler.jsonc — use `.env` files (gitignored)
 - Remote secrets: set via Cloudflare dashboard or `wrangler secret put`
 
-## JSON Response Parsing
-
-Never use shared Zod schemas with `z.date()` to parse JSON from data-service — JSON serializes dates as ISO strings. Use `z.coerce.date()`, `z.string().datetime()`, or minimal pick schemas.

@@ -65,62 +65,13 @@ export const Route = createFileRoute('/_auth/dashboard')({
 })
 ```
 
-## Sign In / Sign Up Forms (REQUIRED: TanStack Form + useMutation)
+## Auth Forms
 
-Never use raw `useState` for form state. Always use `useForm` from `@tanstack/react-form` + `useMutation` from `@tanstack/react-query`.
+Uses standard `form-patterns.md` template. Auth-specific notes:
 
-```tsx
-import { useForm } from "@tanstack/react-form"
-import { useMutation } from "@tanstack/react-query"
-import { authClient } from "@/lib/auth-client"
-
-function SignInForm() {
-  const navigate = useNavigate()
-
-  // No onSuccess here — use mutateAsync + navigate in onSubmit
-  const mutation = useMutation({
-    mutationFn: async (data: { email: string; password: string }) => {
-      const result = await authClient.signIn.email(data)
-      if (result.error) throw new Error(result.error.message)
-      return result
-    },
-  })
-
-  const form = useForm({
-    defaultValues: { email: "", password: "" },
-    onSubmit: async ({ value }) => {
-      mutation.reset()
-      await mutation.mutateAsync(value)
-      navigate({ to: "/dashboard" })
-    },
-  })
-
-  return (
-    <form onSubmit={(e) => { e.preventDefault(); form.handleSubmit() }}>
-      {mutation.isError && <Alert variant="destructive">{mutation.error.message}</Alert>}
-      <form.Field
-        name="email"
-        validators={{ onChange: ({ value }) => !value ? "Required" : undefined }}
-      >
-        {(field) => (
-          <Input
-            value={field.state.value}
-            onChange={(e) => field.handleChange(e.target.value)}
-            onBlur={field.handleBlur}
-          />
-        )}
-      </form.Field>
-      <form.Subscribe selector={(s) => s.canSubmit}>
-        {(canSubmit) => (
-          <Button disabled={!canSubmit || mutation.isPending}>
-            {mutation.isPending ? "Loading..." : "Sign In"}
-          </Button>
-        )}
-      </form.Subscribe>
-    </form>
-  )
-}
-```
+- `mutationFn` wraps `authClient.signIn.email(data)` — check `result.error` and throw
+- Use `mutateAsync` + `navigate({ to: "/dashboard" })` in `onSubmit`
+- No `onSuccess` on mutation — navigation happens in form's `onSubmit`
 
 ## Security Patterns
 

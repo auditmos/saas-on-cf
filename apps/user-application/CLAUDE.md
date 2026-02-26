@@ -76,7 +76,7 @@ const data = await response.json();
 - Server functions (direct/binding) throw `AppError` instead of returning discriminated unions
 - `api-client.ts` throws `AppError` on `!response.ok`
 - Route components use `mutation.isError` / `mutation.error.message` (not `mutation.data.success`)
-- Unique violation: check `error.cause.code === '23505'` (Drizzle wraps pg errors)
+- Drizzle error unwrapping + unique violation: see `error-handling.md` rule
 
 ## Don't
 

@@ -40,6 +40,8 @@ Rules auto-load from `.claude/rules/`:
 ```
 .claude/rules/
 ├── general.md              # Universal TypeScript
+├── error-handling.md       # Cross-package error patterns
+├── cloudflare-deployment.md
 ├── data-ops/               # DB/validation layer
 │   ├── drizzle.md
 │   ├── zod.md
@@ -47,13 +49,15 @@ Rules auto-load from `.claude/rules/`:
 │   └── better-auth.md
 ├── data-service/           # Backend API
 │   ├── hono.md
-│   ├── agent-sdk.md
+│   ├── agent-sdk.md        # Core agent patterns
+│   ├── agent-workflows.md  # Workflows, MCP, AI
 │   ├── cloudflare-workers.md
 │   ├── queues-workflows.md
 │   ├── durable-objects.md
 │   └── storage.md
 └── user-application/       # Frontend
     ├── tanstack.md
+    ├── form-patterns.md    # useForm + useMutation template
     ├── react.md
     ├── ui.md
     ├── i18n.md

@@ -56,6 +56,25 @@ function UserPage() {
 }
 ```
 
+## Router — Search Params Callbacks (Critical)
+
+`validateSearch` schemas with `.default()` produce required fields in output type, but Router provides optional fields in the `prev` callback. Always provide fallback defaults:
+
+```ts
+// Bad — prev.limit is number | undefined, not number
+navigate({ search: (prev) => ({ ...prev, ...updates }) })
+
+// Good — explicit defaults
+navigate({
+  search: (prev) => ({
+    limit: prev.limit ?? 20,
+    offset: prev.offset ?? 0,
+    status: prev.status,
+    ...updates,
+  }),
+})
+```
+
 ## TanStack Query - Query Options
 
 Use `queryOptions` for reusable, type-safe queries:
@@ -85,75 +104,9 @@ export const queryKeys = {
 }
 ```
 
-## Query - Mutations
+## Forms & Mutations
 
-- `mutate()` = fire-and-forget. Use for in-place UI updates (success alerts, cache invalidation via `onSuccess` callback)
-- `mutateAsync()` = awaitable. Use inside `onSubmit` when you need to act after completion (navigate, redirect, reset form)
-
-```ts
-// mutate — stay on page, show result
-const mutation = useMutation({
-  mutationFn: createClient,
-  onSuccess: () => queryClient.invalidateQueries({ queryKey: clientKeys.all }),
-})
-form.onSubmit: mutation.mutate(value)
-
-// mutateAsync — navigate after success
-form.onSubmit: async ({ value }) => {
-  const result = await mutation.mutateAsync(value)
-  navigate({ to: '/dashboard' })
-}
-```
-
-## TanStack Form - REQUIRED for All Forms
-
-Never use raw `useState` for form state. Always use `useForm` + `form.Field` + `form.Subscribe`.
-Pair with `useMutation` for async submissions.
-
-```tsx
-import { useForm } from '@tanstack/react-form'
-import { useMutation } from '@tanstack/react-query'
-
-function CreateForm() {
-  const mutation = useMutation({
-    mutationFn: createClient,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: clientKeys.all }),
-  })
-
-  const form = useForm({
-    defaultValues: { name: '', email: '' },
-    onSubmit: async ({ value }) => {
-      mutation.reset()
-      mutation.mutate(value)
-    },
-  })
-
-  return (
-    <form onSubmit={(e) => { e.preventDefault(); form.handleSubmit() }}>
-      {mutation.isError && <Alert variant="destructive">{mutation.error.message}</Alert>}
-      <form.Field
-        name="email"
-        validators={{ onChange: ({ value }) => !value ? "Required" : undefined }}
-      >
-        {(field) => (
-          <Input
-            value={field.state.value}
-            onChange={(e) => field.handleChange(e.target.value)}
-            onBlur={field.handleBlur}
-          />
-        )}
-      </form.Field>
-      <form.Subscribe selector={(s) => s.canSubmit}>
-        {(canSubmit) => (
-          <Button disabled={!canSubmit || mutation.isPending}>
-            {mutation.isPending ? "Saving..." : "Save"}
-          </Button>
-        )}
-      </form.Subscribe>
-    </form>
-  )
-}
-```
+See `form-patterns.md` for `useForm` + `useMutation` template, mutate vs mutateAsync, and schema alignment.
 
 ## Route Tree Regeneration
 
@@ -166,35 +119,6 @@ cd apps/user-application && npx @tanstack/router-cli generate
 - **DO NOT** use `npx tsr generate` — that's a tree-shaker, not the router codegen
 - Route tree is also auto-regenerated during `pnpm run dev` and `pnpm run build`
 - After regeneration, TS errors about unknown route paths resolve immediately
-
-## Router — Search Params Callbacks
-
-`validateSearch` schemas with `.default()` produce required fields in output type, but Router provides optional fields in the `prev` callback. Always provide fallback defaults:
-
-```ts
-// Bad — prev.limit is number | undefined, not number
-navigate({ search: (prev) => ({ ...prev, ...updates }) })
-
-// Good — explicit defaults
-navigate({
-  search: (prev) => ({
-    limit: prev.limit ?? 20,
-    offset: prev.offset ?? 0,
-    status: prev.status,
-    ...updates,
-  }),
-})
-```
-
-## Form — Schema Alignment
-
-Form `defaultValues` must include all required fields from the mutation's input schema. If a Zod schema has `.default()` (e.g. `active: z.boolean().default(true)`), the **output** type makes it required. Pass it explicitly in `onSubmit`:
-
-```ts
-// Schema: active: z.boolean().optional().default(true) → output type has active: boolean
-// Form onSubmit must include it:
-mutation.mutate({ ...value, active: true })
-```
 
 ## SSR Patterns
 

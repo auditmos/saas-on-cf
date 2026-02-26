@@ -35,8 +35,8 @@ src/
 **Result pattern** (services):
 - Services return `Result<T>` from `types/result.ts` instead of throwing
 - `AppError` has `code`, `message`, `status`, optional `field`
-- Unique violation: check `error.cause.code === '23505'` (Drizzle wraps pg errors)
 - Unexpected errors still throw (caught by global error handler)
+- Error unwrapping details: see `error-handling.md` rule
 
 **Middleware order** (in app.ts):
 1. `requestId()` - generates/passes correlation ID
