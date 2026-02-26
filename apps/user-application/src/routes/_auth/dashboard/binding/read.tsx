@@ -6,7 +6,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { clientDetailBindingQueryOptions } from "@/lib/query-keys";
+import { clientBindingQueries } from "@/lib/query-keys";
 
 const searchSchema = z.object({
 	clientId: z.string().optional(),
@@ -18,7 +18,7 @@ export const Route = createFileRoute("/_auth/dashboard/binding/read")({
 	loaderDeps: ({ search }) => ({ clientId: search.clientId }),
 	loader: async ({ context, deps }) => {
 		if (deps.clientId) {
-			await context.queryClient.ensureQueryData(clientDetailBindingQueryOptions(deps.clientId));
+			await context.queryClient.ensureQueryData(clientBindingQueries.detail(deps.clientId));
 		}
 	},
 });
@@ -33,7 +33,7 @@ function BindingReadPage() {
 		error,
 		isFetching,
 	} = useQuery({
-		...clientDetailBindingQueryOptions(clientId ?? ""),
+		...clientBindingQueries.detail(clientId ?? ""),
 		enabled: !!clientId,
 		placeholderData: (prev) => prev,
 	});
@@ -169,7 +169,7 @@ export const getClientBinding = createServerFn()
   });
 
 // lib/query-keys.ts
-export const clientDetailBindingQueryOptions = (id) =>
+export const clientBindingQueries.detail = (id) =>
   queryOptions({
     queryKey: clientKeys.detail(id, 'binding'),
     queryFn: () => getClientBinding({ data: { id } }),

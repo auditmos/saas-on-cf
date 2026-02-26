@@ -5,7 +5,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AppError } from "@/core/errors";
-import { clientsListApiQueryOptions } from "@/lib/query-keys";
+import { clientApiQueries } from "@/lib/query-keys";
 
 const paginationSchema = z.object({
 	limit: z.number().default(5),
@@ -22,7 +22,7 @@ function ApiListPage() {
 	const navigate = useNavigate();
 
 	const { data, isLoading, error, isFetching, refetch } = useQuery(
-		clientsListApiQueryOptions(pagination),
+		clientApiQueries.list(pagination),
 	);
 
 	return (
@@ -174,7 +174,7 @@ export async function fetchClients(params: PaginationRequest): Promise<ClientLis
 
 // Component - simple client-side usage
 const [pagination, setPagination] = useState({ limit: 5, offset: 0 });
-const { data } = useQuery(clientsListApiQueryOptions(pagination));`}
+const { data } = useQuery(clientApiQueries.list(pagination));`}
 					</pre>
 				</CardContent>
 			</Card>

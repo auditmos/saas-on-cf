@@ -4,7 +4,7 @@ import { z } from "zod";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { clientsListBindingQueryOptions } from "@/lib/query-keys";
+import { clientBindingQueries } from "@/lib/query-keys";
 
 const paginationSchema = z.object({
 	limit: z.number().default(5),
@@ -16,7 +16,7 @@ export const Route = createFileRoute("/_auth/dashboard/binding/list")({
 	validateSearch: paginationSchema,
 	loaderDeps: ({ search }) => ({ limit: search.limit, offset: search.offset }),
 	loader: async ({ context, deps }) => {
-		await context.queryClient.ensureQueryData(clientsListBindingQueryOptions(deps));
+		await context.queryClient.ensureQueryData(clientBindingQueries.list(deps));
 	},
 });
 
@@ -25,7 +25,7 @@ function BindingListPage() {
 	const navigate = useNavigate();
 
 	const { data, isLoading, error, isFetching, refetch } = useQuery(
-		clientsListBindingQueryOptions(pagination),
+		clientBindingQueries.list(pagination),
 	);
 
 	return (
@@ -176,7 +176,7 @@ export const getClientsBinding = createServerFn()
   });
 
 // lib/query-keys.ts
-export const clientsListBindingQueryOptions = (params) =>
+export const clientBindingQueries.list = (params) =>
   queryOptions({
     queryKey: clientKeys.list(params, 'binding'),
     queryFn: () => getClientsBinding({ data: params }),

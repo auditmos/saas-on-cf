@@ -13,14 +13,14 @@ import {
 	DialogTitle,
 } from "@/components/ui/dialog";
 import { deleteClientBinding } from "@/core/functions/clients/binding";
-import { clientKeys, clientsListBindingQueryOptions } from "@/lib/query-keys";
+import { clientBindingQueries, clientKeys } from "@/lib/query-keys";
 
 const pagination = { limit: 10, offset: 0 };
 
 export const Route = createFileRoute("/_auth/dashboard/binding/delete")({
 	component: BindingDeletePage,
 	loader: async ({ context }) => {
-		await context.queryClient.ensureQueryData(clientsListBindingQueryOptions(pagination));
+		await context.queryClient.ensureQueryData(clientBindingQueries.list(pagination));
 	},
 });
 
@@ -33,7 +33,7 @@ function BindingDeletePage() {
 		isLoading,
 		error: fetchError,
 	} = useQuery({
-		...clientsListBindingQueryOptions(pagination),
+		...clientBindingQueries.list(pagination),
 		placeholderData: (prev) => prev,
 	});
 

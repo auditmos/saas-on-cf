@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { updateClientBinding } from "@/core/functions/clients/binding";
-import { clientDetailBindingQueryOptions, clientKeys } from "@/lib/query-keys";
+import { clientBindingQueries, clientKeys } from "@/lib/query-keys";
 
 const searchSchema = z.object({
 	clientId: z.string().optional(),
@@ -21,7 +21,7 @@ export const Route = createFileRoute("/_auth/dashboard/binding/update")({
 	loaderDeps: ({ search }) => ({ clientId: search.clientId }),
 	loader: async ({ context, deps }) => {
 		if (deps.clientId) {
-			await context.queryClient.ensureQueryData(clientDetailBindingQueryOptions(deps.clientId));
+			await context.queryClient.ensureQueryData(clientBindingQueries.detail(deps.clientId));
 		}
 	},
 });
@@ -37,7 +37,7 @@ function BindingUpdatePage() {
 		error: fetchError,
 		isFetching,
 	} = useQuery({
-		...clientDetailBindingQueryOptions(clientId ?? ""),
+		...clientBindingQueries.detail(clientId ?? ""),
 		enabled: !!clientId,
 		placeholderData: (prev) => prev,
 	});

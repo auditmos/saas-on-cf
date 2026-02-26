@@ -6,7 +6,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { clientDetailDirectQueryOptions } from "@/lib/query-keys";
+import { clientDirectQueries } from "@/lib/query-keys";
 
 const searchSchema = z.object({
 	clientId: z.string().optional(),
@@ -18,7 +18,7 @@ export const Route = createFileRoute("/_auth/dashboard/direct/read")({
 	loaderDeps: ({ search }) => ({ clientId: search.clientId }),
 	loader: async ({ context, deps }) => {
 		if (deps.clientId) {
-			await context.queryClient.ensureQueryData(clientDetailDirectQueryOptions(deps.clientId));
+			await context.queryClient.ensureQueryData(clientDirectQueries.detail(deps.clientId));
 		}
 	},
 });
@@ -33,7 +33,7 @@ function DirectReadPage() {
 		error,
 		isFetching,
 	} = useQuery({
-		...clientDetailDirectQueryOptions(clientId ?? ""),
+		...clientDirectQueries.detail(clientId ?? ""),
 		enabled: !!clientId,
 		placeholderData: (prev) => prev,
 	});
@@ -162,14 +162,14 @@ export const Route = createFileRoute('/_auth/dashboard/direct/read')({
   loaderDeps: ({ search }) => ({ clientId: search.clientId }),
   loader: async ({ context, deps }) => {
     await context.queryClient.ensureQueryData(
-      clientDetailDirectQueryOptions(deps.clientId)
+      clientDirectQueries.detail(deps.clientId)
     );
   },
 });
 
 // Component uses cached data
 const { data: client } = useQuery({
-  ...clientDetailDirectQueryOptions(clientId),
+  ...clientDirectQueries.detail(clientId),
   placeholderData: (prev) => prev,
 });`}
 					</pre>

@@ -1,11 +1,47 @@
-import { queryOptions } from "@tanstack/react-query";
+import type { Client, ClientListResponse } from "@repo/data-ops/client";
+import { queryOptions, type UseQueryOptions } from "@tanstack/react-query";
 import { getClientBinding, getClientsBinding } from "@/core/functions/clients/binding";
 import { getClientDirect, getClientsDirect } from "@/core/functions/clients/direct";
 import { fetchClient, fetchClients } from "./api-client";
 
 type PaginationParams = { limit: number; offset: number };
 
-// Base keys with pattern suffix
+interface EntityKeys {
+	detail: (id: string) => readonly unknown[];
+	list: (params: PaginationParams) => readonly unknown[];
+}
+
+interface EntityQueryConfig<TDetail, TList> {
+	keys: EntityKeys;
+	fns: {
+		getOne: (id: string) => Promise<TDetail>;
+		getList: (params: PaginationParams) => Promise<TList>;
+	};
+	overrides?: {
+		detail?: Partial<UseQueryOptions>;
+		list?: Partial<UseQueryOptions>;
+	};
+}
+
+function createEntityQueryOptions<TDetail, TList>(config: EntityQueryConfig<TDetail, TList>) {
+	return {
+		detail: (id: string) =>
+			queryOptions({
+				queryKey: config.keys.detail(id),
+				queryFn: () => config.fns.getOne(id),
+				staleTime: 1000 * 60,
+				...config.overrides?.detail,
+			}),
+		list: (params: PaginationParams) =>
+			queryOptions({
+				queryKey: config.keys.list(params),
+				queryFn: () => config.fns.getList(params),
+				placeholderData: (prev: TList | undefined) => prev,
+				...config.overrides?.list,
+			}),
+	};
+}
+
 export const clientKeys = {
 	all: ["clients"] as const,
 	lists: () => [...clientKeys.all, "list"] as const,
@@ -16,56 +52,35 @@ export const clientKeys = {
 		[...clientKeys.details(), id, pattern] as const,
 };
 
-// ─────────────────────────────────────────────────────────────
-// DIRECT PATTERN - Server Fn → data-ops → DB
-// ─────────────────────────────────────────────────────────────
+export const clientDirectQueries = createEntityQueryOptions<Client | null, ClientListResponse>({
+	keys: {
+		detail: (id) => clientKeys.detail(id, "direct"),
+		list: (params) => clientKeys.list(params, "direct"),
+	},
+	fns: {
+		getOne: (id) => getClientDirect({ data: { id } }),
+		getList: (params) => getClientsDirect({ data: params }),
+	},
+});
 
-export const clientDetailDirectQueryOptions = (id: string) =>
-	queryOptions({
-		queryKey: clientKeys.detail(id, "direct"),
-		queryFn: () => getClientDirect({ data: { id } }),
-		staleTime: 1000 * 60,
-	});
+export const clientBindingQueries = createEntityQueryOptions<Client | null, ClientListResponse>({
+	keys: {
+		detail: (id) => clientKeys.detail(id, "binding"),
+		list: (params) => clientKeys.list(params, "binding"),
+	},
+	fns: {
+		getOne: (id) => getClientBinding({ data: { id } }),
+		getList: (params) => getClientsBinding({ data: params }),
+	},
+});
 
-export const clientsListDirectQueryOptions = (params: PaginationParams) =>
-	queryOptions({
-		queryKey: clientKeys.list(params, "direct"),
-		queryFn: () => getClientsDirect({ data: params }),
-		placeholderData: (prev) => prev,
-	});
-
-// ─────────────────────────────────────────────────────────────
-// BINDING PATTERN - Server Fn → DATA_SERVICE.fetch → data-service → DB
-// ─────────────────────────────────────────────────────────────
-
-export const clientDetailBindingQueryOptions = (id: string) =>
-	queryOptions({
-		queryKey: clientKeys.detail(id, "binding"),
-		queryFn: () => getClientBinding({ data: { id } }),
-		staleTime: 1000 * 60,
-	});
-
-export const clientsListBindingQueryOptions = (params: PaginationParams) =>
-	queryOptions({
-		queryKey: clientKeys.list(params, "binding"),
-		queryFn: () => getClientsBinding({ data: params }),
-		placeholderData: (prev) => prev,
-	});
-
-// ─────────────────────────────────────────────────────────────
-// API PATTERN - Browser → fetch → data-service HTTP
-// ─────────────────────────────────────────────────────────────
-
-export const clientDetailApiQueryOptions = (id: string) =>
-	queryOptions({
-		queryKey: clientKeys.detail(id, "api"),
-		queryFn: () => fetchClient(id),
-		staleTime: 1000 * 60,
-	});
-
-export const clientsListApiQueryOptions = (params: PaginationParams) =>
-	queryOptions({
-		queryKey: clientKeys.list(params, "api"),
-		queryFn: () => fetchClients(params),
-		placeholderData: (prev) => prev,
-	});
+export const clientApiQueries = createEntityQueryOptions<Client | null, ClientListResponse>({
+	keys: {
+		detail: (id) => clientKeys.detail(id, "api"),
+		list: (params) => clientKeys.list(params, "api"),
+	},
+	fns: {
+		getOne: (id) => fetchClient(id),
+		getList: (params) => fetchClients(params),
+	},
+});

@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { AppError } from "@/core/errors";
-import { clientDetailApiQueryOptions } from "@/lib/query-keys";
+import { clientApiQueries } from "@/lib/query-keys";
 
 const searchSchema = z.object({
 	clientId: z.string().optional(),
@@ -29,7 +29,7 @@ function ApiReadPage() {
 		isFetching,
 		refetch,
 	} = useQuery({
-		...clientDetailApiQueryOptions(clientId ?? ""),
+		...clientApiQueries.detail(clientId ?? ""),
 		enabled: !!clientId,
 	});
 
@@ -170,7 +170,7 @@ const { clientId } = Route.useSearch();
 const navigate = useNavigate();
 
 const { data: client } = useQuery({
-  ...clientDetailApiQueryOptions(clientId ?? ''),
+  ...clientApiQueries.detail(clientId ?? ''),
   enabled: !!clientId,
 });
 

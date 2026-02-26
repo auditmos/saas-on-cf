@@ -13,14 +13,14 @@ import {
 	DialogTitle,
 } from "@/components/ui/dialog";
 import { deleteClientDirect } from "@/core/functions/clients/direct";
-import { clientKeys, clientsListDirectQueryOptions } from "@/lib/query-keys";
+import { clientDirectQueries, clientKeys } from "@/lib/query-keys";
 
 const pagination = { limit: 10, offset: 0 };
 
 export const Route = createFileRoute("/_auth/dashboard/direct/delete")({
 	component: DirectDeletePage,
 	loader: async ({ context }) => {
-		await context.queryClient.ensureQueryData(clientsListDirectQueryOptions(pagination));
+		await context.queryClient.ensureQueryData(clientDirectQueries.list(pagination));
 	},
 });
 
@@ -33,7 +33,7 @@ function DirectDeletePage() {
 		isLoading,
 		error: fetchError,
 	} = useQuery({
-		...clientsListDirectQueryOptions(pagination),
+		...clientDirectQueries.list(pagination),
 		placeholderData: (prev) => prev,
 	});
 

@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { updateClientDirect } from "@/core/functions/clients/direct";
-import { clientDetailDirectQueryOptions, clientKeys } from "@/lib/query-keys";
+import { clientDirectQueries, clientKeys } from "@/lib/query-keys";
 
 const searchSchema = z.object({
 	clientId: z.string().optional(),
@@ -21,7 +21,7 @@ export const Route = createFileRoute("/_auth/dashboard/direct/update")({
 	loaderDeps: ({ search }) => ({ clientId: search.clientId }),
 	loader: async ({ context, deps }) => {
 		if (deps.clientId) {
-			await context.queryClient.ensureQueryData(clientDetailDirectQueryOptions(deps.clientId));
+			await context.queryClient.ensureQueryData(clientDirectQueries.detail(deps.clientId));
 		}
 	},
 });
@@ -37,7 +37,7 @@ function DirectUpdatePage() {
 		error: fetchError,
 		isFetching,
 	} = useQuery({
-		...clientDetailDirectQueryOptions(clientId ?? ""),
+		...clientDirectQueries.detail(clientId ?? ""),
 		enabled: !!clientId,
 		placeholderData: (prev) => prev,
 	});

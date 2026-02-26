@@ -4,7 +4,7 @@ import { z } from "zod";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { clientsListDirectQueryOptions } from "@/lib/query-keys";
+import { clientDirectQueries } from "@/lib/query-keys";
 
 const paginationSchema = z.object({
 	limit: z.number().default(5),
@@ -16,7 +16,7 @@ export const Route = createFileRoute("/_auth/dashboard/direct/list")({
 	validateSearch: paginationSchema,
 	loaderDeps: ({ search }) => ({ limit: search.limit, offset: search.offset }),
 	loader: async ({ context, deps }) => {
-		await context.queryClient.ensureQueryData(clientsListDirectQueryOptions(deps));
+		await context.queryClient.ensureQueryData(clientDirectQueries.list(deps));
 	},
 });
 
@@ -25,7 +25,7 @@ function DirectListPage() {
 	const navigate = useNavigate();
 
 	const { data, isLoading, error, isFetching, refetch } = useQuery(
-		clientsListDirectQueryOptions(pagination),
+		clientDirectQueries.list(pagination),
 	);
 
 	return (
@@ -159,7 +159,7 @@ Response → React Query cache → Table render`}
 				<CardContent>
 					<pre className="bg-muted p-4 rounded text-sm overflow-x-auto">
 						{`// lib/query-keys.ts
-export const clientsListDirectQueryOptions = (params) =>
+export const clientDirectQueries.list = (params) =>
   queryOptions({
     queryKey: clientKeys.list(params, 'direct'),
     queryFn: () => getClientsDirect({ data: params }),
@@ -170,7 +170,7 @@ export const clientsListDirectQueryOptions = (params) =>
 export const Route = createFileRoute('/_auth/dashboard/direct/list')({
   loader: async ({ context }) => {
     await context.queryClient.ensureQueryData(
-      clientsListDirectQueryOptions(defaultPagination)
+      clientDirectQueries.list(defaultPagination)
     );
   },
 });`}
