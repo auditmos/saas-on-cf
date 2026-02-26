@@ -10,43 +10,86 @@ import {
 	type PaginationRequest,
 	updateClient as updateClientQuery,
 } from "@repo/data-ops/client";
-import { HTTPException } from "hono/http-exception";
+import type { Result } from "../types/result";
 
-export async function getClients(params: PaginationRequest): Promise<ClientListResponse> {
-	return getClientsQuery(params);
+function isUniqueViolation(error: unknown): boolean {
+	if (!(error instanceof Error)) return false;
+	const cause = error.cause;
+	if (cause instanceof Error) {
+		const pgCode = (cause as Error & { code?: string }).code;
+		if (pgCode === "23505") return true;
+	}
+	return false;
 }
 
-export async function getClientById(id: string): Promise<Client> {
+export async function getClients(params: PaginationRequest): Promise<Result<ClientListResponse>> {
+	const data = await getClientsQuery(params);
+	return { ok: true, data };
+}
+
+export async function getClientById(id: string): Promise<Result<Client>> {
 	const client = await getClient(id);
-	if (!client) throw new HTTPException(404, { message: "Client not found" });
-	return client;
+	if (!client)
+		return {
+			ok: false,
+			error: { code: "NOT_FOUND", message: "Client not found", status: 404 },
+		};
+	return { ok: true, data: client };
 }
 
-export async function createClient(data: ClientCreateInput): Promise<Client> {
+export async function createClient(data: ClientCreateInput): Promise<Result<Client>> {
 	try {
-		return await createClientQuery(data);
+		const client = await createClientQuery(data);
+		return { ok: true, data: client };
 	} catch (error) {
-		if (error instanceof Error && error.message.includes("unique")) {
-			throw new HTTPException(409, { message: "Email already exists" });
+		if (isUniqueViolation(error)) {
+			return {
+				ok: false,
+				error: {
+					code: "CONFLICT",
+					message: "Email already exists",
+					status: 409,
+				},
+			};
 		}
 		throw error;
 	}
 }
 
-export async function updateClient(id: string, data: ClientUpdateInput): Promise<Client> {
+export async function updateClient(id: string, data: ClientUpdateInput): Promise<Result<Client>> {
 	try {
 		const client = await updateClientQuery(id, data);
-		if (!client) throw new HTTPException(404, { message: "Client not found" });
-		return client;
+		if (!client)
+			return {
+				ok: false,
+				error: {
+					code: "NOT_FOUND",
+					message: "Client not found",
+					status: 404,
+				},
+			};
+		return { ok: true, data: client };
 	} catch (error) {
-		if (error instanceof Error && error.message.includes("unique")) {
-			throw new HTTPException(409, { message: "Email already exists" });
+		if (isUniqueViolation(error)) {
+			return {
+				ok: false,
+				error: {
+					code: "CONFLICT",
+					message: "Email already exists",
+					status: 409,
+				},
+			};
 		}
 		throw error;
 	}
 }
 
-export async function deleteClient(id: string): Promise<void> {
+export async function deleteClient(id: string): Promise<Result<null>> {
 	const deleted = await deleteClientQuery(id);
-	if (!deleted) throw new HTTPException(404, { message: "Client not found" });
+	if (!deleted)
+		return {
+			ok: false,
+			error: { code: "NOT_FOUND", message: "Client not found", status: 404 },
+		};
+	return { ok: true, data: null };
 }

@@ -5,20 +5,36 @@ import {
 	IdParamSchema,
 	PaginationRequestSchema,
 } from "@repo/data-ops/client";
+import type { Context } from "hono";
 import { Hono } from "hono";
+import type { ContentfulStatusCode } from "hono/utils/http-status";
 import { authMiddleware } from "../middleware/auth";
 import * as clientService from "../services/client-service";
+import type { Result } from "../types/result";
+
+function resultToResponse<T>(
+	c: Context,
+	result: Result<T>,
+	successStatus: ContentfulStatusCode = 200,
+) {
+	if (!result.ok)
+		return c.json(
+			{ error: result.error.message, code: result.error.code },
+			result.error.status as ContentfulStatusCode,
+		);
+	return c.json(result.data, successStatus);
+}
 
 const clients = new Hono<{ Bindings: Env }>();
 
 clients.get("/", zValidator("query", PaginationRequestSchema), async (c) => {
 	const query = c.req.valid("query");
-	return c.json(await clientService.getClients(query));
+	return resultToResponse(c, await clientService.getClients(query));
 });
 
 clients.get("/:id", zValidator("param", IdParamSchema), async (c) => {
 	const { id } = c.req.valid("param");
-	return c.json(await clientService.getClientById(id));
+	return resultToResponse(c, await clientService.getClientById(id));
 });
 
 clients.post(
@@ -27,7 +43,7 @@ clients.post(
 	zValidator("json", ClientCreateRequestSchema),
 	async (c) => {
 		const data = c.req.valid("json");
-		return c.json(await clientService.createClient(data), 201);
+		return resultToResponse(c, await clientService.createClient(data), 201);
 	},
 );
 
@@ -39,7 +55,7 @@ clients.put(
 	async (c) => {
 		const { id } = c.req.valid("param");
 		const data = c.req.valid("json");
-		return c.json(await clientService.updateClient(id, data));
+		return resultToResponse(c, await clientService.updateClient(id, data));
 	},
 );
 
@@ -49,7 +65,12 @@ clients.delete(
 	zValidator("param", IdParamSchema),
 	async (c) => {
 		const { id } = c.req.valid("param");
-		await clientService.deleteClient(id);
+		const result = await clientService.deleteClient(id);
+		if (!result.ok)
+			return c.json(
+				{ error: result.error.message, code: result.error.code },
+				result.error.status as ContentfulStatusCode,
+			);
 		return c.body(null, 204);
 	},
 );

@@ -28,9 +28,15 @@ src/
 ## Patterns
 
 **Handlers → Services → data-ops queries**
-- Handlers: validation, auth middleware, call service, return response
-- Services: error handling (HTTPException), call data-ops queries
+- Handlers: validation, auth middleware, unwrap `Result<T>` via `resultToResponse`, return response
+- Services: return `Result<T>` (no `HTTPException`), call data-ops queries
 - Queries: imported from `@repo/data-ops/{domain}`
+
+**Result pattern** (services):
+- Services return `Result<T>` from `types/result.ts` instead of throwing
+- `AppError` has `code`, `message`, `status`, optional `field`
+- Unique violation: check `error.cause.code === '23505'` (Drizzle wraps pg errors)
+- Unexpected errors still throw (caught by global error handler)
 
 **Middleware order** (in app.ts):
 1. `requestId()` - generates/passes correlation ID
@@ -40,7 +46,7 @@ src/
 
 **Zod validation**: use `zValidator('param' | 'query' | 'json', Schema)`
 
-**Error handling**: throw `HTTPException` from services, handled by `onErrorHandler`
+**Error handling**: services return `Result<T>`; `HTTPException` still caught by `onErrorHandler` (for `@hono/zod-validator` + safety net)
 
 ## Endpoints
 
