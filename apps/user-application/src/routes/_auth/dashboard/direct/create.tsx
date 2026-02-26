@@ -18,11 +18,9 @@ function DirectCreatePage() {
 	const mutation = useMutation({
 		mutationFn: (data: { name: string; surname: string; email: string }) =>
 			createClientDirect({ data }),
-		onSuccess: (result) => {
-			if (result.success) {
-				queryClient.invalidateQueries({ queryKey: clientKeys.all });
-				form.reset();
-			}
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: clientKeys.all });
+			form.reset();
 		},
 	});
 
@@ -63,26 +61,18 @@ Response → queryClient.invalidateQueries()`}
 					<CardTitle>Create Client</CardTitle>
 				</CardHeader>
 				<CardContent className="space-y-4">
-					{mutation.isSuccess && mutation.data.success && (
+					{mutation.isSuccess && (
 						<Alert variant="success">
 							<AlertTitle>Success</AlertTitle>
 							<AlertDescription>
-								Client "{mutation.data.client.name}" created (ID: {mutation.data.client.id})
+								Client "{mutation.data.name}" created (ID: {mutation.data.id})
 							</AlertDescription>
-						</Alert>
-					)}
-
-					{mutation.isSuccess && !mutation.data.success && (
-						<Alert variant="destructive">
-							<AlertDescription>{mutation.data.error}</AlertDescription>
 						</Alert>
 					)}
 
 					{mutation.isError && (
 						<Alert variant="destructive">
-							<AlertDescription>
-								{mutation.error instanceof Error ? mutation.error.message : "Unknown error"}
-							</AlertDescription>
+							<AlertDescription>{mutation.error.message}</AlertDescription>
 						</Alert>
 					)}
 

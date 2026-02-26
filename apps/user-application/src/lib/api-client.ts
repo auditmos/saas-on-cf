@@ -6,20 +6,10 @@ import {
 	ErrorResponseSchema,
 	type PaginationRequest,
 } from "@repo/data-ops/client";
+import { AppError } from "@/core/errors";
 
 const API_URL = import.meta.env.VITE_DATA_SERVICE_URL || "http://localhost:8788";
 const API_TOKEN = import.meta.env.VITE_API_TOKEN;
-
-export class ApiError extends Error {
-	constructor(
-		message: string,
-		public status: number,
-		public code?: string,
-	) {
-		super(message);
-		this.name = "ApiError";
-	}
-}
 
 const getHeaders = (): HeadersInit => {
 	const headers: HeadersInit = { "Content-Type": "application/json" };
@@ -32,7 +22,11 @@ const handleResponse = async <T>(response: Response): Promise<T> => {
 		const body = await response.json().catch(() => ({}));
 		const parsed = ErrorResponseSchema.safeParse(body);
 		const errorData = parsed.success ? parsed.data : {};
-		throw new ApiError(errorData.message || "Request failed", response.status, errorData.code);
+		throw new AppError(
+			errorData.message || "Request failed",
+			errorData.code || "API_ERROR",
+			response.status,
+		);
 	}
 	return response.json();
 };
@@ -95,10 +89,10 @@ export async function deleteClientApi(id: string): Promise<void> {
 		const body = await response.json().catch(() => ({}));
 		const parsed = ErrorResponseSchema.safeParse(body);
 		const errorData = parsed.success ? parsed.data : {};
-		throw new ApiError(
+		throw new AppError(
 			errorData.message || "Failed to delete client",
+			errorData.code || "API_ERROR",
 			response.status,
-			errorData.code,
 		);
 	}
 }

@@ -5,7 +5,8 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { ApiError, createClientApi } from "@/lib/api-client";
+import { AppError } from "@/core/errors";
+import { createClientApi } from "@/lib/api-client";
 import { clientKeys } from "@/lib/query-keys";
 
 export const Route = createFileRoute("/_auth/dashboard/api/create")({
@@ -77,11 +78,9 @@ Response → queryClient.invalidateQueries()`}
 					{mutation.isError && (
 						<Alert variant="destructive">
 							<AlertDescription>
-								{mutation.error instanceof ApiError
+								{mutation.error instanceof AppError
 									? `${mutation.error.message} (${mutation.error.status})`
-									: mutation.error instanceof Error
-										? mutation.error.message
-										: "Unknown error"}
+									: mutation.error.message}
 							</AlertDescription>
 						</Alert>
 					)}

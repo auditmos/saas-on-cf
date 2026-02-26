@@ -4,7 +4,7 @@ import { z } from "zod";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ApiError } from "@/lib/api-client";
+import { AppError } from "@/core/errors";
 import { clientsListApiQueryOptions } from "@/lib/query-keys";
 
 const paginationSchema = z.object({
@@ -61,7 +61,7 @@ Note: No SSR - client sees loading state on initial render`}
 						<Alert variant="destructive">
 							<AlertTitle>Error</AlertTitle>
 							<AlertDescription>
-								{error instanceof ApiError
+								{error instanceof AppError
 									? `${error.message} (${error.status})`
 									: "Failed to fetch clients. Is data-service running?"}
 							</AlertDescription>

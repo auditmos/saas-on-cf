@@ -39,16 +39,12 @@ function BindingDeletePage() {
 
 	const deleteMutation = useMutation({
 		mutationFn: (id: string) => deleteClientBinding({ data: { id } }),
-		onSuccess: (result) => {
-			if (result.success) {
-				queryClient.invalidateQueries({ queryKey: clientKeys.lists() });
-				setDeleteClientId(null);
-			}
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: clientKeys.lists() });
+			setDeleteClientId(null);
 		},
 	});
 
-	const mutationError =
-		deleteMutation.data && !deleteMutation.data.success ? deleteMutation.data.error : null;
 	const clientToDelete = data?.data.find((u) => u.id === deleteClientId);
 
 	return (
@@ -91,16 +87,21 @@ Response → Invalidate queries → UI refresh`}
 					<CardTitle>Delete Client</CardTitle>
 				</CardHeader>
 				<CardContent className="space-y-4">
-					{(fetchError || mutationError) && (
+					{fetchError && (
 						<Alert variant="destructive">
 							<AlertTitle>Error</AlertTitle>
-							<AlertDescription>
-								{fetchError instanceof Error ? fetchError.message : mutationError}
-							</AlertDescription>
+							<AlertDescription>{fetchError.message}</AlertDescription>
 						</Alert>
 					)}
 
-					{deleteMutation.data?.success && (
+					{deleteMutation.isError && (
+						<Alert variant="destructive">
+							<AlertTitle>Error</AlertTitle>
+							<AlertDescription>{deleteMutation.error.message}</AlertDescription>
+						</Alert>
+					)}
+
+					{deleteMutation.isSuccess && (
 						<Alert variant="success">
 							<AlertTitle>Success</AlertTitle>
 							<AlertDescription>Client deleted!</AlertDescription>

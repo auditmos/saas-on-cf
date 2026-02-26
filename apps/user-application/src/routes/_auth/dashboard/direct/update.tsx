@@ -63,10 +63,8 @@ function DirectUpdatePage() {
 			}
 		},
 
-		onSuccess: (result) => {
-			if (result.success) {
-				navigate({ to: "/dashboard/direct/update", search: { clientId, editing: false } });
-			}
+		onSuccess: () => {
+			navigate({ to: "/dashboard/direct/update", search: { clientId, editing: false } });
 		},
 
 		onSettled: () => {
@@ -114,9 +112,6 @@ function DirectUpdatePage() {
 			navigate({ to: "/dashboard/direct/update", search: { clientId, editing: true } });
 		}
 	};
-
-	const mutationError =
-		updateMutation.data && !updateMutation.data.success ? updateMutation.data.error : null;
 
 	return (
 		<div className="space-y-6">
@@ -170,16 +165,21 @@ Response → Success: keep optimistic
 						</Button>
 					</form>
 
-					{(fetchError || mutationError) && (
+					{fetchError && (
 						<Alert variant="destructive">
 							<AlertTitle>Error</AlertTitle>
-							<AlertDescription>
-								{fetchError instanceof Error ? fetchError.message : mutationError}
-							</AlertDescription>
+							<AlertDescription>{fetchError.message}</AlertDescription>
 						</Alert>
 					)}
 
-					{updateMutation.data?.success && (
+					{updateMutation.isError && (
+						<Alert variant="destructive">
+							<AlertTitle>Error</AlertTitle>
+							<AlertDescription>{updateMutation.error.message}</AlertDescription>
+						</Alert>
+					)}
+
+					{updateMutation.isSuccess && (
 						<Alert variant="success">
 							<AlertTitle>Success</AlertTitle>
 							<AlertDescription>Client updated!</AlertDescription>

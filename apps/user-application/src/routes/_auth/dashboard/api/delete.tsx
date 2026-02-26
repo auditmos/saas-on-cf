@@ -12,6 +12,7 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
+import { AppError } from "@/core/errors";
 import { deleteClientApi, fetchClients } from "@/lib/api-client";
 import { clientKeys } from "@/lib/query-keys";
 
@@ -81,7 +82,7 @@ Response → Invalidate queries → UI refresh`}
 						<Alert variant="destructive">
 							<AlertTitle>Error</AlertTitle>
 							<AlertDescription>
-								{fetchError instanceof ApiError
+								{fetchError instanceof AppError
 									? `${fetchError.message} (${fetchError.status})`
 									: "Failed to fetch clients. Is data-service running?"}
 							</AlertDescription>

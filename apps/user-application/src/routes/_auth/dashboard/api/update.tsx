@@ -7,7 +7,8 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { ApiError, fetchClient, updateClientApi } from "@/lib/api-client";
+import { AppError } from "@/core/errors";
+import { fetchClient, updateClientApi } from "@/lib/api-client";
 import { clientKeys } from "@/lib/query-keys";
 
 const searchSchema = z.object({
@@ -167,7 +168,7 @@ Response → Success: keep optimistic
 						<Alert variant="destructive">
 							<AlertTitle>Error</AlertTitle>
 							<AlertDescription>
-								{fetchError instanceof ApiError
+								{fetchError instanceof AppError
 									? `${fetchError.message} (${fetchError.status})`
 									: fetchError instanceof Error
 										? fetchError.message
@@ -180,7 +181,7 @@ Response → Success: keep optimistic
 						<Alert variant="destructive">
 							<AlertTitle>Update Error</AlertTitle>
 							<AlertDescription>
-								{updateMutation.error instanceof ApiError
+								{updateMutation.error instanceof AppError
 									? `${updateMutation.error.message} (${updateMutation.error.status})`
 									: updateMutation.error instanceof Error
 										? updateMutation.error.message

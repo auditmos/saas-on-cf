@@ -6,7 +6,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { ApiError } from "@/lib/api-client";
+import { AppError } from "@/core/errors";
 import { clientDetailApiQueryOptions } from "@/lib/query-keys";
 
 const searchSchema = z.object({
@@ -99,7 +99,7 @@ Note: No SSR - client sees loading state on initial render`}
 						<Alert variant="destructive">
 							<AlertTitle>Error</AlertTitle>
 							<AlertDescription>
-								{error instanceof ApiError
+								{error instanceof AppError
 									? `${error.message} (${error.status})`
 									: error instanceof Error
 										? error.message
