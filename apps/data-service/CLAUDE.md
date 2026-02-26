@@ -30,7 +30,7 @@ src/
 **Handlers → Services → data-ops queries**
 - Handlers: validation, auth middleware, call service, return response
 - Services: error handling (HTTPException), call data-ops queries
-- Queries: defined in `@repo/data-ops/queries/*`
+- Queries: imported from `@repo/data-ops/{domain}`
 
 **Middleware order** (in app.ts):
 1. `requestId()` - generates/passes correlation ID
@@ -84,6 +84,6 @@ Required in `.dev.vars` (local) or Cloudflare dashboard (remote):
 
 ## Don't
 
-- Put DB queries here - add to `@repo/data-ops/queries`
+- Put DB queries here - add to `@repo/data-ops/{domain}`
 - Forget to rebuild data-ops after schema changes (`pnpm --filter @repo/data-ops build`)
 - Modify `worker-configuration.d.ts`, use `pnpm run cf-typegen`

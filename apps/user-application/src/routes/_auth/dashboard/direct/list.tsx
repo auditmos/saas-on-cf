@@ -44,7 +44,7 @@ Server Function (getClientsDirect)
     │
     │ 2. Zod validation (PaginationRequestSchema)
     ▼
-import { getClients } from '@repo/data-ops/queries/client'
+import { getClients } from '@repo/data-ops/client'
     │
     │ 3. Drizzle query with limit/offset + count
     ▼

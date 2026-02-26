@@ -8,7 +8,7 @@ paths:
 ## Schema Definition
 
 - Use `pgTable()` with explicit column types
-- Define tables in `drizzle/schema.ts`
+- Define tables in `{domain}/table.ts`
 - Define relations in separate `drizzle/relations.ts`
 - Never edit auto-generated files (e.g., `auth-schema.ts`)
 
@@ -78,7 +78,7 @@ function isUniqueViolation(error: unknown): boolean {
 
 ## Queries Module
 
-- Place reusable queries in `queries/*.ts`
+- Place queries in `{domain}/queries.ts`
 - Accept `db` as first parameter for testability
 - Return typed results
 

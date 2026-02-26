@@ -1,4 +1,4 @@
-import type { Client } from "@repo/data-ops/zod-schema/client";
+import type { Client } from "@repo/data-ops/client";
 import { useForm } from "@tanstack/react-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
@@ -135,7 +135,7 @@ Server Function (updateClientDirect)
     │
     │ 2. Zod validation → existence check
     ▼
-import { updateClient } from '@repo/data-ops/queries/client'
+import { updateClient } from '@repo/data-ops/client'
     │
     │ 3. Direct Drizzle update
     ▼

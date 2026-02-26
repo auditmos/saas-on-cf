@@ -71,7 +71,7 @@ Server Function (deleteClientDirect)
     │
     │ 3. Zod validation → existence check
     ▼
-import { deleteClient } from '@repo/data-ops/queries/client'
+import { deleteClient } from '@repo/data-ops/client'
     │
     │ 4. Direct Drizzle delete
     ▼

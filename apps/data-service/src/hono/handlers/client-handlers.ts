@@ -4,7 +4,7 @@ import {
 	ClientUpdateRequestSchema,
 	IdParamSchema,
 	PaginationRequestSchema,
-} from "@repo/data-ops/zod-schema/client";
+} from "@repo/data-ops/client";
 import { Hono } from "hono";
 import { authMiddleware } from "../middleware/auth";
 import * as clientService from "../services/client-service";

@@ -1,4 +1,4 @@
-import type { Client } from "@repo/data-ops/zod-schema/client";
+import type { Client } from "@repo/data-ops/client";
 import { useForm } from "@tanstack/react-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";

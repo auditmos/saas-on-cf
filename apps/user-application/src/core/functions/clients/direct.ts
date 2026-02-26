@@ -1,19 +1,17 @@
 import {
-	createClient,
-	deleteClient,
-	getClient,
-	getClients,
-	updateClient,
-} from "@repo/data-ops/queries/client";
-import {
 	type Client,
 	type ClientCreateInput,
 	ClientCreateRequestSchema,
 	type ClientListResponse,
 	ClientSchema,
 	ClientUpdateRequestSchema,
+	createClient,
+	deleteClient,
+	getClient,
+	getClients,
 	PaginationRequestSchema,
-} from "@repo/data-ops/zod-schema/client";
+	updateClient,
+} from "@repo/data-ops/client";
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import type { DeleteResult, MutationResult } from "./types";

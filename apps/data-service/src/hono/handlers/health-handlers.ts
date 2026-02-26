@@ -1,4 +1,4 @@
-import type { LivenessResponse, ReadinessResponse } from "@repo/data-ops/zod-schema/health";
+import type { LivenessResponse, ReadinessResponse } from "@repo/data-ops/health";
 import { Hono } from "hono";
 import { rateLimiter } from "../middleware/rate-limiter";
 import { checkDatabase } from "../services/health-service";

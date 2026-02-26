@@ -50,7 +50,7 @@ Server Function (createClientDirect)
     │
     │ 2. Zod validation (ClientCreateRequestSchema)
     ▼
-import { createClient } from '@repo/data-ops/queries/client'
+import { createClient } from '@repo/data-ops/client'
     │
     │ 3. Direct DB insert with .returning()
     ▼

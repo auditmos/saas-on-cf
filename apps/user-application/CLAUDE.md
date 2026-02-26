@@ -73,6 +73,6 @@ const data = await response.json();
 
 - Import `env` from 'cloudflare:workers' in client code (server only)
 - Call data-service via public URL from server code — use `fetchDataService()` instead
-- Put DB queries here - add to `@repo/data-ops/queries`
+- Put DB queries here - add to `@repo/data-ops/{domain}`
 - Skip `enabled: !!id` on detail queries (prevents empty ID fetches)
 - Use useState for URL-driven state - use `validateSearch` + `useNavigate`

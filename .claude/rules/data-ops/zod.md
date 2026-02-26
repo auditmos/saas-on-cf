@@ -7,7 +7,7 @@ paths:
 
 ## Schema Definition
 
-- Define schemas in `zod-schema/*.ts`
+- Define schemas in `{domain}/schema.ts`
 - Derive types with `z.infer<typeof Schema>`
 - Use descriptive schema names ending in `Schema`
 

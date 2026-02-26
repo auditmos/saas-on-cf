@@ -12,14 +12,27 @@ Shared DB layer consumed by user-application and data-service apps.
 
 ```
 src/
-├── drizzle/          # DB definitions
-│   ├── schema.ts     # tables (edit this)
-│   ├── relations.ts  # joins config
-│   └── auth-schema.ts # auto-generated, don't edit
-├── queries/          # DB operations (getClient, createClient, etc)
-├── zod-schema/       # validation schemas
-├── database/setup.ts # getDb() connection
-└── auth/             # Better Auth config
+├── client/            # Client domain barrel
+│   ├── table.ts       # Drizzle table definition
+│   ├── schema.ts      # Zod schemas + types
+│   ├── queries.ts     # DB operations (getClient, createClient, etc)
+│   └── index.ts       # Barrel re-export
+├── health/            # Health domain barrel
+│   ├── schema.ts      # Zod schemas + types
+│   ├── queries.ts     # DB operations (checkDatabase)
+│   └── index.ts       # Barrel re-export
+├── drizzle/
+│   ├── relations.ts   # Cross-domain joins config
+│   └── auth-schema.ts # Auto-generated, don't edit
+├── database/setup.ts  # getDb() connection
+└── auth/              # Better Auth config
+```
+
+## Consumer imports
+
+```ts
+import { getClient, ClientSchema, type Client } from "@repo/data-ops/client"
+import { checkDatabase, type LivenessResponse } from "@repo/data-ops/health"
 ```
 
 ## Zod Schema Naming
@@ -33,14 +46,15 @@ src/
 
 ## Workflows
 
-**New table:**
-1. Add to `src/drizzle/schema.ts`
+**New domain:**
+1. Create `src/{domain}/table.ts` with Drizzle table
 2. Add relations to `src/drizzle/relations.ts` if needed
-3. `pnpm run drizzle:dev:generate`
-4. `pnpm run drizzle:dev:migrate`
-5. Create queries in `src/queries/{feature}.ts`
-6. Create zod schemas in `src/zod-schema/{feature}.ts`
-7. `pnpm run build`
+3. `pnpm run drizzle:dev:generate` + `pnpm run drizzle:dev:migrate`
+4. Create `src/{domain}/schema.ts` (Zod schemas)
+5. Create `src/{domain}/queries.ts`
+6. Create `src/{domain}/index.ts` (barrel)
+7. Add export to `package.json`
+8. `pnpm run build`
 
 **Seed data:** `pnpm run seed:dev`
 

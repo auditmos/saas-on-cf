@@ -1,4 +1,4 @@
-import type { Client } from "@repo/data-ops/zod-schema/client";
+import type { Client } from "@repo/data-ops/client";
 
 export interface MutationSuccess {
 	success: true;

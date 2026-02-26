@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { clients } from "../../drizzle/schema";
+import { clients } from "../../client/table";
 import { initDatabase } from "../setup";
 
 const sampleClients = [

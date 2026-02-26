@@ -64,7 +64,7 @@ Server Function (getClientDirect)
     │
     │ 2. Zod validation
     ▼
-import { getClient } from '@repo/data-ops/queries/client'
+import { getClient } from '@repo/data-ops/client'
     │
     │ 3. Direct Drizzle query
     ▼

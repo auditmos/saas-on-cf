@@ -8,7 +8,7 @@ import {
 	ClientSchema,
 	ClientUpdateRequestSchema,
 	PaginationRequestSchema,
-} from "@repo/data-ops/zod-schema/client";
+} from "@repo/data-ops/client";
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import type { DeleteResult, MutationResult } from "./types";

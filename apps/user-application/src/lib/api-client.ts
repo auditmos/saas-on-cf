@@ -1,11 +1,11 @@
-import type {
-	Client,
-	ClientCreateInput,
-	ClientListResponse,
-	ClientUpdateInput,
-	PaginationRequest,
-} from "@repo/data-ops/zod-schema/client";
-import { ErrorResponseSchema } from "@repo/data-ops/zod-schema/client";
+import {
+	type Client,
+	type ClientCreateInput,
+	type ClientListResponse,
+	type ClientUpdateInput,
+	ErrorResponseSchema,
+	type PaginationRequest,
+} from "@repo/data-ops/client";
 
 const API_URL = import.meta.env.VITE_DATA_SERVICE_URL || "http://localhost:8788";
 const API_TOKEN = import.meta.env.VITE_API_TOKEN;

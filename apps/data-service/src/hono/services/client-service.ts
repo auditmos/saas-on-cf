@@ -1,17 +1,15 @@
 import {
+	type Client,
+	type ClientCreateInput,
+	type ClientListResponse,
+	type ClientUpdateInput,
 	createClient as createClientQuery,
 	deleteClient as deleteClientQuery,
 	getClient,
 	getClients as getClientsQuery,
+	type PaginationRequest,
 	updateClient as updateClientQuery,
-} from "@repo/data-ops/queries/client";
-import type {
-	Client,
-	ClientCreateInput,
-	ClientListResponse,
-	ClientUpdateInput,
-	PaginationRequest,
-} from "@repo/data-ops/zod-schema/client";
+} from "@repo/data-ops/client";
 import { HTTPException } from "hono/http-exception";
 
 export async function getClients(params: PaginationRequest): Promise<ClientListResponse> {

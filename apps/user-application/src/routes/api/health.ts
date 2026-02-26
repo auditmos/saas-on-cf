@@ -1,6 +1,5 @@
 import { env } from "cloudflare:workers";
-import { checkDatabase } from "@repo/data-ops/queries/health";
-import type { LivenessResponse } from "@repo/data-ops/zod-schema/health";
+import { checkDatabase, type LivenessResponse } from "@repo/data-ops/health";
 import { createFileRoute } from "@tanstack/react-router";
 import { fetchDataService } from "@/lib/data-service";
 

@@ -1,13 +1,13 @@
 import { count, eq } from "drizzle-orm";
-import { getDb } from "../database/setup";
-import { clients } from "../drizzle/schema";
+import { getDb } from "@/database/setup";
 import type {
 	Client,
 	ClientCreateInput,
 	ClientListResponse,
 	ClientUpdateInput,
 	PaginationRequest,
-} from "../zod-schema/client";
+} from "./schema";
+import { clients } from "./table";
 
 export async function getClient(clientId: string): Promise<Client | null> {
 	const db = getDb();

@@ -3,6 +3,14 @@
 	"version": "1.0.0",
 	"description": "Manage auth, database, schemas, and queries",
 	"exports": {
+		"./client": {
+			"types": "./dist/client/index.d.ts",
+			"default": "./dist/client/index.js"
+		},
+		"./health": {
+			"types": "./dist/health/index.d.ts",
+			"default": "./dist/health/index.js"
+		},
 		"./auth/*": {
 			"types": "./dist/auth/*.d.ts",
 			"default": "./dist/auth/*.js"
@@ -14,18 +22,6 @@
 		"./drizzle/*": {
 			"types": "./dist/drizzle/*.d.ts",
 			"default": "./dist/drizzle/*.js"
-		},
-		"./zod-schema/*": {
-			"types": "./dist/zod-schema/*.d.ts",
-			"default": "./dist/zod-schema/*.js"
-		},
-		"./queries/*": {
-			"types": "./dist/queries/*.d.ts",
-			"default": "./dist/queries/*.js"
-		},
-		"./mocks/*": {
-			"types": "./dist/mocks/*.d.ts",
-			"default": "./dist/mocks/*.js"
 		}
 	},
 	"scripts": {
