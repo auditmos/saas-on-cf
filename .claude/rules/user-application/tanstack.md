@@ -13,7 +13,7 @@ Use `createServerFn` for server-side logic:
 import { createServerFn } from '@tanstack/react-start'
 
 export const getUser = createServerFn({ method: 'GET' })
-  .validator(z.object({ id: z.string() }))
+  .inputValidator(z.object({ id: z.string() }))
   .handler(async ({ data }) => {
     return getUserById(data.id)
   })
