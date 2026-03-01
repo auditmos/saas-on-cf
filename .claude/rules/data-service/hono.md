@@ -52,22 +52,35 @@ export const getUser = async (c: Context) => {
 
 ## Request Validation
 
-Use `@hono/zod-validator` for typed validation:
+**ALWAYS** use `zValidator` from `@hono/zod-validator` — never raw `z.parse()`, `z.safeParse()`, or manual `c.req.json()` parsing in handlers.
+
+**ALWAYS** import named schemas from `@repo/data-ops/{domain}` — never write inline `z.object()` inside `zValidator()`. If a schema doesn't exist yet, create it in the appropriate `data-ops` package first.
 
 ```ts
+// CORRECT — named schema from data-ops
 import { zValidator } from '@hono/zod-validator'
+import { UserCreateSchema, UserIdParamSchema } from '@repo/data-ops/user'
 
 app.post('/users',
-  zValidator('json', createUserSchema),
+  zValidator('json', UserCreateSchema),
   async (c) => {
     const data = c.req.valid('json') // typed!
-    // ...
   }
 )
 
-// Validate params, query, json
+app.get('/users/:id',
+  zValidator('param', UserIdParamSchema),
+  async (c) => {
+    const { id } = c.req.valid('param')
+  }
+)
+
+// WRONG — inline z.object()
 zValidator('param', z.object({ id: z.string().uuid() }))
-zValidator('query', z.object({ limit: z.coerce.number().default(10) }))
+
+// WRONG — raw Zod parsing
+const body = await c.req.json()
+const data = UserCreateSchema.parse(body)
 ```
 
 ## Error Handling
