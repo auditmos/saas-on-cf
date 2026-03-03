@@ -1,8 +1,8 @@
 import { execSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 import readline from "node:readline";
+import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -64,18 +64,8 @@ async function main() {
 	replaceAllInFile(abs("apps/data-service/wrangler.jsonc"), "saas-on-cf", name);
 	replaceAllInFile(abs("apps/user-application/wrangler.jsonc"), "saas-on-cf", name);
 
-	// package.json files
+	// root package.json only — sub-package names stay as-is (pnpm filter depends on them)
 	replaceInFile(abs("package.json"), `"name": "saas-on-cf"`, `"name": "${name}"`);
-	replaceInFile(
-		abs("apps/data-service/package.json"),
-		`"name": "data-service"`,
-		`"name": "${name}-data-service"`,
-	);
-	replaceInFile(
-		abs("apps/user-application/package.json"),
-		`"name": "user-application"`,
-		`"name": "${name}-user-application"`,
-	);
 
 	// Navigation brand text
 	replaceInFile(
@@ -133,6 +123,27 @@ async function main() {
 	rmDir(abs("apps/user-application/src/routes/_auth/dashboard"));
 	rmDir(abs("apps/user-application/src/routes/_auth/app"));
 
+	// Create placeholder child so _auth layout has at least one route
+	fs.writeFileSync(
+		abs("apps/user-application/src/routes/_auth/home.tsx"),
+		`import { createFileRoute } from "@tanstack/react-router";
+
+export const Route = createFileRoute("/_auth/home")({
+	component: HomePage,
+});
+
+function HomePage() {
+	return (
+		<div>
+			<h1 className="text-2xl font-bold text-foreground">Home</h1>
+			<p className="text-muted-foreground mt-2">Welcome! Start building here.</p>
+		</div>
+	);
+}
+`,
+		"utf-8",
+	);
+
 	// ── Step 3: Delete example server functions & middleware ──────────
 
 	console.log("[3/12] Deleting example server functions & middleware...");
@@ -172,7 +183,7 @@ async function main() {
 	{
 		name: "Home",
 		icon: Home,
-		href: "/",
+		href: "/home",
 	},
 ];`,
 	);
@@ -349,13 +360,12 @@ seedDb().catch(() => {
 
 	console.log(`\n✅ Project "${name}" initialized!\n`);
 	console.log("Next steps:");
-	console.log("  1. pnpm run setup");
-	console.log("  2. Configure .env files in packages/data-ops/");
+	console.log("  1. Configure .env files in packages/data-ops/");
 	console.log(
-		"  3. Run drizzle migrations: pnpm --filter data-ops drizzle:dev:generate && drizzle:dev:migrate",
+		"  2. Run drizzle migrations: pnpm --filter data-ops drizzle:dev:generate && drizzle:dev:migrate",
 	);
-	console.log("  4. pnpm run dev:data-service");
-	console.log("  5. pnpm run dev:user-application");
+	console.log("  3. pnpm run dev:data-service");
+	console.log("  4. pnpm run dev:user-application");
 }
 
 main();
