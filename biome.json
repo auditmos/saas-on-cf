@@ -77,10 +77,10 @@
 		]
 	},
 	"plugins": [
-		"./plugins/no-raw-throw.grit",
-		"./plugins/no-then-chains.grit",
-		"./plugins/no-ts-ignore.grit",
-		"./plugins/no-as-any.grit",
-		"./plugins/no-todo-comments.grit"
+		"./.biome-plugins/no-raw-throw.grit",
+		"./.biome-plugins/no-then-chains.grit",
+		"./.biome-plugins/no-ts-ignore.grit",
+		"./.biome-plugins/no-as-any.grit",
+		"./.biome-plugins/no-todo-comments.grit"
 	]
 }

@@ -79,7 +79,7 @@ Rules with `paths:` frontmatter apply only when working with matching files.
 - Run `pnpm run lint` after writing code to catch issues
 - Run `pnpm run lint:fix` to auto-fix formatting + safe lint fixes
 - Max 500 lines per source file. Split if exceeding
-- Biome config: `biome.json` (root). GritQL plugins: `plugins/*.grit`
+- Biome config: `biome.json` (root). GritQL plugins: `.biome-plugins/*.grit`
 
 ## Key Patterns
 
