@@ -67,6 +67,13 @@ async function main() {
 	// root package.json only — sub-package names stay as-is (pnpm filter depends on them)
 	replaceInFile(abs("package.json"), `"name": "saas-on-cf"`, `"name": "${name}"`);
 
+	// Post-login redirect: /dashboard → /home
+	replaceInFile(
+		abs("apps/user-application/src/components/auth/email-auth.tsx"),
+		'navigate({ to: "/dashboard" })',
+		'navigate({ to: "/home" })',
+	);
+
 	// Navigation brand text
 	replaceInFile(
 		abs("apps/user-application/src/components/navigation/navigation-bar.tsx"),
@@ -360,9 +367,12 @@ seedDb().catch(() => {
 
 	console.log(`\n✅ Project "${name}" initialized!\n`);
 	console.log("Next steps:");
-	console.log("  1. Configure .env files in packages/data-ops/");
+	console.log("  1. Configure env files (see .env examples):");
+	console.log("     - packages/data-ops/.env.dev");
+	console.log("     - apps/user-application/.env");
+	console.log("     - apps/data-service/.dev.vars");
 	console.log(
-		"  2. Run drizzle migrations: pnpm --filter data-ops drizzle:dev:generate && drizzle:dev:migrate",
+		"  2. Run drizzle migrations: pnpm --filter data-ops drizzle:dev:generate && pnpm --filter data-ops drizzle:dev:migrate",
 	);
 	console.log("  3. pnpm run dev:data-service");
 	console.log("  4. pnpm run dev:user-application");
