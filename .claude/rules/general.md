@@ -7,7 +7,6 @@
 - Use `satisfies` for type-safe object literals with inference
 - Use `as const` for readonly literal types
 - Prefer discriminated unions over boolean flags
-- Export types alongside implementations
 
 ```ts
 // Good: discriminated union
@@ -33,13 +32,6 @@ class ValidationError extends Error {
 }
 ```
 
-## Functions & Modules
-
-- Named exports over default exports
-- Pure functions where possible
-- Single responsibility per function
-- Explicit return types on public APIs
-
 ## Naming
 
 - Interfaces: `PascalCase` (no `I` prefix)
@@ -47,6 +39,7 @@ class ValidationError extends Error {
 - Functions/variables: `camelCase`
 - Constants: `UPPER_SNAKE_CASE` for true constants
 - Files: `kebab-case.ts`
+- Explicit return types on public APIs
 
 ## Array Access
 
@@ -72,19 +65,6 @@ for (let i = 0; i < items.length; i++) {
   doSomething(item.name)
 }
 ```
-
-## Async Patterns
-
-- Prefer `async/await` over `.then()` chains
-- Handle errors at appropriate boundaries
-- Use `Promise.all()` for parallel independent operations
-- Avoid nested promises
-
-## Imports
-
-- Group: external → internal → relative
-- Absolute imports via path aliases when configured
-- Avoid circular dependencies
 
 # Universal Cloudflare Rules
 

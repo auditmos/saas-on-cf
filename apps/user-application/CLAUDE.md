@@ -69,19 +69,9 @@ const data = await response.json();
 - No HTTP/DNS overhead — internal Worker-to-Worker RPC
 - Health check: `GET /api/health` verifies binding, DB, and env
 
-## Error Handling
-
-- `AppError` in `core/errors.ts` -- single error class for all server functions and API calls
-- Constructor: `new AppError(message, code, status?, field?)`
-- Server functions (direct/binding) throw `AppError` instead of returning discriminated unions
-- `api-client.ts` throws `AppError` on `!response.ok`
-- Route components use `mutation.isError` / `mutation.error.message` (not `mutation.data.success`)
-- Drizzle error unwrapping + unique violation: see `error-handling.md` rule
-
 ## Don't
 
 - Import `env` from 'cloudflare:workers' in client code (server only)
-- Call data-service via public URL from server code — use `fetchDataService()` instead
 - Put DB queries here - add to `@repo/data-ops/{domain}`
 - Skip `enabled: !!id` on detail queries (prevents empty ID fetches)
 - Use useState for URL-driven state - use `validateSearch` + `useNavigate`
