@@ -20,6 +20,10 @@
 		"types": "pnpm run build:data-ops && pnpm run --filter data-service --filter user-application types",
 		"init-project": "tsx scripts/init-project.ts",
 		"knip": "knip",
+		"deps": "taze",
+		"deps:update": "taze -w",
+		"deps:major": "taze major",
+		"deps:major:update": "taze major -w",
 		"release": "semantic-release",
 		"release:dry": "semantic-release --dry-run"
 	},
@@ -34,6 +38,7 @@
 		"@types/node": "^22.18.12",
 		"knip": "^5.86.0",
 		"semantic-release": "^25.0.3",
+		"taze": "^19.10.0",
 		"tsx": "^4.21.0",
 		"typescript": "^5.9.3"
 	}
