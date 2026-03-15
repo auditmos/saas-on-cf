@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/auditmos/saas-on-cf/compare/v1.2.0...v1.3.0) (2026-03-15)
+
+
+### Features
+
+* update dependencies, fix better-auth 1.5.5 type break ([6366f79](https://github.com/auditmos/saas-on-cf/commit/6366f7906f3879a171d5ff25a5ec95b24c993506))
+
 # [1.2.0](https://github.com/auditmos/saas-on-cf/compare/v1.1.0...v1.2.0) (2026-03-15)
 
 
