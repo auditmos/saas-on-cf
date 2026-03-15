@@ -4,7 +4,7 @@ export const createBetterAuth = (config: {
 	database: BetterAuthOptions["database"];
 	secret?: BetterAuthOptions["secret"];
 	baseURL?: BetterAuthOptions["baseURL"];
-}): ReturnType<typeof betterAuth> => {
+}) => {
 	return betterAuth({
 		database: config.database,
 		secret: config.secret,

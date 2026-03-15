@@ -43,15 +43,15 @@
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
-	"packageManager": "pnpm@10.29.2",
+	"packageManager": "pnpm@10.32.1",
 	"dependencies": {
 		"@neondatabase/serverless": "^1.0.2",
-		"better-auth": "^1.4.19",
+		"better-auth": "^1.5.5",
 		"drizzle-orm": "^0.45.1",
 		"zod": "^4.3.6"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "^4.20260303.0",
+		"@cloudflare/workers-types": "^4.20260313.1",
 		"drizzle-kit": "^0.31.9",
 		"postgres": "^3.4.8",
 		"tsc-alias": "^1.8.16",

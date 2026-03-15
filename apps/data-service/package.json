@@ -10,13 +10,13 @@
 		"types": "tsc --noEmit"
 	},
 	"devDependencies": {
-		"@types/node": "^22.18.12",
+		"@types/node": "^22.19.15",
 		"typescript": "^5.9.3",
 		"wrangler": "^4.73.0"
 	},
 	"dependencies": {
 		"@hono/zod-validator": "^0.7.6",
 		"@repo/data-ops": "workspace:*",
-		"hono": "^4.12.2"
+		"hono": "^4.12.8"
 	}
 }
