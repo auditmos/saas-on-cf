@@ -11,7 +11,8 @@
 		"deploy:staging": "pnpm run build:staging && wrangler deploy --env=''",
 		"deploy:production": "pnpm run build:production && wrangler deploy --env=''",
 		"serve": "vite preview",
-		"cf-typegen": "wrangler types --env-interface Env --env dev"
+		"cf-typegen": "wrangler types --env-interface Env --env dev",
+		"types": "tsc --noEmit"
 	},
 	"dependencies": {
 		"@radix-ui/react-avatar": "^1.1.11",
@@ -60,6 +61,6 @@
 		"typescript": "^5.9.3",
 		"vite": "^7.3.1",
 		"web-vitals": "^5.1.0",
-		"wrangler": "^4.68.0"
+		"wrangler": "^4.73.0"
 	}
 }

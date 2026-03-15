@@ -30,6 +30,7 @@ function DirectUpdatePage() {
 	const { clientId, editing } = Route.useSearch();
 	const navigate = useNavigate();
 	const queryClient = useQueryClient();
+	const id = clientId ?? "";
 
 	const {
 		data: client,
@@ -37,21 +38,21 @@ function DirectUpdatePage() {
 		error: fetchError,
 		isFetching,
 	} = useQuery({
-		...clientDirectQueries.detail(clientId ?? ""),
+		...clientDirectQueries.detail(id),
 		enabled: !!clientId,
 		placeholderData: (prev) => prev,
 	});
 
 	const updateMutation = useMutation({
 		mutationFn: (data: { name?: string; surname?: string; email?: string }) =>
-			updateClientDirect({ data: { id: clientId!, data } }),
+			updateClientDirect({ data: { id, data } }),
 
 		onMutate: async (newData) => {
-			await queryClient.cancelQueries({ queryKey: clientKeys.detail(clientId!, "direct") });
+			await queryClient.cancelQueries({ queryKey: clientKeys.detail(id, "direct") });
 			const previousClient = queryClient.getQueryData<Client | null>(
-				clientKeys.detail(clientId!, "direct"),
+				clientKeys.detail(id, "direct"),
 			);
-			queryClient.setQueryData<Client | null>(clientKeys.detail(clientId!, "direct"), (old) =>
+			queryClient.setQueryData<Client | null>(clientKeys.detail(id, "direct"), (old) =>
 				old ? { ...old, ...newData } : old,
 			);
 			return { previousClient };
@@ -59,7 +60,7 @@ function DirectUpdatePage() {
 
 		onError: (_err, _newData, context) => {
 			if (context?.previousClient) {
-				queryClient.setQueryData(clientKeys.detail(clientId!, "direct"), context.previousClient);
+				queryClient.setQueryData(clientKeys.detail(id, "direct"), context.previousClient);
 			}
 		},
 
@@ -68,7 +69,7 @@ function DirectUpdatePage() {
 		},
 
 		onSettled: () => {
-			queryClient.invalidateQueries({ queryKey: clientKeys.detail(clientId!, "direct") });
+			queryClient.invalidateQueries({ queryKey: clientKeys.detail(id, "direct") });
 		},
 	});
 
@@ -209,8 +210,11 @@ Response → Success: keep optimistic
 									>
 										{(field) => (
 											<div className="space-y-1">
-												<label className="text-sm font-medium">Name</label>
+												<label htmlFor="direct-name" className="text-sm font-medium">
+													Name
+												</label>
 												<Input
+													id="direct-name"
 													value={field.state.value}
 													onChange={(e) => field.handleChange(e.target.value)}
 													onBlur={field.handleBlur}
@@ -230,8 +234,11 @@ Response → Success: keep optimistic
 									>
 										{(field) => (
 											<div className="space-y-1">
-												<label className="text-sm font-medium">Surname</label>
+												<label htmlFor="direct-surname" className="text-sm font-medium">
+													Surname
+												</label>
 												<Input
+													id="direct-surname"
 													value={field.state.value}
 													onChange={(e) => field.handleChange(e.target.value)}
 													onBlur={field.handleBlur}
@@ -256,8 +263,11 @@ Response → Success: keep optimistic
 									>
 										{(field) => (
 											<div className="space-y-1">
-												<label className="text-sm font-medium">Email</label>
+												<label htmlFor="direct-email" className="text-sm font-medium">
+													Email
+												</label>
 												<Input
+													id="direct-email"
 													type="email"
 													value={field.state.value}
 													onChange={(e) => field.handleChange(e.target.value)}

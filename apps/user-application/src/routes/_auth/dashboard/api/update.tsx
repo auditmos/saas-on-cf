@@ -21,10 +21,12 @@ export const Route = createFileRoute("/_auth/dashboard/api/update")({
 	validateSearch: searchSchema,
 });
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: inherent form complexity
 function ApiUpdatePage() {
 	const { clientId, editing } = Route.useSearch();
 	const navigate = useNavigate();
 	const queryClient = useQueryClient();
+	const id = clientId ?? "";
 
 	const {
 		data: client,
@@ -32,21 +34,19 @@ function ApiUpdatePage() {
 		error: fetchError,
 		isFetching,
 	} = useQuery({
-		queryKey: clientKeys.detail(clientId, "api"),
-		queryFn: () => fetchClient(clientId),
+		queryKey: clientKeys.detail(id, "api"),
+		queryFn: () => fetchClient(id),
 		enabled: !!clientId,
 	});
 
 	const updateMutation = useMutation({
 		mutationFn: (data: { name?: string; surname?: string; email?: string }) =>
-			updateClientApi(clientId!, data),
+			updateClientApi(id, data),
 
 		onMutate: async (newData) => {
-			await queryClient.cancelQueries({ queryKey: clientKeys.detail(clientId!, "api") });
-			const previousClient = queryClient.getQueryData<Client | null>(
-				clientKeys.detail(clientId!, "api"),
-			);
-			queryClient.setQueryData<Client | null>(clientKeys.detail(clientId!, "api"), (old) =>
+			await queryClient.cancelQueries({ queryKey: clientKeys.detail(id, "api") });
+			const previousClient = queryClient.getQueryData<Client | null>(clientKeys.detail(id, "api"));
+			queryClient.setQueryData<Client | null>(clientKeys.detail(id, "api"), (old) =>
 				old ? { ...old, ...newData } : old,
 			);
 			return { previousClient };
@@ -54,7 +54,7 @@ function ApiUpdatePage() {
 
 		onError: (_err, _newData, context) => {
 			if (context?.previousClient) {
-				queryClient.setQueryData(clientKeys.detail(clientId!, "api"), context.previousClient);
+				queryClient.setQueryData(clientKeys.detail(id, "api"), context.previousClient);
 			}
 		},
 
@@ -63,7 +63,7 @@ function ApiUpdatePage() {
 		},
 
 		onSettled: () => {
-			queryClient.invalidateQueries({ queryKey: clientKeys.detail(clientId!, "api") });
+			queryClient.invalidateQueries({ queryKey: clientKeys.detail(id, "api") });
 		},
 	});
 
@@ -220,8 +220,11 @@ Response → Success: keep optimistic
 									>
 										{(field) => (
 											<div className="space-y-1">
-												<label className="text-sm font-medium">Name</label>
+												<label htmlFor="api-name" className="text-sm font-medium">
+													Name
+												</label>
 												<Input
+													id="api-name"
 													value={field.state.value}
 													onChange={(e) => field.handleChange(e.target.value)}
 													onBlur={field.handleBlur}
@@ -241,8 +244,11 @@ Response → Success: keep optimistic
 									>
 										{(field) => (
 											<div className="space-y-1">
-												<label className="text-sm font-medium">Surname</label>
+												<label htmlFor="api-surname" className="text-sm font-medium">
+													Surname
+												</label>
 												<Input
+													id="api-surname"
 													value={field.state.value}
 													onChange={(e) => field.handleChange(e.target.value)}
 													onBlur={field.handleBlur}
@@ -267,8 +273,11 @@ Response → Success: keep optimistic
 									>
 										{(field) => (
 											<div className="space-y-1">
-												<label className="text-sm font-medium">Email</label>
+												<label htmlFor="api-email" className="text-sm font-medium">
+													Email
+												</label>
 												<Input
+													id="api-email"
 													type="email"
 													value={field.state.value}
 													onChange={(e) => field.handleChange(e.target.value)}

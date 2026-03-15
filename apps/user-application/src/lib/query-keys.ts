@@ -1,5 +1,5 @@
 import type { Client, ClientListResponse } from "@repo/data-ops/client";
-import { queryOptions, type UseQueryOptions } from "@tanstack/react-query";
+import { queryOptions } from "@tanstack/react-query";
 import { getClientBinding, getClientsBinding } from "@/core/functions/clients/binding";
 import { getClientDirect, getClientsDirect } from "@/core/functions/clients/direct";
 import { fetchClient, fetchClients } from "./api-client";
@@ -17,10 +17,6 @@ interface EntityQueryConfig<TDetail, TList> {
 		getOne: (id: string) => Promise<TDetail>;
 		getList: (params: PaginationParams) => Promise<TList>;
 	};
-	overrides?: {
-		detail?: Partial<UseQueryOptions>;
-		list?: Partial<UseQueryOptions>;
-	};
 }
 
 function createEntityQueryOptions<TDetail, TList>(config: EntityQueryConfig<TDetail, TList>) {
@@ -30,14 +26,11 @@ function createEntityQueryOptions<TDetail, TList>(config: EntityQueryConfig<TDet
 				queryKey: config.keys.detail(id),
 				queryFn: () => config.fns.getOne(id),
 				staleTime: 1000 * 60,
-				...config.overrides?.detail,
 			}),
 		list: (params: PaginationParams) =>
 			queryOptions({
 				queryKey: config.keys.list(params),
 				queryFn: () => config.fns.getList(params),
-				placeholderData: (prev: TList | undefined) => prev,
-				...config.overrides?.list,
 			}),
 	};
 }

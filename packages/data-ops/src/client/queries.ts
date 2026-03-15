@@ -36,7 +36,10 @@ export async function getClients(params: PaginationRequest): Promise<ClientListR
 export async function createClient(data: ClientCreateInput): Promise<Client> {
 	const db = getDb();
 	const [client] = await db.insert(clients).values(data).returning();
-	return client!;
+	if (!client) {
+		throw new Error("Failed to create client");
+	}
+	return client;
 }
 
 export async function updateClient(

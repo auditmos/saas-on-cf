@@ -26,11 +26,15 @@ const sampleClients = [
 ];
 
 async function seedDb() {
-	const db = initDatabase({
-		host: process.env.DATABASE_HOST!,
-		username: process.env.DATABASE_USERNAME!,
-		password: process.env.DATABASE_PASSWORD!,
-	});
+	const host = process.env.DATABASE_HOST;
+	const username = process.env.DATABASE_USERNAME;
+	const password = process.env.DATABASE_PASSWORD;
+
+	if (!host || !username || !password) {
+		throw new Error("Missing required DATABASE_* environment variables");
+	}
+
+	const db = initDatabase({ host, username, password });
 	await db.execute(sql`SELECT 1`);
 	await db.insert(clients).values(sampleClients).onConflictDoNothing();
 

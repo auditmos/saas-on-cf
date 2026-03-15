@@ -30,6 +30,7 @@ function BindingUpdatePage() {
 	const { clientId, editing } = Route.useSearch();
 	const navigate = useNavigate();
 	const queryClient = useQueryClient();
+	const id = clientId ?? "";
 
 	const {
 		data: client,
@@ -37,21 +38,21 @@ function BindingUpdatePage() {
 		error: fetchError,
 		isFetching,
 	} = useQuery({
-		...clientBindingQueries.detail(clientId ?? ""),
+		...clientBindingQueries.detail(id),
 		enabled: !!clientId,
 		placeholderData: (prev) => prev,
 	});
 
 	const updateMutation = useMutation({
 		mutationFn: (data: { name?: string; surname?: string; email?: string }) =>
-			updateClientBinding({ data: { id: clientId!, data } }),
+			updateClientBinding({ data: { id, data } }),
 
 		onMutate: async (newData) => {
-			await queryClient.cancelQueries({ queryKey: clientKeys.detail(clientId!, "binding") });
+			await queryClient.cancelQueries({ queryKey: clientKeys.detail(id, "binding") });
 			const previousClient = queryClient.getQueryData<Client | null>(
-				clientKeys.detail(clientId!, "binding"),
+				clientKeys.detail(id, "binding"),
 			);
-			queryClient.setQueryData<Client | null>(clientKeys.detail(clientId!, "binding"), (old) =>
+			queryClient.setQueryData<Client | null>(clientKeys.detail(id, "binding"), (old) =>
 				old ? { ...old, ...newData } : old,
 			);
 			return { previousClient };
@@ -59,7 +60,7 @@ function BindingUpdatePage() {
 
 		onError: (_err, _newData, context) => {
 			if (context?.previousClient) {
-				queryClient.setQueryData(clientKeys.detail(clientId!, "binding"), context.previousClient);
+				queryClient.setQueryData(clientKeys.detail(id, "binding"), context.previousClient);
 			}
 		},
 
@@ -68,7 +69,7 @@ function BindingUpdatePage() {
 		},
 
 		onSettled: () => {
-			queryClient.invalidateQueries({ queryKey: clientKeys.detail(clientId!, "binding") });
+			queryClient.invalidateQueries({ queryKey: clientKeys.detail(id, "binding") });
 		},
 	});
 
@@ -215,8 +216,11 @@ Response → Success: keep optimistic
 									>
 										{(field) => (
 											<div className="space-y-1">
-												<label className="text-sm font-medium">Name</label>
+												<label htmlFor="binding-name" className="text-sm font-medium">
+													Name
+												</label>
 												<Input
+													id="binding-name"
 													value={field.state.value}
 													onChange={(e) => field.handleChange(e.target.value)}
 													onBlur={field.handleBlur}
@@ -236,8 +240,11 @@ Response → Success: keep optimistic
 									>
 										{(field) => (
 											<div className="space-y-1">
-												<label className="text-sm font-medium">Surname</label>
+												<label htmlFor="binding-surname" className="text-sm font-medium">
+													Surname
+												</label>
 												<Input
+													id="binding-surname"
 													value={field.state.value}
 													onChange={(e) => field.handleChange(e.target.value)}
 													onBlur={field.handleBlur}
@@ -262,8 +269,11 @@ Response → Success: keep optimistic
 									>
 										{(field) => (
 											<div className="space-y-1">
-												<label className="text-sm font-medium">Email</label>
+												<label htmlFor="binding-email" className="text-sm font-medium">
+													Email
+												</label>
 												<Input
+													id="binding-email"
 													type="email"
 													value={field.state.value}
 													onChange={(e) => field.handleChange(e.target.value)}
