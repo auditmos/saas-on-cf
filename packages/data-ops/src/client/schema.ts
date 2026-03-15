@@ -54,8 +54,6 @@ export const PaginationMetaSchema = z.object({
 	hasMore: z.boolean(),
 });
 
-export const ClientResponseSchema = ClientSchema;
-
 export const ClientListResponseSchema = z.object({
 	data: z.array(ClientSchema),
 	pagination: PaginationMetaSchema,
@@ -75,6 +73,5 @@ export type ClientCreateInput = z.infer<typeof ClientCreateRequestSchema>;
 export type ClientUpdateInput = z.infer<typeof ClientUpdateRequestSchema>;
 export type PaginationRequest = z.infer<typeof PaginationRequestSchema>;
 export type PaginationMeta = z.infer<typeof PaginationMetaSchema>;
-export type ClientResponse = z.infer<typeof ClientResponseSchema>;
 export type ClientListResponse = z.infer<typeof ClientListResponseSchema>;
 export type ErrorResponse = z.infer<typeof ErrorResponseSchema>;

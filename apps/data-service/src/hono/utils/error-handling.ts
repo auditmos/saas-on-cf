@@ -18,19 +18,6 @@ export function isError(error: unknown): error is Error {
 }
 
 /**
- * Helper function to get error message from unknown error
- */
-export function getErrorMessage(error: unknown): string {
-	if (isError(error)) {
-		return error.message;
-	}
-	if (typeof error === "string") {
-		return error;
-	}
-	return "Unknown error occurred";
-}
-
-/**
  * Helper function to create error response object
  */
 export function createErrorResponse(error: unknown): { error: string; code?: string } {

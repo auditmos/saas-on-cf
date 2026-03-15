@@ -1,0 +1,28 @@
+{
+	"$schema": "https://unpkg.com/knip@5/schema.json",
+	"ignoreDependencies": ["cloudflare"],
+	"workspaces": {
+		".": {
+			"entry": ["scripts/*.ts"]
+		},
+		"apps/data-service": {
+			"ignore": ["src/durable-objects/**", "src/workflows/**"]
+		},
+		"apps/user-application": {
+			"entry": ["src/start.tsx", "src/routes/**/*.{ts,tsx}"],
+			"ignoreDependencies": ["web-vitals"],
+			"ignore": [
+				"src/core/functions/example-*.ts",
+				"src/core/middleware/example-*.ts",
+				"src/core/middleware/auth.ts",
+				"src/components/landing/index.ts",
+				"src/components/ui/**",
+				"src/integrations/**"
+			]
+		},
+		"packages/data-ops": {
+			"entry": ["src/*/index.ts", "src/auth/*.ts", "config/auth.ts", "drizzle-*.config.ts"],
+			"ignoreBinaries": ["dotenvx"]
+		}
+	}
+}

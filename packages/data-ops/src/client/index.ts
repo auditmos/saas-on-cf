@@ -9,7 +9,6 @@ export type {
 	Client,
 	ClientCreateInput,
 	ClientListResponse,
-	ClientResponse,
 	ClientUpdateInput,
 	ErrorResponse,
 	PaginationMeta,
@@ -18,7 +17,6 @@ export type {
 export {
 	ClientCreateRequestSchema,
 	ClientListResponseSchema,
-	ClientResponseSchema,
 	ClientSchema,
 	ClientUpdateRequestSchema,
 	ErrorResponseSchema,
