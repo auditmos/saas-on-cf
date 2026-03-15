@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/auditmos/saas-on-cf/compare/v1.1.0...v1.2.0) (2026-03-15)
+
+
+### Features
+
+* add taze for dependency update checking ([57c243c](https://github.com/auditmos/saas-on-cf/commit/57c243c79a6e680efb6c99fc79b4d161535a944c))
+
 # [1.1.0](https://github.com/auditmos/saas-on-cf/compare/v1.0.0...v1.1.0) (2026-03-15)
 
 
