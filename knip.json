@@ -1,9 +1,9 @@
 {
 	"$schema": "https://unpkg.com/knip@5/schema.json",
-	"ignoreDependencies": ["cloudflare"],
+	"ignoreDependencies": ["cloudflare", "@vitest/coverage-v8"],
 	"workspaces": {
 		".": {
-			"entry": ["scripts/*.ts"]
+			"entry": ["scripts/*.ts", "taze.config.ts"]
 		},
 		"apps/data-service": {
 			"ignore": ["src/durable-objects/**", "src/workflows/**"]

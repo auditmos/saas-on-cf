@@ -44,6 +44,16 @@ Replace `dev` with `staging` or `production`.
 - `apps/user-application/` — `.env` files per Vite mode
 - `apps/data-service/` — `.dev.vars` (local), Cloudflare dashboard (remote)
 
+## Testing
+
+```bash
+pnpm run test              # run all tests
+pnpm run test:watch        # watch mode
+pnpm run test:coverage     # with coverage report
+```
+
+Uses [Vitest](https://vitest.dev) with workspace projects. Each package can also run tests independently via `pnpm --filter <package> test`.
+
 ## Deployment
 
 ```bash

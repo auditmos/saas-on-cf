@@ -25,13 +25,21 @@ pnpm run deploy:production:data-service
 pnpm run seed:dev / seed:staging / seed:production
 pnpm run lint                     # check all (formatting + linting)
 pnpm run lint:fix                 # auto-fix all
+pnpm run test                     # run all tests
+pnpm run test:watch               # watch mode
+pnpm run test:coverage            # with coverage report
 ```
 
-## Linting
+## Verification
 
-- Run `pnpm run lint` after writing code
+Lint auto-runs via PostToolUse hook on Edit/Write (biome check --write).
+
+After completing changes, run manually:
+1. `pnpm run types` — type-check all packages (builds data-ops first)
+2. `pnpm run test` — run all tests
+
 - Max 500 lines per source file — split if exceeding
-- Config: `biome.json` (root), plugins: `.biome-plugins/*.grit`
+- Biome config: `biome.json` (root), plugins: `.biome-plugins/*.grit`
 
 ## Design Docs
 

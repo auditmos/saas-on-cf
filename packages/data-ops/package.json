@@ -38,7 +38,9 @@
 		"drizzle:production:pull": "dotenvx run -f .env.production -- drizzle-kit pull --config drizzle-production.config.ts",
 		"seed:dev": "dotenvx run -f .env.dev -- tsx src/database/seed/seed.ts",
 		"seed:staging": "dotenvx run -f .env.staging -- tsx src/database/seed/seed.ts",
-		"seed:production": "dotenvx run -f .env.production -- tsx src/database/seed/seed.ts"
+		"seed:production": "dotenvx run -f .env.production -- tsx src/database/seed/seed.ts",
+		"test": "vitest run",
+		"test:watch": "vitest"
 	},
 	"keywords": [],
 	"author": "",
@@ -51,7 +53,7 @@
 		"zod": "^4.3.6"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "^4.20260313.1",
+		"@cloudflare/workers-types": "^4.20260316.1",
 		"drizzle-kit": "^0.31.9",
 		"postgres": "^3.4.8",
 		"tsc-alias": "^1.8.16",

@@ -24,6 +24,9 @@
 		"deps:update": "taze -w",
 		"deps:major": "taze major",
 		"deps:major:update": "taze major -w",
+		"test": "vitest run",
+		"test:watch": "vitest",
+		"test:coverage": "vitest run --coverage",
 		"release": "semantic-release",
 		"release:dry": "semantic-release --dry-run"
 	},
@@ -36,10 +39,12 @@
 		"@semantic-release/changelog": "^6.0.3",
 		"@semantic-release/git": "^10.0.1",
 		"@types/node": "^22.19.15",
+		"@vitest/coverage-v8": "^4.1.0",
 		"knip": "^5.86.0",
 		"semantic-release": "^25.0.3",
 		"taze": "^19.10.0",
 		"tsx": "^4.21.0",
-		"typescript": "^5.9.3"
+		"typescript": "^5.9.3",
+		"vitest": "^4.1.0"
 	}
 }

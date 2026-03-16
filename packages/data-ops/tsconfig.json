@@ -15,7 +15,7 @@
 		"paths": {
 			"@/*": ["./src/*"]
 		},
-		"types": ["@cloudflare/workers-types"]
+		"types": ["@cloudflare/workers-types", "vitest/globals"]
 	},
 	"include": ["src"]
 }

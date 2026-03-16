@@ -37,7 +37,7 @@
 
 		/* Skip type checking all .d.ts files. */
 		"skipLibCheck": true,
-		"types": ["./worker-configuration.d.ts", "./service-bindings.d.ts"],
+		"types": ["./worker-configuration.d.ts", "./service-bindings.d.ts", "vitest/globals"],
 		"paths": {
 			"@/*": ["./src/*"],
 			"@/bindings": ["./service-bindings.d.ts"]
