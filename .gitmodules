@@ -1,0 +1,3 @@
+[submodule "plugins/brainstormer"]
+	path = plugins/brainstormer
+	url = https://github.com/auditmos/brainstormer.git
