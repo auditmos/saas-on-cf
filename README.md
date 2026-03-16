@@ -71,4 +71,24 @@ To deploy to a different CF account, copy `.env.example` to `.env` and fill in `
 
 ## Package Docs
 
-Each package has its own `CLAUDE.md` with detailed structure, patterns, and workflows.
+Each package has its own `AGENTS.md` with detailed structure, patterns, and workflows (`CLAUDE.md` symlinks to `AGENTS.md`).
+
+## Cloning
+
+This repo includes [brainstormer](https://github.com/auditmos/brainstormer) as a git submodule at `plugins/brainstormer`. Clone with:
+
+```bash
+git clone --recurse-submodules https://github.com/auditmos/saas-on-cf.git
+```
+
+If already cloned without submodules:
+
+```bash
+git submodule update --init
+```
+
+To pull latest brainstormer updates:
+
+```bash
+git submodule update --remote plugins/brainstormer
+```
