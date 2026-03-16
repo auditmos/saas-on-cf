@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/auditmos/saas-on-cf/compare/v1.6.0...v1.7.0) (2026-03-16)
+
+
+### Features
+
+* add brainstormer plugin as submodule with skill symlinks ([7780a7a](https://github.com/auditmos/saas-on-cf/commit/7780a7a894744b3d301c4f503de1e18684afb34a))
+
 # [1.6.0](https://github.com/auditmos/saas-on-cf/compare/v1.5.0...v1.6.0) (2026-03-16)
 
 
