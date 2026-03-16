@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/auditmos/saas-on-cf/compare/v1.5.0...v1.6.0) (2026-03-16)
+
+
+### Features
+
+* adopt AGENTS.md convention with CLAUDE.md symlinks and add llms.txt ([fcb6dca](https://github.com/auditmos/saas-on-cf/commit/fcb6dca4e98d4f7b45ea54b5423d092028be3034))
+
 # [1.5.0](https://github.com/auditmos/saas-on-cf/compare/v1.4.0...v1.5.0) (2026-03-16)
 
 
