@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/auditmos/saas-on-cf/compare/v1.4.0...v1.5.0) (2026-03-16)
+
+
+### Features
+
+* expand bug fix workflow to full TDD cycle in rules ([8ca5d0e](https://github.com/auditmos/saas-on-cf/commit/8ca5d0ecc4d10d86321b8566b4afa22f754dd569))
+
 # [1.4.0](https://github.com/auditmos/saas-on-cf/compare/v1.3.0...v1.4.0) (2026-03-16)
 
 
