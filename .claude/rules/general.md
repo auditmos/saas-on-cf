@@ -72,4 +72,10 @@ for (let i = 0; i < items.length; i++) {
 
 # Universal Programming Rules
 
-- When I report a bug, don't start by trying to fix it. Instead, start by writing a test that reproduces the bug.
+## Bug Fix Workflow
+
+When a bug is reported:
+1. Write a failing test that reproduces the bug — do not touch implementation yet
+2. Show the failing test and propose a fix — wait for approval
+3. Implement the fix — the test should now pass
+4. Run full test suite to confirm no regressions
