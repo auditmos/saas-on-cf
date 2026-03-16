@@ -1,0 +1,52 @@
+# saas-on-cf
+
+> Monorepo: TanStack Start frontend + Hono API backend on Cloudflare Workers.
+
+## Packages
+
+- [data-ops](packages/data-ops/AGENTS.md): Shared DB layer (Drizzle ORM, Zod v4, Better Auth) consumed by both apps
+- [data-service](apps/data-service/AGENTS.md): REST API on Cloudflare Workers using Hono with WorkerEntrypoint pattern
+- [user-application](apps/user-application/AGENTS.md): SSR frontend on Cloudflare Workers using TanStack Start
+
+## Rules
+
+### General
+- [General TypeScript & Cloudflare](.claude/rules/general.md): Type safety, error handling, naming, array access, bug fix workflow
+- [Cloudflare Deployment](.claude/rules/cloudflare-deployment.md): Hostname separation, custom domains, SSL/TLS, Vite plugin environments
+- [Error Handling](.claude/rules/error-handling.md): Layered error approach across data-ops, data-service, and user-application
+
+### data-ops
+- [Drizzle ORM](.claude/rules/data-ops/drizzle.md): Schema definitions, migrations, query patterns
+- [Zod Validation](.claude/rules/data-ops/zod.md): Schema naming conventions, request/response patterns
+- [Better Auth](.claude/rules/data-ops/better-auth.md): Auth config, auto-generated schema
+- [Neon Postgres](.claude/rules/data-ops/neon.md): Serverless DB connection patterns
+
+### data-service
+- [Hono](.claude/rules/data-service/hono.md): Handler/service/query pattern, middleware chain, Result type
+- [Cloudflare Workers](.claude/rules/data-service/cloudflare-workers.md): Worker patterns and bindings
+- [Durable Objects](.claude/rules/data-service/durable-objects.md): DO patterns
+- [Queues & Workflows](.claude/rules/data-service/queues-workflows.md): Queue consumers, workflow definitions
+- [Storage](.claude/rules/data-service/storage.md): KV, R2, D1 patterns
+- [Agent SDK](.claude/rules/data-service/agent-sdk.md): Cloudflare Agents SDK patterns
+- [Agent Workflows](.claude/rules/data-service/agent-workflows.md): Agent workflow orchestration
+
+### user-application
+- [TanStack](.claude/rules/user-application/tanstack.md): Router, Query, Form patterns
+- [React](.claude/rules/user-application/react.md): Component patterns, hooks
+- [Auth](.claude/rules/user-application/auth.md): Better Auth client, protected routes
+- [UI](.claude/rules/user-application/ui.md): Component library patterns
+- [shadcn/tweakcn](.claude/rules/user-application/shadcn-tweakcn.md): UI primitives
+- [Forms](.claude/rules/user-application/form-patterns.md): Form validation and submission
+- [i18n](.claude/rules/user-application/i18n.md): use-intl, locale strategy, translation files
+- [Vite](.claude/rules/user-application/vite.md): Build config, Cloudflare Vite plugin
+
+## Agents
+
+- [Design Doc Writer](.claude/agents/dd-w.md): Create design documents and technical specifications
+- [Design Doc Implementer](.claude/agents/dd-i.md): Implement features from existing design documents
+- [MVP Advisor](.claude/agents/mvp-e.md): Ensure speed-over-perfection principles
+
+## Commands
+
+- [Implement](.claude/commands/implement.md): Implement a design doc
+- [Verify Design Docs](.claude/commands/verify-dd.md): Review design docs for implementation readiness
