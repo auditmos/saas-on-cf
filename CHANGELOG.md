@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/auditmos/saas-on-cf/compare/v1.3.0...v1.4.0) (2026-03-16)
+
+
+### Features
+
+* add vitest test infrastructure and Claude Code hooks ([136b624](https://github.com/auditmos/saas-on-cf/commit/136b6247f2ea1a6900c5bd9c5345dee79bf1759d))
+
 # [1.3.0](https://github.com/auditmos/saas-on-cf/compare/v1.2.0...v1.3.0) (2026-03-15)
 
 
