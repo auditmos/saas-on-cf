@@ -73,25 +73,12 @@ To deploy to a different CF account, copy `.env.example` to `.env` and fill in `
 
 Each package has its own `AGENTS.md` with detailed structure, patterns, and workflows (`CLAUDE.md` symlinks to `AGENTS.md`).
 
-## Cloning
+## Brainstormer
 
-This repo includes [brainstormer](https://github.com/auditmos/brainstormer) as a git submodule at `plugins/brainstormer`. Clone with:
+Planning skills ([brainstormer](https://github.com/auditmos/brainstormer)) are pre-configured via `extraKnownMarketplaces` and `enabledPlugins` in `.claude/settings.json`. They install automatically on first open.
 
-```bash
-git clone --recurse-submodules https://github.com/auditmos/saas-on-cf.git
-```
-
-If already cloned without submodules:
+To update to the latest brainstormer skills:
 
 ```bash
-git submodule update --init
-```
-
-To pull latest brainstormer updates:
-
-```bash
-git submodule update --remote plugins/brainstormer
-git add plugins/brainstormer
-git commit -m "update brainstormer"
-git push
+/plugin marketplace update brainstormer
 ```

@@ -44,8 +44,8 @@
 	"extraKnownMarketplaces": {
 		"brainstormer": {
 			"source": {
-				"source": "directory",
-				"path": "./plugins/brainstormer"
+				"source": "github",
+				"repo": "auditmos/brainstormer"
 			}
 		}
 	},
