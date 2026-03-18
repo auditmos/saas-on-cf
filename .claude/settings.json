@@ -32,6 +32,14 @@
 			}
 		]
 	},
+	"extraKnownMarketplaces": {
+		"brainstormer": {
+			"source": {
+				"source": "directory",
+				"path": "./plugins/brainstormer"
+			}
+		}
+	},
 	"permissions": {
 		"allow": [
 			"Bash(tail:*)",
