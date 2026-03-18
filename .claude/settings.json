@@ -32,6 +32,15 @@
 			}
 		]
 	},
+	"enabledPlugins": {
+		"ask@brainstormer": true,
+		"blueprint@brainstormer": true,
+		"carve@brainstormer": true,
+		"dispatch@brainstormer": true,
+		"lean@brainstormer": true,
+		"tdd@brainstormer": true,
+		"brainstorm@brainstormer": true
+	},
 	"extraKnownMarketplaces": {
 		"brainstormer": {
 			"source": {
