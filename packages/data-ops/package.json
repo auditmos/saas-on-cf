@@ -53,8 +53,8 @@
 		"zod": "^4.3.6"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "^4.20260316.1",
-		"drizzle-kit": "^0.31.9",
+		"@cloudflare/workers-types": "^4.20260317.1",
+		"drizzle-kit": "^0.31.10",
 		"postgres": "^3.4.8",
 		"tsc-alias": "^1.8.16",
 		"tsx": "^4.21.0",
