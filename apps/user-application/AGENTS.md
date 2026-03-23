@@ -54,9 +54,10 @@ pnpm run deploy:prod      # deploy to production
 - `VITE_DATA_SERVICE_URL` - public API URL
 - `VITE_API_TOKEN` - client-side API auth
 
+<important if="you are making server-side calls to data-service from user-application">
 ## Service Binding (DATA_SERVICE)
 
-Use `fetchDataService()` from `lib/data-service.ts` for server-side calls to data-service via Worker service binding. Never call the public API URL from server code.
+Use `fetchDataService()` from `lib/data-service.ts` for server-side calls via Worker service binding. Never call the public API URL from server code.
 
 ```ts
 import { fetchDataService } from "@/lib/data-service";
@@ -68,6 +69,7 @@ const data = await response.json();
 - Server-only — uses `env` from `cloudflare:workers`
 - No HTTP/DNS overhead — internal Worker-to-Worker RPC
 - Health check: `GET /api/health` verifies binding, DB, and env
+</important>
 
 ## Don't
 

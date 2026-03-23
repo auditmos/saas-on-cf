@@ -33,17 +33,17 @@ pnpm run test:coverage            # with coverage report
 ## Verification
 
 Lint auto-runs via PostToolUse hook on Edit/Write (biome check --write).
+Max 500 lines per source file — split if exceeding.
 
-After completing changes, run manually:
+<important if="you have finished implementing or modifying code">
+Run manually before declaring done:
 1. `pnpm run types` — type-check all packages (builds data-ops first)
 2. `pnpm run test` — run all tests
+</important>
 
-- Max 500 lines per source file — split if exceeding
-- Biome config: `biome.json` (root), plugins: `.biome-plugins/*.grit`
-
-## Design Docs
-
+<important if="you are creating, reviewing, or updating design documents">
 - `/docs` is the single source of truth for business requirements
 - Apply review notes/status updates directly in the corresponding design doc
 - Never create separate md files for reviews/audits/analyses unless explicitly asked
 - Flag implementation deviations inline in the doc
+</important>

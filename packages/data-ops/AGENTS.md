@@ -37,6 +37,7 @@ import { getClient, ClientSchema, type Client } from "@repo/data-ops/client"
 import { checkDatabase, type LivenessResponse } from "@repo/data-ops/health"
 ```
 
+<important if="you are creating or modifying Zod schemas in data-ops">
 ## Zod Schema Naming
 
 | Purpose | Suffix | Example |
@@ -45,10 +46,11 @@ import { checkDatabase, type LivenessResponse } from "@repo/data-ops/health"
 | Request | `RequestSchema` | `ClientCreateRequestSchema` |
 | Response | `ResponseSchema` | `ClientListResponseSchema` |
 | Type export | no suffix | `Client`, `ClientCreateInput` |
+</important>
 
-## Workflows
+<important if="you are adding a new domain or entity to data-ops">
+## New Domain Workflow
 
-**New domain:**
 1. Create `src/{domain}/table.ts` with Drizzle table
 2. Add relations to `src/drizzle/relations.ts` if needed
 3. `pnpm run drizzle:dev:generate` + `pnpm run drizzle:dev:migrate`
@@ -59,14 +61,17 @@ import { checkDatabase, type LivenessResponse } from "@repo/data-ops/health"
 8. `pnpm run build`
 
 **Seed data:** `pnpm run seed:dev`
+</important>
 
-## Patterns
+<important if="you are writing or modifying database queries in data-ops">
+## Query Patterns
 
 - Queries use `getDb()` from `database/setup.ts`
 - All queries are async, return typed results
 - Use `eq`, `count` from drizzle-orm for queries
 - Insert with `.returning()` to get created record
 - Use `.onConflictDoNothing()` for idempotent inserts
+</important>
 
 ## Don't
 

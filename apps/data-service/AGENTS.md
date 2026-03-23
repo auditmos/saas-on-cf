@@ -29,12 +29,6 @@ src/
 
 See `hono.md` and `error-handling.md` rules for handler/service/query patterns and Result/AppError details.
 
-**Middleware order** (in app.ts):
-1. `requestId()` - generates/passes correlation ID
-2. `onError` - global error handler
-3. `cors` - CORS headers
-4. Route-specific: `authMiddleware`, `rateLimiter`, `zValidator`
-
 ## Endpoints
 
 - `GET /health/live` - liveness (instant 200)
@@ -42,6 +36,16 @@ See `hono.md` and `error-handling.md` rules for handler/service/query patterns a
 - `GET|POST|PUT|DELETE /users/*` - CRUD (POST/PUT/DELETE require Bearer token)
 - `POST /webhooks/*` - inbound webhooks (signature verified)
 
+<important if="you are adding or modifying middleware in data-service">
+## Middleware Order (in app.ts)
+
+1. `requestId()` - generates/passes correlation ID
+2. `onError` - global error handler
+3. `cors` - CORS headers
+4. Route-specific: `authMiddleware`, `rateLimiter`, `zValidator`
+</important>
+
+<important if="you are working with webhooks in data-service">
 ## Webhooks
 
 **Pattern:** verification middleware → handler → service → data-ops
@@ -57,6 +61,7 @@ See `hono.md` and `error-handling.md` rules for handler/service/query patterns a
 - `webhook-signature` - `v1,<base64 HMAC-SHA256>`
 
 **Idempotency:** `webhook_logs.msgId` unique constraint - duplicates are no-ops
+</important>
 
 ## Dev
 
