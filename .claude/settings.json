@@ -17,7 +17,7 @@
 				"hooks": [
 					{
 						"type": "command",
-						"command": "FILE=$(cat - | jq -r '.tool_input.file_path') && pnpm exec biome check --write --unsafe \"$FILE\""
+						"command": "FILE=$(cat - | jq -r '.tool_input.file_path') && pnpm exec biome check --write --unsafe --skip=correctness/noUnusedImports \"$FILE\""
 					}
 				]
 			},
