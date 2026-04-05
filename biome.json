@@ -98,7 +98,8 @@
 			"!packages/data-ops/src/drizzle/auth-schema.ts",
 			"!.claude/settings.json",
 			"!.claude/settings.local.json",
-			"!.claude/skills"
+			"!.claude/skills",
+			"!plugins"
 		]
 	},
 	"plugins": [
