@@ -14,11 +14,11 @@
 	"devDependencies": {
 		"@types/node": "^22.19.17",
 		"typescript": "^5.9.3",
-		"wrangler": "^4.80.0"
+		"wrangler": "^4.82.2"
 	},
 	"dependencies": {
 		"@hono/zod-validator": "^0.7.6",
 		"@repo/data-ops": "workspace:*",
-		"hono": "^4.12.10"
+		"hono": "^4.12.12"
 	}
 }
