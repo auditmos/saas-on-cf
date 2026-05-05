@@ -2,13 +2,15 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { PGlite } from "@electric-sql/pglite";
 import { neon } from "@neondatabase/serverless";
-import type { PgDatabase } from "drizzle-orm/pg-core";
 import { drizzle as drizzleNeon } from "drizzle-orm/neon-http";
 import { migrate as migrateNeon } from "drizzle-orm/neon-http/migrator";
+import type { PgDatabase } from "drizzle-orm/pg-core";
 import { drizzle as drizzlePglite } from "drizzle-orm/pglite";
 import { migrate as migratePglite } from "drizzle-orm/pglite/migrator";
 
+// biome-ignore-start lint/suspicious/noExplicitAny: shared shape across PGlite + Neon adapters; their concrete generics diverge
 export type TestDb = PgDatabase<any, any, any>;
+// biome-ignore-end lint/suspicious/noExplicitAny: shared shape across PGlite + Neon adapters; their concrete generics diverge
 
 export interface TestDbHandle {
 	db: TestDb;
