@@ -37,11 +37,12 @@ src/
 ## Dev
 
 ```bash
-pnpm run dev              # local dev (port 3000)
-pnpm run build            # build for production
-pnpm run deploy:dev       # deploy to dev
-pnpm run deploy:staging   # deploy to staging
-pnpm run deploy:prod      # deploy to production
+pnpm run dev                # local dev (port 3000)
+pnpm run build              # build for production (default)
+pnpm run build:staging      # build with staging config
+pnpm run build:production   # build with production config
+pnpm run deploy:staging     # build:staging + wrangler deploy
+pnpm run deploy:production  # build:production + wrangler deploy
 ```
 
 ## Env vars
