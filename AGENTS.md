@@ -22,7 +22,7 @@ pnpm run deploy:staging:user-application
 pnpm run deploy:staging:data-service
 pnpm run deploy:production:user-application
 pnpm run deploy:production:data-service
-pnpm run seed:dev / seed:staging / seed:production
+pnpm run db:seed:dev / db:seed:staging / db:seed:production
 pnpm run lint                     # check all (formatting + linting)
 pnpm run lint:fix                 # auto-fix all
 pnpm run test                     # run all tests

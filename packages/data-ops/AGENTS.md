@@ -60,7 +60,7 @@ import { checkDatabase, type LivenessResponse } from "@repo/data-ops/health"
 7. Add export to `package.json`
 8. `pnpm run build`
 
-**Seed data:** `pnpm run seed:dev`
+**Seed data:** `pnpm run db:seed:dev`
 </important>
 
 <important if="you are writing or modifying database queries in data-ops">
