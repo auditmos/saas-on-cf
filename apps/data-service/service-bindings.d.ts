@@ -6,4 +6,4 @@ interface ExampleQueueMessage {
 	messageData;
 }
 
-interface Env extends Cloudflare.Env {}
+interface Env extends BaseEnv {}
