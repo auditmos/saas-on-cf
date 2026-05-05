@@ -46,16 +46,6 @@
 - [Design Doc Implementer](.claude/agents/dd-i.md): Implement features from existing design documents
 - [MVP Advisor](.claude/agents/mvp-e.md): Ensure speed-over-perfection principles
 
-## Skills (via brainstormer plugin)
-
-- [Ask](plugins/brainstormer/skills/ask/SKILL.md): Discovery interviews, pressure-test ideas
-- [Blueprint](plugins/brainstormer/skills/blueprint/SKILL.md): PRD creation as GitHub issue
-- [Carve](plugins/brainstormer/skills/carve/SKILL.md): Break PRD into phased vertical slices
-- [Dispatch](plugins/brainstormer/skills/dispatch/SKILL.md): Convert PRD to dependency-ordered GitHub issues
-- [Lean](plugins/brainstormer/skills/lean/SKILL.md): MVP advisor, speed over perfection
-- [TDD](plugins/brainstormer/skills/tdd/SKILL.md): Red-green-refactor with vertical slices
-- [Brainstorm](plugins/brainstormer/skills/brainstorm/SKILL.md): Orchestrated end-to-end planning workflow
-
 ## Commands
 
 - [Implement](.claude/commands/implement.md): Implement a design doc

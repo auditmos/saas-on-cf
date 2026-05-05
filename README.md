@@ -1,6 +1,19 @@
 # SaaS-on-CF (Software as a Service on Cloudflare)
 
+*AI agent index: [llms.txt](./llms.txt)*
+
 Modular web application template
+
+## Using this Template
+
+1. Click **Use this template** on GitHub (or `gh repo create --template`).
+2. Rename the workers in `apps/user-application/wrangler.jsonc` and `apps/data-service/wrangler.jsonc` (`name` field), plus `apps/*/package.json` (`name`).
+3. Provision a Neon database and fill in `packages/data-ops/.env.dev` (see [.env.example](./packages/data-ops/.env.example)), `apps/data-service/.dev.vars`, and `apps/user-application/.env`.
+4. Run `pnpm run setup && pnpm run db:migrate:dev`.
+5. Start dev in two terminals: `pnpm run dev:data-service` (port 8788) and `pnpm run dev:user-application` (port 3000).
+6. Delete the example `client` domain (`packages/data-ops/src/client/`, `apps/data-service/src/hono/handlers/client-handlers.ts` + related service/routes, and its uses in `apps/user-application`) when you no longer need the demo, and start modelling your own domain.
+
+See [Setup](#setup) and [Deployment](#deployment) below for the full dev/deploy loop.
 
 ## Architecture
 
