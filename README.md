@@ -7,11 +7,12 @@ Modular web application template
 ## Using this Template
 
 1. Click **Use this template** on GitHub (or `gh repo create --template`).
-2. Rename the workers in `apps/user-application/wrangler.jsonc` and `apps/data-service/wrangler.jsonc` (`name` field), plus `apps/*/package.json` (`name`).
-3. Provision a Neon database and fill in `packages/data-ops/.env.dev` (see [.env.example](./packages/data-ops/.env.example)), `apps/data-service/.dev.vars`, and `apps/user-application/.env`.
-4. Run `pnpm run setup && pnpm run db:migrate:dev`.
-5. Start dev in two terminals: `pnpm run dev:data-service` (port 8788) and `pnpm run dev:user-application` (port 3000).
-6. Delete the example `client` domain (`packages/data-ops/src/client/`, `apps/data-service/src/hono/handlers/client-handlers.ts` + related service/routes, and its uses in `apps/user-application`) when you no longer need the demo, and start modelling your own domain.
+2. `pnpm install`.
+3. `pnpm run init-project` — prompts for a kebab-case project name, renames every `wrangler.jsonc` + root `package.json`, and fans out the `*.example` templates into per-env files (`apps/data-service/.{dev,staging,production}.vars`, `apps/user-application/.env{,.staging,.production}`, `packages/data-ops/.env.{dev,staging,production}`). Idempotent — re-runnable, never overwrites filled-in files. The script's "Next steps" output lists every field that still needs a value.
+4. Provision a Neon database and fill `DATABASE_HOST/USERNAME/PASSWORD` in the env files created above. Set `BETTER_AUTH_SECRET` (`openssl rand -base64 32`) in `apps/user-application/.env*` and the matching `VITE_API_TOKEN` / `DATA_SERVICE_API_TOKEN` / `API_TOKEN` triple per environment.
+5. Run `pnpm run setup && pnpm run db:generate:dev && pnpm run db:migrate:dev`.
+6. Start dev in two terminals: `pnpm run dev:data-service` (port 8788) and `pnpm run dev:user-application` (port 3000).
+7. *(Optional, when you're done with the demo)* delete the example `client` domain: `packages/data-ops/src/client/`, `apps/data-service/src/hono/handlers/client-handlers.ts` + matching service/routes, and its uses in `apps/user-application`. Then start modelling your own domain.
 
 See [Setup](#setup) and [Deployment](#deployment) below for the full dev/deploy loop.
 
