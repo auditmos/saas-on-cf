@@ -53,6 +53,12 @@ jobs:
       - name: Knip
         run: pnpm run knip
 
+      # Runs semantic-release. Conventional Commits → version bump:
+      #   feat:                                            → minor
+      #   fix: / perf: / revert: / refactor:               → patch
+      #   BREAKING CHANGE: footer (or `!` after type)      → major
+      #   docs: / chore: / ci: / style: / test: / build:   → no release
+      # Full rule set in .releaserc.json (commit-analyzer plugin).
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
