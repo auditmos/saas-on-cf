@@ -1,0 +1,11 @@
+CLOUDFLARE_ENV=dev
+
+DATABASE_HOST=
+DATABASE_USERNAME=
+DATABASE_PASSWORD=
+
+# API token for client-side callers (paired with VITE_API_TOKEN in user-application).
+API_TOKEN=
+
+# Comma-separated list of allowed origins for CORS. Leave empty for dev (allows all).
+ALLOWED_ORIGINS=
