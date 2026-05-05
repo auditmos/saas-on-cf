@@ -29,11 +29,13 @@ pnpm run dev:data-service      # Hono backend service (port 8788)
 
 ### Database Migrations
 
-From `packages/data-ops/` directory:
+From the repo root (proxies to `packages/data-ops`):
 
 ```bash
-pnpm run drizzle:dev:generate  # Generate migration
-pnpm run drizzle:dev:migrate   # Apply to database
+pnpm run db:generate:dev   # Generate migration
+pnpm run db:migrate:dev    # Apply to database
+pnpm run db:pull:dev       # Pull schema from DB
+pnpm run db:seed:dev       # Seed sample data
 ```
 
 Replace `dev` with `staging` or `production`.

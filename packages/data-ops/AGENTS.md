@@ -53,7 +53,7 @@ import { checkDatabase, type LivenessResponse } from "@repo/data-ops/health"
 
 1. Create `src/{domain}/table.ts` with Drizzle table
 2. Add relations to `src/drizzle/relations.ts` if needed
-3. `pnpm run drizzle:dev:generate` + `pnpm run drizzle:dev:migrate`
+3. `pnpm run db:generate:dev` + `pnpm run db:migrate:dev`
 4. Create `src/{domain}/schema.ts` (Zod schemas)
 5. Create `src/{domain}/queries.ts`
 6. Create `src/{domain}/index.ts` (barrel)

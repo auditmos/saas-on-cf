@@ -55,7 +55,7 @@ const user = await db.query.users.findFirst({
 
 - Never manually edit generated migration files
 - Use environment-specific configs: `drizzle-{dev,staging,production}.config.ts`
-- Run `drizzle:*:generate` then `drizzle:*:migrate`
+- Run `db:generate:{dev,staging,production}` then `db:migrate:{dev,staging,production}`
 - Test migrations on dev/staging before production
 
 ## Queries Module
