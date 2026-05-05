@@ -1,3 +1,5 @@
+## [1.8.1](https://github.com/auditmos/saas-on-cf/compare/v1.8.0...v1.8.1) (2026-05-05)
+
 # [1.8.0](https://github.com/auditmos/saas-on-cf/compare/v1.7.0...v1.8.0) (2026-05-05)
 
 
