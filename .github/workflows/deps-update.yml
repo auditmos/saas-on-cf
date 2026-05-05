@@ -1,0 +1,79 @@
+name: Deps update
+
+on:
+  schedule:
+    - cron: "0 6 * * 1" # Monday 06:00 UTC (07:00/08:00 PL)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: deps-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    name: Bump deps + open PR
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: pnpm
+
+      - name: Install (sanity check current state)
+        run: pnpm install --frozen-lockfile
+
+      - name: Update deps
+        run: pnpm run deps:update
+
+      - name: Refresh lockfile
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Lint
+        run: pnpm run lint:ci
+
+      - name: Type check
+        run: pnpm run types
+
+      - name: Test
+        run: pnpm run test
+
+      - name: Knip
+        run: pnpm run knip
+
+      - name: Open PR
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: chore/deps-update
+          delete-branch: true
+          commit-message: "chore(deps): weekly minor + patch bumps"
+          title: "chore(deps): weekly minor + patch bumps"
+          body: |
+            Automated weekly run of `pnpm deps:update` (`taze -r -w`) +
+            `pnpm install`. Walks every workspace package — root, apps/*,
+            packages/* — so sub-package versions stay in sync.
+
+            Validated by this job before opening the PR:
+            - `pnpm lint:ci`
+            - `pnpm types`
+            - `pnpm test`
+            - `pnpm knip`
+
+            Note: `secrets.GITHUB_TOKEN` does not trigger CI on PRs it
+            creates. To run CI on this PR, click "Re-run all jobs" or push
+            an empty commit.
+
+            Close this PR if anything looks off and run the bumps manually.
+          labels: dependencies, automated
