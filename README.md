@@ -36,9 +36,10 @@ pnpm run db:generate:dev   # Generate migration
 pnpm run db:migrate:dev    # Apply to database
 pnpm run db:pull:dev       # Pull schema from DB
 pnpm run db:seed:dev       # Seed sample data
+pnpm run db:studio         # Open Drizzle Studio (dev only)
 ```
 
-Replace `dev` with `staging` or `production`.
+Replace `dev` with `staging` or `production` (except `db:studio`, which is dev-only).
 
 ### Environment Variables
 

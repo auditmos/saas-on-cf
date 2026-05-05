@@ -20,6 +20,7 @@
 		"db:pull:dev": "pnpm run --filter data-ops db:pull:dev",
 		"db:pull:staging": "pnpm run --filter data-ops db:pull:staging",
 		"db:pull:production": "pnpm run --filter data-ops db:pull:production",
+		"db:studio": "pnpm run --filter data-ops db:studio",
 		"db:seed:dev": "pnpm run --filter data-ops db:seed:dev",
 		"db:seed:staging": "pnpm run --filter data-ops db:seed:staging",
 		"db:seed:production": "pnpm run --filter data-ops db:seed:production",
