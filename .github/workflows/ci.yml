@@ -15,29 +15,10 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
-  neon-branch:
-    name: Create Neon Branch
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    timeout-minutes: 3
-    outputs:
-      db_url: ${{ steps.create.outputs.db_url_with_pooler }}
-      branch_id: ${{ steps.create.outputs.branch_id }}
-    steps:
-      - name: Create ephemeral Neon branch
-        id: create
-        uses: neondatabase/create-branch-action@v6
-        with:
-          project_id: ${{ vars.NEON_PROJECT_ID }}
-          api_key: ${{ secrets.NEON_API_KEY }}
-          branch_name: ci/pr-${{ github.event.pull_request.number }}
-
   ci:
     name: Lint + Test + Quality
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    needs: [neon-branch]
-    if: always()
 
     steps:
       - uses: actions/checkout@v4
@@ -63,9 +44,6 @@ jobs:
         run: pnpm run lint:ci
 
       - name: Tests
-        env:
-          TEST_DATABASE_URL: ${{ needs.neon-branch.outputs.db_url }}
-          TEST_DB_PROFILE: ${{ needs.neon-branch.outputs.db_url && 'managed' || 'local' }}
         run: pnpm run test
 
       # -- Advisory gates --
@@ -81,16 +59,3 @@ jobs:
       - name: Dependency freshness
         continue-on-error: true
         run: pnpm run deps
-
-  cleanup-neon-branch:
-    name: Delete Neon Branch
-    runs-on: ubuntu-latest
-    timeout-minutes: 2
-    needs: [neon-branch, ci]
-    if: always() && needs.neon-branch.outputs.branch_id
-    steps:
-      - uses: neondatabase/delete-branch-action@v3
-        with:
-          project_id: ${{ vars.NEON_PROJECT_ID }}
-          api_key: ${{ secrets.NEON_API_KEY }}
-          branch: ${{ needs.neon-branch.outputs.branch_id }}
