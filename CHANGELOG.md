@@ -1,3 +1,10 @@
+# [1.8.0](https://github.com/auditmos/saas-on-cf/compare/v1.7.0...v1.8.0) (2026-05-05)
+
+
+### Features
+
+* CI/CD pipeline + test-harness (back-port from pi-web) ([560e66e](https://github.com/auditmos/saas-on-cf/commit/560e66ec8054fae8fd2d914a480a0b09b3045340))
+
 # [1.7.0](https://github.com/auditmos/saas-on-cf/compare/v1.6.0...v1.7.0) (2026-03-16)
 
 
