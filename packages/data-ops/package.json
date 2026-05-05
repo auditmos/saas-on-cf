@@ -48,16 +48,17 @@
 	"license": "ISC",
 	"packageManager": "pnpm@10.33.3",
 	"dependencies": {
-		"@neondatabase/serverless": "^1.0.2",
-		"better-auth": "^1.6.3",
+		"@neondatabase/serverless": "^1.1.0",
+		"better-auth": "^1.6.9",
 		"drizzle-orm": "^0.45.2",
-		"zod": "^4.3.6"
+		"zod": "^4.4.3"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "^4.20260414.1",
+		"@cloudflare/workers-types": "^4.20260505.1",
+		"@types/node": "^22.19.17",
 		"drizzle-kit": "^0.31.10",
 		"postgres": "^3.4.9",
-		"tsc-alias": "^1.8.16",
+		"tsc-alias": "^1.8.17",
 		"tsx": "^4.21.0",
 		"typescript": "^5.9.3"
 	}

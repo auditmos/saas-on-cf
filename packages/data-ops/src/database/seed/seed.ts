@@ -1,3 +1,4 @@
+/// <reference types="node" />
 import { sql } from "drizzle-orm";
 import { clients } from "../../client/table";
 import { initDatabase } from "../setup";
