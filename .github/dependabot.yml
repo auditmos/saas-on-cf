@@ -1,0 +1,39 @@
+version: 2
+
+updates:
+  # GitHub Actions versions — taze doesn't cover this ecosystem.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore(ci)"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "github-actions"
+    groups:
+      actions-minor-patch:
+        update-types:
+          - "minor"
+          - "patch"
+
+  # npm: SECURITY UPDATES ONLY. Regular version bumps are handled by
+  # the weekly `deps-update.yml` workflow (taze). `open-pull-requests-limit: 0`
+  # disables version updates but keeps security advisory PRs flowing.
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 0
+    commit-message:
+      prefix: "chore(deps)"
+      prefix-development: "chore(deps-dev)"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "security"
