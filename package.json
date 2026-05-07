@@ -61,6 +61,6 @@
 	},
 	"simple-git-hooks": {
 		"pre-commit": "pnpm run lint:ci",
-		"pre-push": "pnpm run types"
+		"pre-push": "pnpm run types && pnpm run knip"
 	}
 }
