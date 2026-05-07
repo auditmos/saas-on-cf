@@ -16,6 +16,7 @@ updates:
     labels:
       - "dependencies"
       - "github-actions"
+      - "automated"
     groups:
       actions-minor-patch:
         update-types:
@@ -37,3 +38,4 @@ updates:
     labels:
       - "dependencies"
       - "security"
+      - "automated"
