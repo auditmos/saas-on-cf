@@ -12,9 +12,9 @@
 		"test:watch": "vitest"
 	},
 	"devDependencies": {
-		"@types/node": "^22.19.18",
+		"@types/node": "^22.19.19",
 		"typescript": "^5.9.3",
-		"wrangler": "^4.90.0"
+		"wrangler": "^4.92.0"
 	},
 	"dependencies": {
 		"@hono/zod-validator": "^0.7.6",
