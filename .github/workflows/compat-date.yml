@@ -1,0 +1,81 @@
+name: Compat date check
+
+on:
+  schedule:
+    - cron: "0 7 * * 1" # Monday 07:00 UTC (just after deps-update)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: compat-date
+  cancel-in-progress: false
+
+env:
+  # Future-proof: opt into Node 24 for JS actions before GH forces it (2026-06-02 default, 2026-09-16 hard cutoff)
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  bump:
+    name: Bump stale compatibility_date + open PR
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: lts/*
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Detect + bump stale compatibility_date values
+        id: bump
+        run: pnpm tsx scripts/bump-stale-compat-dates.ts
+
+      - name: Open PR
+        if: steps.bump.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v8
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: chore/bump-compat-date
+          delete-branch: true
+          commit-message: "chore: bump stale Workers compatibility_date"
+          title: "chore: bump stale Workers compatibility_date"
+          body: |
+            One or more `wrangler.jsonc` files have a `compatibility_date`
+            more than 90 days old. This PR bumps each to today's date.
+
+            ## Files changed
+
+            ${{ steps.bump.outputs.summary }}
+
+            ## Why
+
+            The Cloudflare Workers [best-practices page](https://developers.cloudflare.com/workers/best-practices/workers-best-practices/#keep-your-compatibility-date-current)
+            says to keep `compatibility_date` close to today so the Worker
+            picks up new runtime features and bug fixes without code changes.
+            For a template repo, this keeps every fork from inheriting a
+            stale baseline.
+
+            ## Review checklist
+
+            - [ ] Skim the [compatibility date changelog](https://developers.cloudflare.com/workers/configuration/compatibility-dates/) between the old and new dates — flag any behavior changes that affect this repo
+            - [ ] CI is green (push an empty commit if it didn't auto-run — see note below)
+            - [ ] Local dev still works (`pnpm run dev:data-service` + `pnpm run dev:user-application`)
+
+            ## Notes
+
+            - `secrets.GITHUB_TOKEN` does not trigger CI on PRs it creates. Click "Re-run all jobs" or push an empty commit to run CI.
+            - To check locally without bumping: `pnpm tsx scripts/bump-stale-compat-dates.ts --check`
+            - To bump locally: `pnpm tsx scripts/bump-stale-compat-dates.ts`
+          labels: automated, workers-best-practices
