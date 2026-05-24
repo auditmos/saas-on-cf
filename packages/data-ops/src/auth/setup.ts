@@ -4,11 +4,20 @@ export const createBetterAuth = (config: {
 	database: BetterAuthOptions["database"];
 	secret?: BetterAuthOptions["secret"];
 	baseURL?: BetterAuthOptions["baseURL"];
+	crossSubDomainCookieDomain?: string;
 }) => {
 	return betterAuth({
 		database: config.database,
 		secret: config.secret,
 		baseURL: config.baseURL,
+		advanced: config.crossSubDomainCookieDomain
+			? {
+					crossSubDomainCookies: {
+						enabled: true,
+						domain: config.crossSubDomainCookieDomain,
+					},
+				}
+			: undefined,
 		emailAndPassword: {
 			enabled: true,
 		},

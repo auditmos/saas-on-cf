@@ -14,9 +14,11 @@ export default {
 			password: env.DATABASE_PASSWORD,
 		});
 
+		const optionalEnv = env as unknown as Record<string, string | undefined>;
 		setAuth({
 			secret: env.BETTER_AUTH_SECRET,
 			baseURL: env.BETTER_AUTH_BASE_URL,
+			crossSubDomainCookieDomain: optionalEnv.BETTER_AUTH_COOKIE_DOMAIN || undefined,
 			adapter: {
 				drizzleDb: getDb(),
 				provider: "pg",

@@ -9,13 +9,9 @@ import {
 import { AppError } from "@/core/errors";
 
 const API_URL = import.meta.env.VITE_DATA_SERVICE_URL || "http://localhost:8788";
-const API_TOKEN = import.meta.env.VITE_API_TOKEN;
 
-const getHeaders = (): HeadersInit => {
-	const headers: HeadersInit = { "Content-Type": "application/json" };
-	if (API_TOKEN) headers.Authorization = `Bearer ${API_TOKEN}`;
-	return headers;
-};
+const JSON_HEADERS: HeadersInit = { "Content-Type": "application/json" };
+const CREDENTIALS: RequestCredentials = "include";
 
 const handleResponse = async <T>(response: Response): Promise<T> => {
 	if (!response.ok) {
@@ -35,7 +31,8 @@ const handleResponse = async <T>(response: Response): Promise<T> => {
 export async function fetchClient(id: string): Promise<Client | null> {
 	const response = await fetch(`${API_URL}/clients/${id}`, {
 		method: "GET",
-		headers: getHeaders(),
+		headers: JSON_HEADERS,
+		credentials: CREDENTIALS,
 	});
 	if (response.status === 404) return null;
 	return handleResponse<Client>(response);
@@ -50,7 +47,8 @@ export async function fetchClients(params: PaginationRequest): Promise<ClientLis
 
 	const response = await fetch(`${API_URL}/clients?${searchParams}`, {
 		method: "GET",
-		headers: getHeaders(),
+		headers: JSON_HEADERS,
+		credentials: CREDENTIALS,
 	});
 
 	return handleResponse<ClientListResponse>(response);
@@ -60,7 +58,8 @@ export async function fetchClients(params: PaginationRequest): Promise<ClientLis
 export async function createClientApi(data: ClientCreateInput): Promise<Client> {
 	const response = await fetch(`${API_URL}/clients`, {
 		method: "POST",
-		headers: getHeaders(),
+		headers: JSON_HEADERS,
+		credentials: CREDENTIALS,
 		body: JSON.stringify(data),
 	});
 
@@ -71,7 +70,8 @@ export async function createClientApi(data: ClientCreateInput): Promise<Client> 
 export async function updateClientApi(id: string, data: ClientUpdateInput): Promise<Client> {
 	const response = await fetch(`${API_URL}/clients/${id}`, {
 		method: "PUT",
-		headers: getHeaders(),
+		headers: JSON_HEADERS,
+		credentials: CREDENTIALS,
 		body: JSON.stringify(data),
 	});
 
@@ -82,7 +82,8 @@ export async function updateClientApi(id: string, data: ClientUpdateInput): Prom
 export async function deleteClientApi(id: string): Promise<void> {
 	const response = await fetch(`${API_URL}/clients/${id}`, {
 		method: "DELETE",
-		headers: getHeaders(),
+		headers: JSON_HEADERS,
+		credentials: CREDENTIALS,
 	});
 
 	if (!response.ok) {

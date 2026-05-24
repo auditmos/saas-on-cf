@@ -1,4 +1,5 @@
 import { zValidator } from "@hono/zod-validator";
+import { getAuth } from "@repo/data-ops/auth/server";
 import {
 	ClientCreateRequestSchema,
 	ClientUpdateRequestSchema,
@@ -8,7 +9,7 @@ import {
 import type { Context } from "hono";
 import { Hono } from "hono";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
-import { authMiddleware } from "../middleware/auth";
+import { sessionAuth } from "../middleware/session-auth";
 import * as clientService from "../services/client-service";
 import type { Result } from "../types/result";
 
@@ -25,6 +26,12 @@ function resultToResponse<T>(
 	return c.json(result.data, successStatus);
 }
 
+const mutationAuth = (c: Context<{ Bindings: Env }>, next: () => Promise<void>) =>
+	sessionAuth({
+		bearer: c.env.API_TOKEN,
+		getSession: (req) => getAuth().api.getSession({ headers: req.headers }),
+	})(c, next);
+
 const clients = new Hono<{ Bindings: Env }>();
 
 clients.get("/", zValidator("query", PaginationRequestSchema), async (c) => {
@@ -37,19 +44,14 @@ clients.get("/:id", zValidator("param", IdParamSchema), async (c) => {
 	return resultToResponse(c, await clientService.getClientById(id));
 });
 
-clients.post(
-	"/",
-	(c, next) => authMiddleware(c.env.API_TOKEN)(c, next),
-	zValidator("json", ClientCreateRequestSchema),
-	async (c) => {
-		const data = c.req.valid("json");
-		return resultToResponse(c, await clientService.createClient(data), 201);
-	},
-);
+clients.post("/", mutationAuth, zValidator("json", ClientCreateRequestSchema), async (c) => {
+	const data = c.req.valid("json");
+	return resultToResponse(c, await clientService.createClient(data), 201);
+});
 
 clients.put(
 	"/:id",
-	(c, next) => authMiddleware(c.env.API_TOKEN)(c, next),
+	mutationAuth,
 	zValidator("param", IdParamSchema),
 	zValidator("json", ClientUpdateRequestSchema),
 	async (c) => {
@@ -59,20 +61,15 @@ clients.put(
 	},
 );
 
-clients.delete(
-	"/:id",
-	(c, next) => authMiddleware(c.env.API_TOKEN)(c, next),
-	zValidator("param", IdParamSchema),
-	async (c) => {
-		const { id } = c.req.valid("param");
-		const result = await clientService.deleteClient(id);
-		if (!result.ok)
-			return c.json(
-				{ error: result.error.message, code: result.error.code },
-				result.error.status as ContentfulStatusCode,
-			);
-		return c.body(null, 204);
-	},
-);
+clients.delete("/:id", mutationAuth, zValidator("param", IdParamSchema), async (c) => {
+	const { id } = c.req.valid("param");
+	const result = await clientService.deleteClient(id);
+	if (!result.ok)
+		return c.json(
+			{ error: result.error.message, code: result.error.code },
+			result.error.status as ContentfulStatusCode,
+		);
+	return c.body(null, 204);
+});
 
 export default clients;
