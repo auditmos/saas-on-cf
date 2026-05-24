@@ -1,39 +1,35 @@
 import type { MiddlewareHandler } from "hono";
 
+type BindingResolver =
+	| RateLimit
+	| { [K in keyof Env]: Env[K] extends RateLimit ? K : never }[keyof Env];
+
 interface RateLimitConfig {
-	windowMs: number;
-	maxRequests: number;
+	binding: BindingResolver;
+	limit: number;
+	window: number;
 }
 
-const requestCounts = new Map<string, { count: number; resetTime: number }>();
-let requestCounter = 0;
-const CLEANUP_INTERVAL = 100;
-
-function cleanupExpired(now: number) {
-	for (const [ip, record] of requestCounts) {
-		if (now > record.resetTime) requestCounts.delete(ip);
-	}
+function resolve(binding: BindingResolver, env: Env): RateLimit {
+	return typeof binding === "string" ? (env[binding] as RateLimit) : binding;
 }
 
 export const rateLimiter = (config: RateLimitConfig): MiddlewareHandler => {
 	return async (c, next) => {
-		const ip = c.req.header("cf-connecting-ip") || c.req.header("x-forwarded-for") || "unknown";
-		const now = Date.now();
+		const key = c.req.header("cf-connecting-ip") || c.req.header("x-forwarded-for") || "anonymous";
 
-		if (++requestCounter % CLEANUP_INTERVAL === 0) cleanupExpired(now);
+		const binding = resolve(config.binding, c.env as Env);
+		const { success } = await binding.limit({ key });
 
-		const record = requestCounts.get(ip);
+		c.header("X-RateLimit-Limit", String(config.limit));
+		c.header("X-RateLimit-Reset", String(config.window));
 
-		if (!record || now > record.resetTime) {
-			requestCounts.set(ip, { count: 1, resetTime: now + config.windowMs });
-			return next();
-		}
-
-		if (record.count >= config.maxRequests) {
+		if (!success) {
+			c.header("Retry-After", String(config.window));
+			c.header("X-RateLimit-Remaining", "0");
 			return c.json({ error: "Too many requests" }, 429);
 		}
 
-		record.count++;
 		return next();
 	};
 };

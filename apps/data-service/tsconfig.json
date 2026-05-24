@@ -37,7 +37,12 @@
 
 		/* Skip type checking all .d.ts files. */
 		"skipLibCheck": true,
-		"types": ["./worker-configuration.d.ts", "./service-bindings.d.ts", "vitest/globals"],
+		"types": [
+			"./worker-configuration.d.ts",
+			"./service-bindings.d.ts",
+			"vitest/globals",
+			"@cloudflare/vitest-pool-workers/types"
+		],
 		"paths": {
 			"@/*": ["./src/*"],
 			"@/bindings": ["./service-bindings.d.ts"]
