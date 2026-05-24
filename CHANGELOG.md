@@ -1,3 +1,10 @@
+## [1.8.2](https://github.com/auditmos/saas-on-cf/compare/v1.8.1...v1.8.2) (2026-05-24)
+
+
+### Bug Fixes
+
+* **security:** replace module-level rate limiter with platform ratelimit binding ([5a0976e](https://github.com/auditmos/saas-on-cf/commit/5a0976e0af37a7be960a8d3d7c556bac8af66095)), closes [#9](https://github.com/auditmos/saas-on-cf/issues/9)
+
 ## [1.8.1](https://github.com/auditmos/saas-on-cf/compare/v1.8.0...v1.8.1) (2026-05-05)
 
 # [1.8.0](https://github.com/auditmos/saas-on-cf/compare/v1.7.0...v1.8.0) (2026-05-05)
