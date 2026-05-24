@@ -1,3 +1,10 @@
+## [1.8.3](https://github.com/auditmos/saas-on-cf/compare/v1.8.2...v1.8.3) (2026-05-24)
+
+
+### Bug Fixes
+
+* **security:** stop shipping data-service bearer to browser ([#10](https://github.com/auditmos/saas-on-cf/issues/10)) ([c3ed908](https://github.com/auditmos/saas-on-cf/commit/c3ed9088bd8d7ee1caf0987fe00635df9e7c196b))
+
 ## [1.8.2](https://github.com/auditmos/saas-on-cf/compare/v1.8.1...v1.8.2) (2026-05-24)
 
 
