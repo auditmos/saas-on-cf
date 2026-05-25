@@ -1,3 +1,14 @@
+// Browser-only data-service client — example of the public-HTTP access pattern.
+//
+// SSR / server functions: use core/functions/clients/binding.ts (service binding, no public hop).
+// This module exists for the "browser → public API" demo (routes/_auth/dashboard/api/*).
+//
+// Auth: relies entirely on the Better Auth session cookie (credentials: "include").
+// No bundled bearer token — re-introducing import.meta.env.VITE_API_TOKEN here would
+// ship the gate to every browser. api-client.test.ts pins both invariants
+// (credentials: include, no Authorization header), and api-token-not-in-bundle.test.ts
+// pins the bundle-level guarantee.
+
 import {
 	type Client,
 	type ClientCreateInput,
