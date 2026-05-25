@@ -1,3 +1,10 @@
+## [1.8.7](https://github.com/auditmos/saas-on-cf/compare/v1.8.6...v1.8.7) (2026-05-25)
+
+
+### Bug Fixes
+
+* **auth:** make setAuth idempotent to avoid per-request reinit ([5dabd20](https://github.com/auditmos/saas-on-cf/commit/5dabd20c6a3f367c1ac9b359f23d5200bbcae56e))
+
 ## [1.8.6](https://github.com/auditmos/saas-on-cf/compare/v1.8.5...v1.8.6) (2026-05-25)
 
 
