@@ -1,9 +1,9 @@
-interface ExampleWorkflowParmas {
-	dataToPassIn;
+interface ExampleWorkflowParams {
+	dataToPassIn: Record<string, unknown>;
 }
 
 interface ExampleQueueMessage {
-	messageData;
+	messageData: Record<string, unknown>;
 }
 
 interface Env extends BaseEnv {}
