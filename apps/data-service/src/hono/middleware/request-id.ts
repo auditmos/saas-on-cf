@@ -6,9 +6,15 @@ declare module "hono" {
 	}
 }
 
+const REQUEST_ID_RE = /^[a-zA-Z0-9-]{1,64}$/;
+
 export const requestId = (): MiddlewareHandler => {
 	return async (c, next) => {
-		const id = c.req.header("x-request-id") || c.req.header("cf-ray") || crypto.randomUUID();
+		const clientId = c.req.header("x-request-id");
+		const id =
+			clientId && REQUEST_ID_RE.test(clientId)
+				? clientId
+				: (c.req.header("cf-ray") ?? crypto.randomUUID());
 
 		c.set("requestId", id);
 
