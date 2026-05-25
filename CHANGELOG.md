@@ -1,3 +1,10 @@
+## [1.8.11](https://github.com/auditmos/saas-on-cf/compare/v1.8.10...v1.8.11) (2026-05-25)
+
+
+### Bug Fixes
+
+* **security:** validate x-request-id to prevent log injection ([#18](https://github.com/auditmos/saas-on-cf/issues/18)) ([456d460](https://github.com/auditmos/saas-on-cf/commit/456d460331ba6567e348a9c28e86c3c6aca0d068))
+
 ## [1.8.10](https://github.com/auditmos/saas-on-cf/compare/v1.8.9...v1.8.10) (2026-05-25)
 
 
