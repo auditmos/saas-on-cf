@@ -1,3 +1,10 @@
+## [1.8.6](https://github.com/auditmos/saas-on-cf/compare/v1.8.5...v1.8.6) (2026-05-25)
+
+
+### Bug Fixes
+
+* **workers:** add explicit observability sampling rates and shape test ([c25c55f](https://github.com/auditmos/saas-on-cf/commit/c25c55fea3a4d9a02f668f98a9fada0bf93b4833)), closes [#13](https://github.com/auditmos/saas-on-cf/issues/13)
+
 ## [1.8.5](https://github.com/auditmos/saas-on-cf/compare/v1.8.4...v1.8.5) (2026-05-25)
 
 
