@@ -26,12 +26,12 @@
 		"@repo/data-ops": "workspace:^",
 		"@tailwindcss/vite": "^4.3.0",
 		"@tanstack/react-form": "^1.32.0",
-		"@tanstack/react-query": "^5.100.10",
-		"@tanstack/react-query-devtools": "^5.100.10",
-		"@tanstack/react-router": "^1.170.4",
+		"@tanstack/react-query": "^5.100.14",
+		"@tanstack/react-query-devtools": "^5.100.14",
+		"@tanstack/react-router": "^1.170.8",
 		"@tanstack/react-router-devtools": "^1.167.0",
 		"@tanstack/react-router-ssr-query": "^1.167.0",
-		"@tanstack/react-start": "^1.168.6",
+		"@tanstack/react-start": "^1.168.13",
 		"better-auth": "^1.6.11",
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
@@ -47,14 +47,14 @@
 		"zod": "^4.4.3"
 	},
 	"devDependencies": {
-		"@cloudflare/vite-plugin": "^1.37.1",
+		"@cloudflare/vite-plugin": "^1.38.0",
 		"@types/node": "^22.19.19",
-		"@types/react": "^19.2.14",
+		"@types/react": "^19.2.15",
 		"@types/react-dom": "^19.2.3",
 		"@vitejs/plugin-react": "^5.2.0",
 		"typescript": "^5.9.3",
 		"vite": "^7.3.3",
 		"web-vitals": "^5.2.0",
-		"wrangler": "^4.92.0"
+		"wrangler": "^4.94.0"
 	}
 }
