@@ -1,3 +1,10 @@
+## [1.9.2](https://github.com/auditmos/saas-on-cf/compare/v1.9.1...v1.9.2) (2026-05-25)
+
+
+### Bug Fixes
+
+* **rate-limit:** drop from /health/ready, apply to /clients mutations ([#23](https://github.com/auditmos/saas-on-cf/issues/23)) ([48adf22](https://github.com/auditmos/saas-on-cf/commit/48adf222694fa0a30c68d615f9349077f2c65225))
+
 ## [1.9.1](https://github.com/auditmos/saas-on-cf/compare/v1.9.0...v1.9.1) (2026-05-25)
 
 
