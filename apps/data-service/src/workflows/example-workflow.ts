@@ -3,7 +3,9 @@ import { WorkflowEntrypoint, type WorkflowEvent, type WorkflowStep } from "cloud
 export class ExampleWorkflow extends WorkflowEntrypoint<Env, ExampleWorkflowParams> {
 	async run(_event: Readonly<WorkflowEvent<ExampleWorkflowParams>>, step: WorkflowStep) {
 		const randomNumber = await step.do("Get random number", async () => {
-			return Math.floor(Math.random() * 10) + 1;
+			const buf = new Uint8Array(1);
+			crypto.getRandomValues(buf);
+			return ((buf[0] ?? 0) % 10) + 1;
 		});
 
 		await step.sleep("Wait for random number of seconds", `${randomNumber} seconds`);
