@@ -1,3 +1,10 @@
+## [1.8.4](https://github.com/auditmos/saas-on-cf/compare/v1.8.3...v1.8.4) (2026-05-25)
+
+
+### Bug Fixes
+
+* **types:** correct service-bindings typo and type implicit-any payloads ([d67c799](https://github.com/auditmos/saas-on-cf/commit/d67c799d4d4beb2773ed6fe390d37a5911d62b9d)), closes [#11](https://github.com/auditmos/saas-on-cf/issues/11)
+
 ## [1.8.3](https://github.com/auditmos/saas-on-cf/compare/v1.8.2...v1.8.3) (2026-05-24)
 
 
