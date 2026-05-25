@@ -9,6 +9,11 @@ import { applySecurityHeaders } from "./lib/security-headers";
 
 export default {
 	async fetch(request: Request) {
+		if (!env.CLOUDFLARE_ENV) {
+			throw new Error(
+				"CLOUDFLARE_ENV is required — declare it in wrangler.jsonc vars per env block",
+			);
+		}
 		initDatabase({
 			host: env.DATABASE_HOST,
 			username: env.DATABASE_USERNAME,

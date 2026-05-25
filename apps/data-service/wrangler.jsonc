@@ -20,6 +20,7 @@
 		 */
 		"dev": {
 			"name": "saas-on-cf-ds-dev",
+			"vars": { "CLOUDFLARE_ENV": "dev" },
 			"unsafe": {
 				"bindings": [
 					{
@@ -72,6 +73,7 @@
 			//   }
 			// ],
 			"name": "saas-on-cf-ds-staging",
+			"vars": { "CLOUDFLARE_ENV": "staging" },
 			"unsafe": {
 				"bindings": [
 					{
@@ -118,6 +120,7 @@
 			//   }
 			// ],
 			"name": "saas-on-cf-ds-production",
+			"vars": { "CLOUDFLARE_ENV": "production" },
 			"unsafe": {
 				"bindings": [
 					{

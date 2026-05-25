@@ -8,6 +8,11 @@ import { handleScheduled } from "./scheduled";
 export default class DataService extends WorkerEntrypoint<Env> {
 	constructor(ctx: ExecutionContext, env: Env) {
 		super(ctx, env);
+		if (!env.CLOUDFLARE_ENV) {
+			throw new Error(
+				"CLOUDFLARE_ENV is required — declare it in wrangler.jsonc vars per env block",
+			);
+		}
 		initDatabase({
 			host: env.DATABASE_HOST,
 			username: env.DATABASE_USERNAME,

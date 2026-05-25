@@ -1,4 +1,4 @@
-CLOUDFLARE_ENV=dev
+# CLOUDFLARE_ENV is declared in wrangler.jsonc vars per env block — do not duplicate it here.
 
 DATABASE_HOST=
 DATABASE_USERNAME=

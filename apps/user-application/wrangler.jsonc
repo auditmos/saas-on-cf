@@ -21,6 +21,7 @@
 		 */
 		"dev": {
 			"name": "saas-on-cf-ua-dev",
+			"vars": { "CLOUDFLARE_ENV": "dev" },
 			"services": [
 				{
 					"binding": "DATA_SERVICE",
@@ -33,6 +34,7 @@
 		 */
 		"staging": {
 			"name": "saas-on-cf-ua-staging",
+			"vars": { "CLOUDFLARE_ENV": "staging" },
 			// "routes": [
 			//   {
 			//     "custom_domain": true,
@@ -51,6 +53,7 @@
 		 */
 		"production": {
 			"name": "saas-on-cf-ua-production",
+			"vars": { "CLOUDFLARE_ENV": "production" },
 			// "routes": [
 			//   {
 			//     "custom_domain": true,
