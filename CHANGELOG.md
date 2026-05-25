@@ -1,3 +1,10 @@
+## [1.8.10](https://github.com/auditmos/saas-on-cf/compare/v1.8.9...v1.8.10) (2026-05-25)
+
+
+### Performance Improvements
+
+* **cors:** cache cors() factory per env + drop stale :5173 origins ([14bcac6](https://github.com/auditmos/saas-on-cf/commit/14bcac6989debb6c845459a2cfd18bedb3aff40c)), closes [#17](https://github.com/auditmos/saas-on-cf/issues/17)
+
 ## [1.8.9](https://github.com/auditmos/saas-on-cf/compare/v1.8.8...v1.8.9) (2026-05-25)
 
 
