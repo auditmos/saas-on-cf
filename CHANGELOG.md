@@ -1,3 +1,10 @@
+# [1.10.0](https://github.com/auditmos/saas-on-cf/compare/v1.9.2...v1.10.0) (2026-05-25)
+
+
+### Features
+
+* **init-project:** wire wrangler route placeholders from prompts ([#26](https://github.com/auditmos/saas-on-cf/issues/26)) ([191f624](https://github.com/auditmos/saas-on-cf/commit/191f624a91f6175ce7cb753bf1c50d66b1347da9))
+
 ## [1.9.2](https://github.com/auditmos/saas-on-cf/compare/v1.9.1...v1.9.2) (2026-05-25)
 
 
