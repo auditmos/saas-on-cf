@@ -8,6 +8,20 @@ Shared DB layer consumed by user-application and data-service apps.
 - Zod v4 for validation
 - Better Auth for authentication
 
+<important if="you are forking this template to use a non-Neon Postgres provider">
+## Switching to non-Neon Postgres?
+
+Neon's HTTP driver (`drizzle-orm/neon-http`) is serverless-friendly — no connection pool, no Hyperdrive needed. Any other remote Postgres (RDS, Supabase, self-hosted, etc.) requires Hyperdrive or every request pays ~300–500 ms for TCP + TLS + auth.
+
+To fork:
+
+1. Swap `drizzle-orm/neon-http` in `src/database/setup.ts` for `drizzle-orm/postgres-js` or `drizzle-orm/node-postgres`.
+2. Add a `hyperdrive` binding to **both** `apps/data-service/wrangler.jsonc` and `apps/user-application/wrangler.jsonc` (see https://developers.cloudflare.com/hyperdrive/).
+3. Initialize the driver with the Hyperdrive connection string from the binding (`env.HYPERDRIVE.connectionString`), not the raw `DATABASE_HOST`.
+
+`scripts/hyperdrive-drift.test.ts` enforces step 2 — it fails CI if `setup.ts` imports a non-Neon adapter without matching `hyperdrive[]` entries in both wrangler files.
+</important>
+
 ## Structure
 
 ```
