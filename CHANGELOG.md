@@ -1,3 +1,10 @@
+## [1.8.8](https://github.com/auditmos/saas-on-cf/compare/v1.8.7...v1.8.8) (2026-05-25)
+
+
+### Bug Fixes
+
+* **auth:** forward all HTTP methods to Better Auth via ANY handler ([391eaaa](https://github.com/auditmos/saas-on-cf/commit/391eaaa5488e7ea7c7236c9e4a9df453f3b78a5a)), closes [#15](https://github.com/auditmos/saas-on-cf/issues/15)
+
 ## [1.8.7](https://github.com/auditmos/saas-on-cf/compare/v1.8.6...v1.8.7) (2026-05-25)
 
 
