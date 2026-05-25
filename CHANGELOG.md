@@ -1,3 +1,10 @@
+## [1.9.1](https://github.com/auditmos/saas-on-cf/compare/v1.9.0...v1.9.1) (2026-05-25)
+
+
+### Bug Fixes
+
+* **config:** declare CLOUDFLARE_ENV in wrangler.jsonc vars per env block ([abf0a95](https://github.com/auditmos/saas-on-cf/commit/abf0a95cc6b5d62404dea00303e8298347967f4c))
+
 # [1.9.0](https://github.com/auditmos/saas-on-cf/compare/v1.8.12...v1.9.0) (2026-05-25)
 
 
