@@ -5,9 +5,10 @@ import { env } from "cloudflare:workers";
 import { setAuth } from "@repo/data-ops/auth/server";
 import { getDb, initDatabase } from "@repo/data-ops/database/setup";
 import handler from "@tanstack/react-start/server-entry";
+import { applySecurityHeaders } from "./lib/security-headers";
 
 export default {
-	fetch(request: Request) {
+	async fetch(request: Request) {
 		initDatabase({
 			host: env.DATABASE_HOST,
 			username: env.DATABASE_USERNAME,
@@ -25,10 +26,11 @@ export default {
 			},
 		});
 
-		return handler.fetch(request, {
+		const response = await handler.fetch(request, {
 			context: {
 				fromFetch: true,
 			},
 		});
+		return applySecurityHeaders(response);
 	},
 };
