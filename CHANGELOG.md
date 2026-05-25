@@ -1,3 +1,10 @@
+## [1.8.5](https://github.com/auditmos/saas-on-cf/compare/v1.8.4...v1.8.5) (2026-05-25)
+
+
+### Bug Fixes
+
+* **workers:** bump stale compatibility_date and add freshness test ([031b4c3](https://github.com/auditmos/saas-on-cf/commit/031b4c312f10926ca9cd83a50f8d5c8ef1f34f6f)), closes [#12](https://github.com/auditmos/saas-on-cf/issues/12)
+
 ## [1.8.4](https://github.com/auditmos/saas-on-cf/compare/v1.8.3...v1.8.4) (2026-05-25)
 
 
