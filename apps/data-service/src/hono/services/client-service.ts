@@ -10,17 +10,8 @@ import {
 	type PaginationRequest,
 	updateClient as updateClientQuery,
 } from "@repo/data-ops/client";
+import { isUniqueViolation } from "@repo/data-ops/database/errors";
 import type { Result } from "../types/result";
-
-function isUniqueViolation(error: unknown): boolean {
-	if (!(error instanceof Error)) return false;
-	const cause = error.cause;
-	if (cause instanceof Error) {
-		const pgCode = (cause as Error & { code?: string }).code;
-		if (pgCode === "23505") return true;
-	}
-	return false;
-}
 
 export async function getClients(params: PaginationRequest): Promise<Result<ClientListResponse>> {
 	const data = await getClientsQuery(params);

@@ -12,19 +12,10 @@ import {
 	PaginationRequestSchema,
 	updateClient,
 } from "@repo/data-ops/client";
+import { isUniqueViolation } from "@repo/data-ops/database/errors";
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { AppError } from "@/core/errors";
-
-function isUniqueViolation(error: unknown): boolean {
-	if (!(error instanceof Error)) return false;
-	const cause = error.cause;
-	if (cause instanceof Error) {
-		const pgCode = (cause as Error & { code?: string }).code;
-		if (pgCode === "23505") return true;
-	}
-	return false;
-}
 
 // GET Client
 const GetClientInput = z.object({ id: z.string().min(1) });
