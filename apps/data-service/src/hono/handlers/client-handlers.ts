@@ -9,6 +9,7 @@ import {
 import type { Context } from "hono";
 import { Hono } from "hono";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
+import { rateLimiter } from "../middleware/rate-limiter";
 import { sessionAuth } from "../middleware/session-auth";
 import * as clientService from "../services/client-service";
 import type { Result } from "../types/result";
@@ -32,6 +33,8 @@ const mutationAuth = (c: Context<{ Bindings: Env }>, next: () => Promise<void>) 
 		getSession: (req) => getAuth().api.getSession({ headers: req.headers }),
 	})(c, next);
 
+const mutationRateLimit = rateLimiter({ binding: "RATE_LIMITER", limit: 10, window: 60 });
+
 const clients = new Hono<{ Bindings: Env }>();
 
 clients.get("/", zValidator("query", PaginationRequestSchema), async (c) => {
@@ -44,13 +47,20 @@ clients.get("/:id", zValidator("param", IdParamSchema), async (c) => {
 	return resultToResponse(c, await clientService.getClientById(id));
 });
 
-clients.post("/", mutationAuth, zValidator("json", ClientCreateRequestSchema), async (c) => {
-	const data = c.req.valid("json");
-	return resultToResponse(c, await clientService.createClient(data), 201);
-});
+clients.post(
+	"/",
+	mutationRateLimit,
+	mutationAuth,
+	zValidator("json", ClientCreateRequestSchema),
+	async (c) => {
+		const data = c.req.valid("json");
+		return resultToResponse(c, await clientService.createClient(data), 201);
+	},
+);
 
 clients.put(
 	"/:id",
+	mutationRateLimit,
 	mutationAuth,
 	zValidator("param", IdParamSchema),
 	zValidator("json", ClientUpdateRequestSchema),
@@ -61,15 +71,21 @@ clients.put(
 	},
 );
 
-clients.delete("/:id", mutationAuth, zValidator("param", IdParamSchema), async (c) => {
-	const { id } = c.req.valid("param");
-	const result = await clientService.deleteClient(id);
-	if (!result.ok)
-		return c.json(
-			{ error: result.error.message, code: result.error.code },
-			result.error.status as ContentfulStatusCode,
-		);
-	return c.body(null, 204);
-});
+clients.delete(
+	"/:id",
+	mutationRateLimit,
+	mutationAuth,
+	zValidator("param", IdParamSchema),
+	async (c) => {
+		const { id } = c.req.valid("param");
+		const result = await clientService.deleteClient(id);
+		if (!result.ok)
+			return c.json(
+				{ error: result.error.message, code: result.error.code },
+				result.error.status as ContentfulStatusCode,
+			);
+		return c.body(null, 204);
+	},
+);
 
 export default clients;

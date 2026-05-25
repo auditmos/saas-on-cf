@@ -11,6 +11,11 @@ function withWrongBearer(init: RequestInit = {}): RequestInit {
 	};
 }
 
+function randIp() {
+	const o = () => Math.floor(Math.random() * 250) + 1;
+	return `10.${o()}.${o()}.${o()}`;
+}
+
 describe("client mutation routes require auth", () => {
 	it("rejects POST /clients when bearer is wrong (and no cookie)", async () => {
 		const res = await clients.fetch(
@@ -48,5 +53,32 @@ describe("client mutation routes require auth", () => {
 			env,
 		);
 		expect(res.status).toBe(401);
+	});
+});
+
+describe("client mutation routes enforce a rate-limit budget", () => {
+	it("returns 429 on POST /clients past the budget (rate-limit runs before auth)", async () => {
+		const ip = randIp();
+
+		const postWithIp = () =>
+			clients.fetch(
+				new Request(
+					"http://localhost/",
+					withWrongBearer({
+						method: "POST",
+						headers: { "Content-Type": "application/json", "cf-connecting-ip": ip },
+						body: jsonBody,
+					}),
+				),
+				env,
+			);
+
+		for (let i = 0; i < 10; i++) {
+			const res = await postWithIp();
+			expect(res.status, `request #${i + 1} should hit auth and 401`).toBe(401);
+		}
+
+		const eleventh = await postWithIp();
+		expect(eleventh.status).toBe(429);
 	});
 });

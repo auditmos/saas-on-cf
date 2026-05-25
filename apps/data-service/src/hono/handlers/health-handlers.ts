@@ -1,6 +1,5 @@
 import type { LivenessResponse, ReadinessResponse } from "@repo/data-ops/health";
 import { Hono } from "hono";
-import { rateLimiter } from "../middleware/rate-limiter";
 import { checkDatabase } from "../services/health-service";
 
 const health = new Hono<{ Bindings: Env }>();
@@ -13,7 +12,7 @@ health.get("/live", (c) => {
 	return c.json(response);
 });
 
-health.get("/ready", rateLimiter({ binding: "RATE_LIMITER", limit: 10, window: 60 }), async (c) => {
+health.get("/ready", async (c) => {
 	const dbStatus = await checkDatabase();
 	const response: ReadinessResponse = {
 		status: dbStatus === "connected" ? "ok" : "degraded",
