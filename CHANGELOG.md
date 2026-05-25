@@ -1,3 +1,10 @@
+## [1.8.9](https://github.com/auditmos/saas-on-cf/compare/v1.8.8...v1.8.9) (2026-05-25)
+
+
+### Bug Fixes
+
+* **security:** replace Math.random() with crypto in example workflow ([85cdea7](https://github.com/auditmos/saas-on-cf/commit/85cdea76a4e84fa4036ff3013906dc0f28dcb4d7)), closes [#16](https://github.com/auditmos/saas-on-cf/issues/16)
+
 ## [1.8.8](https://github.com/auditmos/saas-on-cf/compare/v1.8.7...v1.8.8) (2026-05-25)
 
 
