@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/auditmos/saas-on-cf/compare/v1.8.12...v1.9.0) (2026-05-25)
+
+
+### Features
+
+* **security:** add defense-in-depth headers to both Workers ([#20](https://github.com/auditmos/saas-on-cf/issues/20)) ([0fbb0e3](https://github.com/auditmos/saas-on-cf/commit/0fbb0e3f8581e5162ca2cb3345452dcfaecff095))
+
 ## [1.8.12](https://github.com/auditmos/saas-on-cf/compare/v1.8.11...v1.8.12) (2026-05-25)
 
 ## [1.8.11](https://github.com/auditmos/saas-on-cf/compare/v1.8.10...v1.8.11) (2026-05-25)
