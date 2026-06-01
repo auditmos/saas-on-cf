@@ -12,11 +12,11 @@
 		"test:watch": "vitest"
 	},
 	"devDependencies": {
-		"@cloudflare/vitest-pool-workers": "^0.16.9",
+		"@cloudflare/vitest-pool-workers": "^0.16.10",
 		"@types/node": "^22.19.19",
 		"typescript": "^5.9.3",
-		"vitest": "^4.1.7",
-		"wrangler": "^4.94.0"
+		"vitest": "^4.1.8",
+		"wrangler": "^4.95.0"
 	},
 	"dependencies": {
 		"@hono/zod-validator": "^0.7.6",
