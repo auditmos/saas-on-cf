@@ -6,10 +6,13 @@
 			"entry": ["scripts/*.ts", "taze.config.ts"]
 		},
 		"apps/data-service": {
+			"entry": ["src/**/*.test.ts", "vitest.config.mts"],
+			"vitest": { "config": [] },
 			"ignore": ["src/durable-objects/**", "src/workflows/**"]
 		},
 		"apps/user-application": {
-			"entry": ["src/start.tsx", "src/routes/**/*.{ts,tsx}"],
+			"entry": ["src/start.tsx", "src/routes/**/*.{ts,tsx}", "vite.config.ts"],
+			"vite": { "config": [] },
 			"ignoreDependencies": ["web-vitals"],
 			"ignore": [
 				"src/core/functions/example-*.ts",
