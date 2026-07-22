@@ -16,6 +16,12 @@ concurrency:
 env:
   # Future-proof: opt into Node 24 for JS actions before GH forces it (2026-06-02 default, 2026-09-16 hard cutoff)
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  # `pnpm install` runs `prepare` -> simple-git-hooks, which installs the pre-push
+  # hook into the CI runner, where it then fires on every automated push
+  # (create-pull-request, semantic-release) and can reject the push over checks
+  # CI has already run. Hooks are a local dev net; the explicit steps below are
+  # the CI contract, and they report per-step instead of failing inside a push.
+  SKIP_SIMPLE_GIT_HOOKS: "1"
 
 jobs:
   release:
