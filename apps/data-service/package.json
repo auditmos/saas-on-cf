@@ -13,10 +13,10 @@
 	},
 	"devDependencies": {
 		"@cloudflare/vitest-pool-workers": "^0.16.20",
-		"@types/node": "^22.20.0",
+		"@types/node": "^22.20.1",
 		"typescript": "^5.9.3",
 		"vitest": "^4.1.10",
-		"wrangler": "^4.105.0"
+		"wrangler": "^4.113.0"
 	},
 	"dependencies": {
 		"@hono/zod-validator": "^0.7.6",
