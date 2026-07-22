@@ -15,12 +15,12 @@
 		"@cloudflare/vitest-pool-workers": "^0.16.20",
 		"@types/node": "^22.20.0",
 		"typescript": "^5.9.3",
-		"vitest": "^4.1.9",
+		"vitest": "^4.1.10",
 		"wrangler": "^4.105.0"
 	},
 	"dependencies": {
 		"@hono/zod-validator": "^0.7.6",
 		"@repo/data-ops": "workspace:*",
-		"hono": "^4.12.27"
+		"hono": "^4.12.31"
 	}
 }
