@@ -1,3 +1,10 @@
+## [1.10.1](https://github.com/auditmos/saas-on-cf/compare/v1.10.0...v1.10.1) (2026-07-22)
+
+
+### Bug Fixes
+
+* **data-ops:** set explicit rootDir for tsc-alias 1.9 ([b182d34](https://github.com/auditmos/saas-on-cf/commit/b182d3401b841ed886fc753c9441dc820753fb11))
+
 # [1.10.0](https://github.com/auditmos/saas-on-cf/compare/v1.9.2...v1.10.0) (2026-05-25)
 
 
