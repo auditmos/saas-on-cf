@@ -49,7 +49,7 @@
 	"packageManager": "pnpm@10.34.5",
 	"dependencies": {
 		"@neondatabase/serverless": "^1.1.0",
-		"better-auth": "^1.6.23",
+		"better-auth": "^1.6.25",
 		"drizzle-orm": "^0.45.2",
 		"zod": "^4.4.3"
 	},
