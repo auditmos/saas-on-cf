@@ -1,3 +1,10 @@
+## [1.10.4](https://github.com/auditmos/saas-on-cf/compare/v1.10.3...v1.10.4) (2026-08-07)
+
+
+### Bug Fixes
+
+* **security:** require a session on client read endpoints ([2153e9f](https://github.com/auditmos/saas-on-cf/commit/2153e9f9c9a90e396c43ea5da023f367902a77f0)), closes [#40](https://github.com/auditmos/saas-on-cf/issues/40)
+
 ## [1.10.3](https://github.com/auditmos/saas-on-cf/compare/v1.10.2...v1.10.3) (2026-08-07)
 
 
