@@ -33,7 +33,7 @@ See `hono.md` and `error-handling.md` rules for handler/service/query patterns a
 
 - `GET /health/live` - liveness (instant 200)
 - `GET /health/ready` - readiness (checks DB)
-- `GET|POST|PUT|DELETE /users/*` - CRUD (POST/PUT/DELETE require Bearer token)
+- `GET|POST|PUT|DELETE /clients/*` - CRUD (all routes require a session cookie or the service Bearer token; the router guard is `use("*")`, so new routes are protected by default)
 - `POST /webhooks/*` - inbound webhooks (signature verified)
 
 <important if="you are adding or modifying middleware in data-service">
