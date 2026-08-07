@@ -1,3 +1,10 @@
+## [1.10.2](https://github.com/auditmos/saas-on-cf/compare/v1.10.1...v1.10.2) (2026-08-07)
+
+
+### Bug Fixes
+
+* **security:** make server functions fail closed by default ([7bb5dc2](https://github.com/auditmos/saas-on-cf/commit/7bb5dc2e6014a5aafd63369554a3f329572bea96)), closes [#38](https://github.com/auditmos/saas-on-cf/issues/38)
+
 ## [1.10.1](https://github.com/auditmos/saas-on-cf/compare/v1.10.0...v1.10.1) (2026-07-22)
 
 
