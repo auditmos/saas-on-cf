@@ -1,9 +1,9 @@
 import { createFileRoute, Outlet, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { PendingApproval } from "@/components/auth/pending-approval";
 import { Header } from "@/components/layout/header";
 import { Sidebar } from "@/components/layout/sidebar";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { selectAuthView } from "@/core/auth-view";
 import { authClient } from "@/lib/auth-client";
 
 export const Route = createFileRoute("/_auth")({
@@ -29,39 +29,21 @@ function RouteComponent() {
 		);
 	}
 
-	if (!session.data) {
+	const view = selectAuthView(session.data);
+
+	if (view === "signed-out") {
 		return null;
 	}
 
-	const approved = (session.data.user as Record<string, unknown>).approved as boolean;
-
-	if (!approved) {
+	if (view === "pending-approval") {
 		return (
-			<div className="min-h-screen flex items-center justify-center bg-background p-4">
-				<Card className="w-full max-w-md">
-					<CardHeader className="text-center">
-						<CardTitle className="text-2xl font-bold">Account Pending</CardTitle>
-						<CardDescription>
-							Your account is awaiting admin approval. You'll gain access once approved.
-						</CardDescription>
-					</CardHeader>
-					<CardContent className="space-y-4">
-						<div className="text-center text-sm text-muted-foreground">
-							Signed in as {session.data.user.email}
-						</div>
-						<Button
-							variant="outline"
-							className="w-full"
-							onClick={async () => {
-								await authClient.signOut();
-								navigate({ to: "/" });
-							}}
-						>
-							Sign Out
-						</Button>
-					</CardContent>
-				</Card>
-			</div>
+			<PendingApproval
+				email={session.data?.user.email ?? ""}
+				onSignOut={async () => {
+					await authClient.signOut();
+					navigate({ to: "/" });
+				}}
+			/>
 		);
 	}
 

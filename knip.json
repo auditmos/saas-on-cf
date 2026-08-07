@@ -17,7 +17,6 @@
 			"ignore": [
 				"src/core/functions/example-*.ts",
 				"src/core/middleware/example-*.ts",
-				"src/core/middleware/auth.ts",
 				"src/components/landing/index.ts",
 				"src/components/ui/**",
 				"src/integrations/**"
