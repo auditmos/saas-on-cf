@@ -13,6 +13,8 @@ export default defineProject({
 	test: {
 		globals: true,
 		include: ["src/**/*.test.ts"],
-		exclude: ["src/routes/**"],
+		// `*.workers.test.ts` belongs to `vitest.workers.config.mts`, which runs it
+		// inside workerd. Running it here instead would assert against the stub above.
+		exclude: ["src/routes/**", "src/**/*.workers.test.ts"],
 	},
 });

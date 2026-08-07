@@ -72,6 +72,22 @@ const data = await response.json();
 - Health check: `GET /api/health` verifies binding, DB, and env
 </important>
 
+<important if="you are writing or moving tests in user-application">
+## Two test projects
+
+| File suffix | Config | Runtime | Use for |
+|---|---|---|---|
+| `*.test.ts` | `vitest.config.ts` | Node | Pure server-side logic. `cloudflare:workers` is aliased to the stub in `src/test/cloudflare-workers.ts`. |
+| `*.workers.test.ts` | `vitest.workers.config.mts` | workerd | Anything whose behaviour **is** the runtime's: service bindings, isolate-local module state, platform globals. Nothing is stubbed. |
+
+Both run under root `pnpm run test`. Bindings for the workerd project are declared
+inline in `vitest.workers.config.mts`, not read from `wrangler.jsonc` — the deployed
+config points `main` at the Start server entry, which only builds through the Vite plugin.
+
+If a behaviour can be stated correctly in Node, keep it in the Node project; it is
+an order of magnitude faster to run.
+</important>
+
 ## Don't
 
 - Import `env` from 'cloudflare:workers' in client code (server only)
