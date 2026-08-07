@@ -1,3 +1,10 @@
+# [1.11.0](https://github.com/auditmos/saas-on-cf/compare/v1.10.4...v1.11.0) (2026-08-07)
+
+
+### Features
+
+* **security:** own every rate limit in one policy module ([d001370](https://github.com/auditmos/saas-on-cf/commit/d0013706b1b65e40ee1537e4154230ef4f41b364)), closes [#42](https://github.com/auditmos/saas-on-cf/issues/42)
+
 ## [1.10.4](https://github.com/auditmos/saas-on-cf/compare/v1.10.3...v1.10.4) (2026-08-07)
 
 
