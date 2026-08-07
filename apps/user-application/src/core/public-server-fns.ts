@@ -25,7 +25,14 @@ export interface PublicServerFn {
 	reason: string;
 }
 
-export const PUBLIC_SERVER_FNS: readonly PublicServerFn[] = [];
+export const PUBLIC_SERVER_FNS: readonly PublicServerFn[] = [
+	{
+		filename: "src/core/functions/auth/session.ts",
+		name: "getAuthView",
+		reason:
+			"The protected layout's server-side guard calls this to decide whether to redirect. An anonymous caller must be able to reach it to be told they are signed out. It returns only the caller's own session state.",
+	},
+];
 
 /** Identity the Start compiler attaches to every server function. */
 export interface ServerFnIdentity {

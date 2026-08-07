@@ -172,7 +172,12 @@ const identity = (fn: { filename: string; name: string }) => `${fn.filename}#${f
  * let anonymous callers on the internet reach an endpoint — this list exists so
  * that decision cannot be made without a reviewer seeing this test change.
  */
-const REVIEWED_PUBLIC_SERVER_FNS: readonly string[] = [];
+const REVIEWED_PUBLIC_SERVER_FNS: readonly string[] = [
+	// Returns only the caller's own session state so the protected layout's
+	// server-side guard can decide whether to redirect. An anonymous caller must
+	// reach it to be told they are signed out; it discloses nothing else.
+	"src/core/functions/auth/session.ts#getAuthView",
+];
 
 describe("server-function enumeration guardrail", () => {
 	it("discovers the exported server functions (the scanner is not silently finding nothing)", () => {

@@ -1,44 +1,36 @@
-import { createFileRoute, Outlet, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { createFileRoute, Outlet, redirect, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
 import { PendingApproval } from "@/components/auth/pending-approval";
 import { Header } from "@/components/layout/header";
 import { Sidebar } from "@/components/layout/sidebar";
-import { selectAuthView } from "@/core/auth-view";
+import { getAuthView } from "@/core/functions/auth/session";
 import { authClient } from "@/lib/auth-client";
 
 export const Route = createFileRoute("/_auth")({
+	// Runs on the server before anything under /_auth renders, so an
+	// unauthenticated request is answered with a redirect instead of with the
+	// protected content plus a client-side correction after the fact.
+	beforeLoad: async () => {
+		const auth = await getAuthView();
+
+		if (auth.view === "signed-out") {
+			throw redirect({ to: "/signin" });
+		}
+
+		return { auth };
+	},
 	component: RouteComponent,
 });
 
 function RouteComponent() {
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-	const session = authClient.useSession();
+	const { auth } = Route.useRouteContext();
 	const navigate = useNavigate();
 
-	useEffect(() => {
-		if (!session.isPending && !session.data) {
-			navigate({ to: "/signin" });
-		}
-	}, [session.isPending, session.data, navigate]);
-
-	if (session.isPending) {
-		return (
-			<div className="min-h-screen flex items-center justify-center bg-background">
-				<div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-			</div>
-		);
-	}
-
-	const view = selectAuthView(session.data);
-
-	if (view === "signed-out") {
-		return null;
-	}
-
-	if (view === "pending-approval") {
+	if (auth.view === "pending-approval") {
 		return (
 			<PendingApproval
-				email={session.data?.user.email ?? ""}
+				email={auth.email ?? ""}
 				onSignOut={async () => {
 					await authClient.signOut();
 					navigate({ to: "/" });
