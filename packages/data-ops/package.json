@@ -11,6 +11,10 @@
 			"types": "./dist/health/index.d.ts",
 			"default": "./dist/health/index.js"
 		},
+		"./rate-limit": {
+			"types": "./dist/rate-limit/index.d.ts",
+			"default": "./dist/rate-limit/index.js"
+		},
 		"./auth/*": {
 			"types": "./dist/auth/*.d.ts",
 			"default": "./dist/auth/*.js"

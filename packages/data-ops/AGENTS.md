@@ -49,7 +49,31 @@ src/
 ```ts
 import { getClient, ClientSchema, type Client } from "@repo/data-ops/client"
 import { checkDatabase, type LivenessResponse } from "@repo/data-ops/health"
+import { enforceRateLimit, RATE_LIMIT_POLICY } from "@repo/data-ops/rate-limit"
 ```
+
+<important if="you are adding, changing, or removing a rate limit">
+## Rate-limit policy
+
+`src/rate-limit/policy.ts` is the only place a threshold is written. Both Workers
+read from it; neither states a limit of its own.
+
+To change a limit:
+
+1. Edit the rule in `RATE_LIMIT_POLICY`.
+2. Update the matching `ratelimits` entry in **every** env block of that Worker's
+   `wrangler.jsonc` — the field is not inherited from the top level.
+3. `pnpm --filter <worker> cf-typegen` so the generated `Env` reflects the binding.
+
+`scripts/rate-limit-policy.test.ts` fails if any of those three drift apart, if a
+threshold appears at a call site, or if the legacy `unsafe` escape hatch returns.
+The platform accepts only `10` or `60` for `period`.
+
+Key derivation is session-first, address-second, and deliberately not overridable
+per call site: a session keyed on its token cannot reset its budget by changing
+address, and an anonymous caller keyed on address cannot reset it by dropping
+cookies.
+</important>
 
 <important if="you are creating or modifying Zod schemas in data-ops">
 ## Zod Schema Naming

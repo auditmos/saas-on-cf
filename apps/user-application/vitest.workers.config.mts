@@ -44,6 +44,9 @@ export default defineConfig({
 				compatibilityFlags: ["nodejs_compat"],
 				bindings: { CLOUDFLARE_ENV: "dev" },
 				serviceBindings: { DATA_SERVICE: echoUpstream },
+				// Mirrors the `ratelimits` block in wrangler.jsonc.
+				// `scripts/rate-limit-policy.test.ts` fails if either drifts from the policy.
+				ratelimits: { RATE_LIMITER_SERVER_FN: { simple: { limit: 100, period: 60 } } },
 			},
 		}),
 	],

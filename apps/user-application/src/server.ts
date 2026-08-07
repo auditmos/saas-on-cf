@@ -5,6 +5,7 @@ import { env } from "cloudflare:workers";
 import { setAuth } from "@repo/data-ops/auth/server";
 import { getDb, initDatabase } from "@repo/data-ops/database/setup";
 import handler from "@tanstack/react-start/server-entry";
+import { withRateLimit } from "./lib/rate-limit";
 import { applySecurityHeaders } from "./lib/security-headers";
 
 export default {
@@ -31,11 +32,14 @@ export default {
 			},
 		});
 
-		const response = await handler.fetch(request, {
-			context: {
-				fromFetch: true,
-			},
+		// Ahead of the renderer: a throttled caller should not cost a render.
+		return withRateLimit(request, env as unknown as Record<string, unknown>, async () => {
+			const response = await handler.fetch(request, {
+				context: {
+					fromFetch: true,
+				},
+			});
+			return applySecurityHeaders(response);
 		});
-		return applySecurityHeaders(response);
 	},
 };

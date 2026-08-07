@@ -9,7 +9,6 @@ import {
 import type { Context } from "hono";
 import { Hono } from "hono";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
-import { rateLimiter } from "../middleware/rate-limiter";
 import { sessionAuth } from "../middleware/session-auth";
 import * as clientService from "../services/client-service";
 import type { Result } from "../types/result";
@@ -33,14 +32,11 @@ const requireSession = (c: Context<{ Bindings: Env }>, next: () => Promise<void>
 		getSession: (req) => getAuth().api.getSession({ headers: req.headers }),
 	})(c, next);
 
-const mutationRateLimit = rateLimiter({ binding: "RATE_LIMITER", limit: 10, window: 60 });
-
 const clients = new Hono<{ Bindings: Env }>();
 
-// Mutations are metered ahead of the session check so an unauthenticated flood
-// is turned away without spending a session lookup on every request.
-clients.on(["POST", "PUT", "DELETE"], "*", mutationRateLimit);
-
+// Rate limiting is registered once at the app boundary and driven by the shared
+// policy — see `../app.ts`. Nothing here states a threshold.
+//
 // Fail closed: every route on this router needs a session cookie or the
 // service-to-service bearer — including reads, and including routes added
 // later. Client names and email addresses are not anonymously enumerable.

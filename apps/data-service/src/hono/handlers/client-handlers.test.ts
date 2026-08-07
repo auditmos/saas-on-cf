@@ -125,29 +125,6 @@ describe("no client-facing route is anonymously reachable", () => {
 	});
 });
 
-describe("client mutation routes enforce a rate-limit budget", () => {
-	it("returns 429 on POST /clients past the budget (rate-limit runs before auth)", async () => {
-		const ip = randIp();
-
-		const postWithIp = () =>
-			clients.fetch(
-				new Request(
-					"http://localhost/",
-					withWrongBearer({
-						method: "POST",
-						headers: { "Content-Type": "application/json", "cf-connecting-ip": ip },
-						body: jsonBody,
-					}),
-				),
-				env,
-			);
-
-		for (let i = 0; i < 10; i++) {
-			const res = await postWithIp();
-			expect(res.status, `request #${i + 1} should hit auth and 401`).toBe(401);
-		}
-
-		const eleventh = await postWithIp();
-		expect(eleventh.status).toBe(429);
-	});
-});
+// Rate limiting moved to the app boundary when the policy module took ownership
+// of every threshold. Its tests live in `../app.test.ts`, which is where the
+// limiter is now registered — this router no longer meters anything itself.

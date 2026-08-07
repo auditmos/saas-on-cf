@@ -15,6 +15,16 @@
 			"service": "saas-on-cf-ds-dev"
 		}
 	],
+	// Thresholds mirror RATE_LIMIT_POLICY in @repo/data-ops/rate-limit, which is
+	// where they are decided. `scripts/rate-limit-policy.test.ts` fails if the two
+	// disagree. Declared per env because `ratelimits` is not inherited.
+	"ratelimits": [
+		{
+			"name": "RATE_LIMITER_SERVER_FN",
+			"namespace_id": "2000",
+			"simple": { "limit": 100, "period": 60 }
+		}
+	],
 	"env": {
 		/**
 		 * Local / Development environment
@@ -26,6 +36,16 @@
 				{
 					"binding": "DATA_SERVICE",
 					"service": "saas-on-cf-ds-dev"
+				}
+			],
+			// Thresholds mirror RATE_LIMIT_POLICY in @repo/data-ops/rate-limit, which is
+			// where they are decided. `scripts/rate-limit-policy.test.ts` fails if the two
+			// disagree. Declared per env because `ratelimits` is not inherited.
+			"ratelimits": [
+				{
+					"name": "RATE_LIMITER_SERVER_FN",
+					"namespace_id": "2001",
+					"simple": { "limit": 100, "period": 60 }
 				}
 			]
 		},
@@ -46,6 +66,16 @@
 					"binding": "DATA_SERVICE",
 					"service": "saas-on-cf-ds-staging"
 				}
+			],
+			// Thresholds mirror RATE_LIMIT_POLICY in @repo/data-ops/rate-limit, which is
+			// where they are decided. `scripts/rate-limit-policy.test.ts` fails if the two
+			// disagree. Declared per env because `ratelimits` is not inherited.
+			"ratelimits": [
+				{
+					"name": "RATE_LIMITER_SERVER_FN",
+					"namespace_id": "2002",
+					"simple": { "limit": 100, "period": 60 }
+				}
 			]
 		},
 		/**
@@ -64,6 +94,16 @@
 				{
 					"binding": "DATA_SERVICE",
 					"service": "saas-on-cf-ds-production"
+				}
+			],
+			// Thresholds mirror RATE_LIMIT_POLICY in @repo/data-ops/rate-limit, which is
+			// where they are decided. `scripts/rate-limit-policy.test.ts` fails if the two
+			// disagree. Declared per env because `ratelimits` is not inherited.
+			"ratelimits": [
+				{
+					"name": "RATE_LIMITER_SERVER_FN",
+					"namespace_id": "2003",
+					"simple": { "limit": 100, "period": 60 }
 				}
 			]
 		}

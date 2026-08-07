@@ -1,35 +1,29 @@
+import { enforceRateLimit, rateLimitHeaders, type WorkerName } from "@repo/data-ops/rate-limit";
 import type { MiddlewareHandler } from "hono";
 
-type BindingResolver =
-	| RateLimit
-	| { [K in keyof Env]: Env[K] extends RateLimit ? K : never }[keyof Env];
-
-interface RateLimitConfig {
-	binding: BindingResolver;
-	limit: number;
-	window: number;
-}
-
-function resolve(binding: BindingResolver, env: Env): RateLimit {
-	return typeof binding === "string" ? (env[binding] as RateLimit) : binding;
-}
-
-export const rateLimiter = (config: RateLimitConfig): MiddlewareHandler => {
+/**
+ * Thin adapter over the shared rate-limit policy.
+ *
+ * It takes no threshold, no window, and no binding — only which Worker it is
+ * running in. Everything else (which routes are metered, at what rate, keyed by
+ * what, and what a throttled caller is told) is stated once in
+ * `@repo/data-ops/rate-limit` and nowhere else.
+ */
+export const rateLimiter = (worker: WorkerName): MiddlewareHandler<{ Bindings: Env }> => {
 	return async (c, next) => {
-		const key = c.req.header("cf-connecting-ip") || c.req.header("x-forwarded-for") || "anonymous";
+		const outcome = await enforceRateLimit({
+			worker,
+			request: c.req.raw,
+			env: c.env as unknown as Record<string, unknown>,
+		});
 
-		const binding = resolve(config.binding, c.env as Env);
-		const { success } = await binding.limit({ key });
+		if (!outcome.metered) return next();
 
-		c.header("X-RateLimit-Limit", String(config.limit));
-		c.header("X-RateLimit-Reset", String(config.window));
+		if (!outcome.allowed) return outcome.response;
 
-		if (!success) {
-			c.header("Retry-After", String(config.window));
-			c.header("X-RateLimit-Remaining", "0");
-			return c.json({ error: "Too many requests" }, 429);
+		for (const [name, value] of Object.entries(rateLimitHeaders(outcome.rule))) {
+			c.header(name, value);
 		}
-
 		return next();
 	};
 };
