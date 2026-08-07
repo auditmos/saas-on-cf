@@ -1,3 +1,10 @@
+## [1.10.3](https://github.com/auditmos/saas-on-cf/compare/v1.10.2...v1.10.3) (2026-08-07)
+
+
+### Bug Fixes
+
+* **security:** guard the protected layout on the server ([ea3f584](https://github.com/auditmos/saas-on-cf/commit/ea3f584c3499c8940f59b66644949038b31d3ee2)), closes [#38](https://github.com/auditmos/saas-on-cf/issues/38) [#39](https://github.com/auditmos/saas-on-cf/issues/39)
+
 ## [1.10.2](https://github.com/auditmos/saas-on-cf/compare/v1.10.1...v1.10.2) (2026-08-07)
 
 
