@@ -10,7 +10,7 @@
 			"vitest": { "config": [] }
 		},
 		"apps/user-application": {
-			"entry": ["src/start.tsx", "src/routes/**/*.{ts,tsx}", "vite.config.ts"],
+			"entry": ["src/routes/**/*.{ts,tsx}", "vite.config.ts"],
 			"vite": { "config": [] },
 			"ignoreDependencies": ["web-vitals"],
 			"ignore": [

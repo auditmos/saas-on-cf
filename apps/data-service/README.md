@@ -28,24 +28,30 @@ Business logic layer.
 
 ##### Endpoints
 
-**Users** `/users`
+Registered in [`app.ts`](./src/hono/app.ts). There are two routers and no others.
+
+**Health** `/health`
 | Method | Path | Auth | Description |
 |--------|------|------|-------------|
-| GET | `/users` | - | List (`?limit=10&offset=0`) |
-| GET | `/users/:id` | - | Get |
-| POST | `/users` | 🔒 | Create |
-| PUT | `/users/:id` | 🔒 | Update |
-| DELETE | `/users/:id` | 🔒 | Delete |
+| GET | `/health/live` | - | Liveness — always 200, touches nothing |
+| GET | `/health/ready` | - | Readiness — 200, or 503 with `database: "disconnected"` |
 
-🔒 = `Authorization: Bearer <API_TOKEN>`
-
-**Webhooks** `/webhooks`
+**Clients** `/clients`
 | Method | Path | Auth | Description |
 |--------|------|------|-------------|
-| POST | `/webhooks/user.sync` | 🔐 | Sync user from external system |
-| POST | `/webhooks/user.action` | 🔐 | Receive user action events |
+| GET | `/clients` | 🔒 | List (`?limit=` 1–100, default 10; `?offset=` default 0) |
+| GET | `/clients/:id` | 🔒 | Get by UUID |
+| POST | `/clients` | 🔒 | Create → 201 |
+| PUT | `/clients/:id` | 🔒 | Update |
+| DELETE | `/clients/:id` | 🔒 | Delete → 204 |
 
-🔐 = standard-webhooks signature (`webhook-id`, `webhook-timestamp`, `webhook-signature` headers)
+🔒 = a Better Auth session cookie **or** `Authorization: Bearer <API_TOKEN>`.
+
+The guard is `clients.use("*", requireSession)`, so it covers reads as well as
+writes and applies to any route added to this router later — client names and
+email addresses are not anonymously enumerable. Rate limiting is registered once
+at the app boundary from the shared policy in `@repo/data-ops/rate-limit`; no
+route states a threshold of its own.
 
 The Worker serves HTTP and nothing else — there is no cron, queue, Durable
 Object, or Workflow. Adding one means adding its binding or trigger to

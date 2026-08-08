@@ -251,11 +251,11 @@ const protectedFunction = createServerFn().middleware([
   protectedFunctionMiddleware,
 ]);
 
-export const deleteUser = protectedFunction
+export const deleteClient = protectedFunction
   .validator((data: { id: string }) => z.object({ id: z.string() }).parse(data))
   .handler(async ({ data, context }) => {
     const response = await env.DATA_SERVICE.fetch(
-      new Request(`https://data-service/users/${data.id}`, {
+      new Request(`https://data-service/clients/${data.id}`, {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${env.DATA_SERVICE_API_TOKEN}` },
       })
@@ -269,13 +269,15 @@ export const deleteUser = protectedFunction
 
 ```typescript
 const deleteMutation = useMutation({
-  mutationFn: (id: string) => deleteUser({ data: { id } }),
+  mutationFn: (id: string) => deleteClient({ data: { id } }),
   onSuccess: () => {
-    queryClient.invalidateQueries({ queryKey: ["users"] });
+    // Key factories live in `src/lib/query-keys.ts` — invalidate through them
+    // rather than retyping the array, so a key change cannot miss a call site.
+    queryClient.invalidateQueries({ queryKey: clientKeys.lists() });
   },
 });
 
-<button onClick={() => deleteMutation.mutate(userId)}>
+<button onClick={() => deleteMutation.mutate(clientId)}>
   {deleteMutation.isPending ? "Deleting..." : "Delete"}
 </button>
 ```
@@ -436,7 +438,7 @@ class ServerFunctionError extends Error {
   }
 }
 
-export const deleteUser = protectedFunction
+export const deleteClient = protectedFunction
   .validator(/* ... */)
   .handler(async ({ data, context }) => {
     if (context.session.user.role !== "admin") {
@@ -572,7 +574,7 @@ The application connects to `data-service` via **Cloudflare service bindings** -
 import { env } from "cloudflare:workers";
 
 const response = await env.DATA_SERVICE.fetch(
-  new Request("https://internal/users")  // hostname ignored
+  new Request("https://internal/clients")  // hostname ignored
 );
 ```
 
