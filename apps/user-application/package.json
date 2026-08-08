@@ -7,7 +7,6 @@
 		"build": "vite build",
 		"build:staging": "vite build --mode staging",
 		"build:production": "vite build --mode production",
-		"deploy": "pnpm run build && wrangler deploy",
 		"deploy:staging": "pnpm run build:staging && wrangler deploy --env=''",
 		"deploy:production": "pnpm run build:production && wrangler deploy --env=''",
 		"serve": "vite preview",

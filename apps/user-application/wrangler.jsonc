@@ -13,12 +13,10 @@
 	// asserts it per env too, so an env block cannot drop it unnoticed.
 	"upload_source_maps": true,
 	"main": "./src/server.ts",
-	"services": [
-		{
-			"binding": "DATA_SERVICE",
-			"service": "saas-on-cf-ds-dev"
-		}
-	],
+	// No top-level `services` block on purpose: it would apply to any deploy
+	// that does not select an env, and the one that used to live here named the
+	// development backend. Each env block below binds its own.
+	// `scripts/wrangler-config.test.ts` fails if one reappears.
 	// Thresholds mirror RATE_LIMIT_POLICY in @repo/data-ops/rate-limit, which is
 	// where they are decided. `scripts/rate-limit-policy.test.ts` fails if the two
 	// disagree. Declared per env because `ratelimits` is not inherited.
