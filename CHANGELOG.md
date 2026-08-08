@@ -1,3 +1,10 @@
+## [1.13.1](https://github.com/auditmos/saas-on-cf/compare/v1.13.0...v1.13.1) (2026-08-08)
+
+
+### Bug Fixes
+
+* **deploy:** stop the frontend shipping wired to the dev backend ([6990d13](https://github.com/auditmos/saas-on-cf/commit/6990d13d0872d3c8642cb43ee6b1a0413e049d8b)), closes [#45](https://github.com/auditmos/saas-on-cf/issues/45)
+
 # [1.13.0](https://github.com/auditmos/saas-on-cf/compare/v1.12.0...v1.13.0) (2026-08-08)
 
 
