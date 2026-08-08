@@ -1,3 +1,10 @@
+# [1.13.0](https://github.com/auditmos/saas-on-cf/compare/v1.12.0...v1.13.0) (2026-08-08)
+
+
+### Features
+
+* **observability:** upload source maps so deployed traces name real code ([4380613](https://github.com/auditmos/saas-on-cf/commit/43806133b1f749401ac1b88605e4748e9a1a4530)), closes [#44](https://github.com/auditmos/saas-on-cf/issues/44)
+
 # [1.12.0](https://github.com/auditmos/saas-on-cf/compare/v1.11.0...v1.12.0) (2026-08-08)
 
 
