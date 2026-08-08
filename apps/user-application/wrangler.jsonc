@@ -8,6 +8,10 @@
 		"logs": { "head_sampling_rate": 1 },
 		"traces": { "enabled": true, "head_sampling_rate": 0.01 }
 	},
+	// Without this, every stack trace in the dashboard points at bundled output
+	// and names nothing. Inheritable, but `scripts/observability-config.test.ts`
+	// asserts it per env too, so an env block cannot drop it unnoticed.
+	"upload_source_maps": true,
 	"main": "./src/server.ts",
 	"services": [
 		{
@@ -32,6 +36,7 @@
 		"dev": {
 			"name": "saas-on-cf-ua-dev",
 			"vars": { "CLOUDFLARE_ENV": "dev" },
+			"upload_source_maps": true,
 			"services": [
 				{
 					"binding": "DATA_SERVICE",
@@ -55,6 +60,7 @@
 		"staging": {
 			"name": "saas-on-cf-ua-staging",
 			"vars": { "CLOUDFLARE_ENV": "staging" },
+			"upload_source_maps": true,
 			// "routes": [
 			//   {
 			//     "custom_domain": true,
@@ -84,6 +90,7 @@
 		"production": {
 			"name": "saas-on-cf-ua-production",
 			"vars": { "CLOUDFLARE_ENV": "production" },
+			"upload_source_maps": true,
 			// "routes": [
 			//   {
 			//     "custom_domain": true,

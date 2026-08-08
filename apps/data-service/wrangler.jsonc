@@ -9,6 +9,10 @@
 		"logs": { "head_sampling_rate": 1 },
 		"traces": { "enabled": true, "head_sampling_rate": 0.01 }
 	},
+	// Without this, every stack trace in the dashboard points at bundled output
+	// and names nothing. Inheritable, but `scripts/observability-config.test.ts`
+	// asserts it per env too, so an env block cannot drop it unnoticed.
+	"upload_source_maps": true,
 	// "triggers": {
 	//   "crons": [
 	//     "0 * * * *"
@@ -21,6 +25,7 @@
 		"dev": {
 			"name": "saas-on-cf-ds-dev",
 			"vars": { "CLOUDFLARE_ENV": "dev" },
+			"upload_source_maps": true,
 			// Thresholds mirror RATE_LIMIT_POLICY in @repo/data-ops/rate-limit, which is
 			// where they are decided. `scripts/rate-limit-policy.test.ts` fails if the two
 			// disagree. Declared per env because `ratelimits` is not inherited.
@@ -73,6 +78,7 @@
 			// ],
 			"name": "saas-on-cf-ds-staging",
 			"vars": { "CLOUDFLARE_ENV": "staging" },
+			"upload_source_maps": true,
 			// Thresholds mirror RATE_LIMIT_POLICY in @repo/data-ops/rate-limit, which is
 			// where they are decided. `scripts/rate-limit-policy.test.ts` fails if the two
 			// disagree. Declared per env because `ratelimits` is not inherited.
@@ -125,6 +131,7 @@
 			// ],
 			"name": "saas-on-cf-ds-production",
 			"vars": { "CLOUDFLARE_ENV": "production" },
+			"upload_source_maps": true,
 			// Thresholds mirror RATE_LIMIT_POLICY in @repo/data-ops/rate-limit, which is
 			// where they are decided. `scripts/rate-limit-policy.test.ts` fails if the two
 			// disagree. Declared per env because `ratelimits` is not inherited.

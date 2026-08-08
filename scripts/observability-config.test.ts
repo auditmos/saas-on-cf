@@ -74,3 +74,70 @@ describe("wrangler.jsonc observability sampling config", () => {
 		});
 	}
 });
+
+/**
+ * A stack trace nobody can read is not observability. `upload_source_maps` is
+ * inheritable, so the top-level declaration is the one that does the work — but
+ * an env block that overrides it silently loses its traces, and an env block
+ * added later inherits nothing anybody thought about. Asserting it everywhere
+ * is what stops that from happening quietly.
+ */
+describe("wrangler.jsonc source-map upload", () => {
+	for (const file of files) {
+		const relative = file.slice(repoRoot.length + 1);
+
+		describe(relative, () => {
+			const config = parseJsonc(readFileSync(file, "utf8")) as {
+				upload_source_maps?: unknown;
+				env?: Record<string, { upload_source_maps?: unknown }>;
+			};
+
+			it("uploads source maps at the top level", () => {
+				expect(
+					config.upload_source_maps,
+					`${relative} must set upload_source_maps: true — without it every deployed stack trace is minified`,
+				).toBe(true);
+			});
+
+			it("uploads source maps in every env block", () => {
+				const envs = config.env ?? {};
+				const names = Object.keys(envs);
+				expect(names.length, `${relative} declares no env blocks`).toBeGreaterThan(0);
+
+				for (const name of names) {
+					expect(
+						envs[name]?.upload_source_maps,
+						`${relative} env.${name} must set upload_source_maps: true`,
+					).toBe(true);
+				}
+			});
+		});
+	}
+});
+
+/**
+ * The frontend Worker is bundled by Vite, which emits no source map unless asked
+ * — so `upload_source_maps` alone would upload nothing there and the traces
+ * would stay minified anyway. Server bundle only: a map beside the client bundle
+ * is published, and publishing the sources is a different decision entirely.
+ */
+describe("the frontend build emits the map its Worker uploads", () => {
+	const viteConfig = readFileSync(
+		resolve(repoRoot, "apps/user-application/vite.config.ts"),
+		"utf8",
+	).replace(/\s+/g, "");
+
+	it("enables source maps for the server bundle", () => {
+		expect(
+			/environments:\{[^}]*ssr:\{build:\{[^}]*sourcemap:true/.test(viteConfig),
+			"apps/user-application/vite.config.ts must set environments.ssr.build.sourcemap = true",
+		).toBe(true);
+	});
+
+	it("does not enable them for the client bundle", () => {
+		expect(
+			/^build:\{[^}]*sourcemap:true/m.test(viteConfig.replace(/^constconfig=defineConfig\(\{/, "")),
+			"a top-level build.sourcemap would publish the client's sources — scope it to the ssr environment",
+		).toBe(false);
+	});
+});
