@@ -41,13 +41,11 @@ app.use('/api/*', rateLimiter())
 - Keep handlers focused on HTTP concerns
 
 ```ts
-// handlers/users.ts
-export const getUser = async (c: Context) => {
-  const { id } = c.req.param()
-  const result = await userService.getById(c.env, id)
-  if (!result) return c.json({ error: 'Not found' }, 404)
-  return c.json(result)
-}
+// hono/handlers/client-handlers.ts
+clients.get('/:id', zValidator('param', IdParamSchema), async (c) => {
+  const { id } = c.req.valid('param')
+  return resultToResponse(c, await clientService.getClientById(id))
+})
 ```
 
 ## Request Validation

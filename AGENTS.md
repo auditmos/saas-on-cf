@@ -41,9 +41,11 @@ Run manually before declaring done:
 2. `pnpm run test` — run all tests
 </important>
 
-<important if="you are creating, reviewing, or updating design documents">
-- `/docs` is the single source of truth for business requirements
-- Apply review notes/status updates directly in the corresponding design doc
-- Never create separate md files for reviews/audits/analyses unless explicitly asked
-- Flag implementation deviations inline in the doc
-</important>
+## Documentation
+
+These files are read as instructions, not as background. Anything they describe
+has to exist — `scripts/doc-truth.test.ts` fails when one names a path that does
+not resolve. Document what was built, not what is planned; a specification for
+unbuilt software reads to the next agent as something to extend.
+
+Never create separate md files for reviews/audits/analyses unless explicitly asked.

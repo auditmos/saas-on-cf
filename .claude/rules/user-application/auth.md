@@ -52,15 +52,18 @@ export const authMiddleware = createMiddleware().server(async ({ next }) => {
 })
 ```
 
-Apply to routes:
+Apply to the layout route, so everything nested under it is covered — including
+routes added later:
 
 ```tsx
-// routes/_auth/dashboard.tsx
-export const Route = createFileRoute('/_auth/dashboard')({
-  beforeLoad: ({ context }) => {
-    if (!context.session) {
-      throw redirect({ to: '/login' })
+// routes/_auth/route.tsx
+export const Route = createFileRoute('/_auth')({
+  beforeLoad: async () => {
+    const auth = await getAuthView()
+    if (auth.view === 'signed-out') {
+      throw redirect({ to: '/signin' })
     }
+    return { auth }
   },
 })
 ```

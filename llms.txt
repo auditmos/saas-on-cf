@@ -26,9 +26,6 @@
 - [Cloudflare Workers](.claude/rules/data-service/cloudflare-workers.md): Worker patterns and bindings
 - [Durable Objects](.claude/rules/data-service/durable-objects.md): DO patterns
 - [Queues & Workflows](.claude/rules/data-service/queues-workflows.md): Queue consumers, workflow definitions
-- [Storage](.claude/rules/data-service/storage.md): KV, R2, D1 patterns
-- [Agent SDK](.claude/rules/data-service/agent-sdk.md): Cloudflare Agents SDK patterns
-- [Agent Workflows](.claude/rules/data-service/agent-workflows.md): Agent workflow orchestration
 
 ### user-application
 - [TanStack](.claude/rules/user-application/tanstack.md): Router, Query, Form patterns
@@ -37,7 +34,6 @@
 - [UI](.claude/rules/user-application/ui.md): Component library patterns
 - [shadcn/tweakcn](.claude/rules/user-application/shadcn-tweakcn.md): UI primitives
 - [Forms](.claude/rules/user-application/form-patterns.md): Form validation and submission
-- [i18n](.claude/rules/user-application/i18n.md): use-intl, locale strategy, translation files
 - [Vite](.claude/rules/user-application/vite.md): Build config, Cloudflare Vite plugin
 
 ## Agents

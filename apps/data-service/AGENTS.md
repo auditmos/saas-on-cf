@@ -34,33 +34,16 @@ See `hono.md` and `error-handling.md` rules for handler/service/query patterns a
 - `GET /health/live` - liveness (instant 200)
 - `GET /health/ready` - readiness (checks DB)
 - `GET|POST|PUT|DELETE /clients/*` - CRUD (all routes require a session cookie or the service Bearer token; the router guard is `use("*")`, so new routes are protected by default)
-- `POST /webhooks/*` - inbound webhooks (signature verified)
 
 <important if="you are adding or modifying middleware in data-service">
 ## Middleware Order (in app.ts)
 
 1. `requestId()` - generates/passes correlation ID
-2. `onError` - global error handler
-3. `cors` - CORS headers
-4. Route-specific: `authMiddleware`, `rateLimiter`, `zValidator`
-</important>
-
-<important if="you are working with webhooks in data-service">
-## Webhooks
-
-**Pattern:** verification middleware → handler → service → data-ops
-
-**Key constraint:** signature verification needs raw body string before JSON parsing. Cannot use `zValidator` as route middleware. Instead:
-1. Middleware reads body via `c.req.text()`, stores in context
-2. Verifies signature against raw string
-3. Handler parses body with `Schema.parse(JSON.parse(body))`
-
-**Headers (standard-webhooks):**
-- `webhook-id` - UUID, used for idempotency
-- `webhook-timestamp` - unix seconds, 5min tolerance
-- `webhook-signature` - `v1,<base64 HMAC-SHA256>`
-
-**Idempotency:** `webhook_logs.msgId` unique constraint - duplicates are no-ops
+2. `createSecureHeadersMiddleware()` - response security headers
+3. `onError` - global error handler
+4. `createCorsMiddleware()` - CORS headers
+5. `rateLimiter("data-service")` - metering, ahead of every route's session check
+6. Route-specific: `requireSession`, `zValidator`
 </important>
 
 ## Dev

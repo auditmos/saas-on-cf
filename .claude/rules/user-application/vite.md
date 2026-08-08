@@ -19,13 +19,13 @@ user-application uses `.env` approach. If `.dev.vars` exists, `.env` is ignored 
 
 ### Server-side (Worker `env`)
 
-All vars from `.env` are available on the Worker `env` object from `cloudflare:workers`. This project prefixes them with `VITE_`:
+All vars from `.env` are available on the Worker `env` object from `cloudflare:workers`, under the exact name they are declared with. The `VITE_` prefix is not added or removed here — it only decides what the browser can see:
 
 ```ts
 import { env } from 'cloudflare:workers'
-env.VITE_DATA_SERVICE_API_TOKEN  // correct
+env.DATA_SERVICE_API_TOKEN       // correct — server-only bearer for the service binding
 env.VITE_DATA_SERVICE_URL        // correct
-env.DATA_SERVICE_API_TOKEN       // WRONG — does not exist
+env.VITE_API_TOKEN               // correct — the token the browser also gets
 ```
 
 ### Client-side (browser)

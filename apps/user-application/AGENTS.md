@@ -18,16 +18,17 @@ src/
 ├── routes/                   # File-based routing
 │   ├── __root.tsx            # Root layout
 │   ├── index.tsx             # Landing page
-│   ├── faq/$categoryId.tsx   # Dynamic FAQ pages
+│   ├── signin.tsx            # Sign in
+│   ├── signup.tsx            # Sign up
 │   ├── _auth/                # Protected routes (require auth)
-│   └── api/                  # API handlers (Better Auth)
+│   └── api/                  # auth.$.tsx (Better Auth), health.ts
 ├── lib/
 │   ├── utils.ts              # Shared utilities
 │   ├── auth-client.ts        # Better Auth client
 │   └── data-service.ts       # Service binding client (DATA_SERVICE)
 └── components/               # React components
     ├── landing/              # Landing page sections
-    ├── faq/                  # FAQ page component
+    ├── layout/               # Page shell
     ├── navigation/           # Nav bar
     ├── theme/                # Theme toggle + provider
     ├── auth/                 # Auth components
@@ -51,9 +52,9 @@ pnpm run deploy:production  # build:production + wrangler deploy
 - `DATABASE_HOST`, `DATABASE_USERNAME`, `DATABASE_PASSWORD`
 - `BETTER_AUTH_SECRET`
 - `CLOUDFLARE_ENV` - dev | staging | production
-- `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` (optional, OAuth)
 - `VITE_DATA_SERVICE_URL` - public API URL
 - `VITE_API_TOKEN` - client-side API auth
+- `DATA_SERVICE_API_TOKEN` - server-side bearer for the service binding
 
 <important if="you are making server-side calls to data-service from user-application">
 ## Service Binding (DATA_SERVICE)
