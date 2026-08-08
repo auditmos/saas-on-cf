@@ -1,0 +1,58 @@
+name: Deps major report
+
+# The weekly "Deps update" job runs taze in minor mode, which treats a pre-1.0
+# minor as breaking and so never lands one. That is deliberate. The cost is that
+# those updates, and every major, are invisible — a package can drift majors
+# behind with nothing scheduled to say so. This job reports them into a single
+# tracking issue and changes nothing in the tree; taking a breaking change stays
+# a human decision.
+
+on:
+  schedule:
+    - cron: "0 8 1 * *" # 1st of the month, 08:00 UTC — after the weekly lanes have run
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: deps-major-report
+  cancel-in-progress: false
+
+env:
+  # Future-proof: opt into Node 24 for JS actions before GH forces it (2026-06-02 default, 2026-09-16 hard cutoff)
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  # `pnpm install` runs `prepare` -> simple-git-hooks, which installs the pre-push
+  # hook into the CI runner. Nothing here pushes, but the hook is a local dev net
+  # either way and installing it into CI only creates surprises.
+  SKIP_SIMPLE_GIT_HOOKS: "1"
+
+jobs:
+  report:
+    name: Report frozen deps into a tracking issue
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: lts/*
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      # Reconciles one tracking issue: opens it, rewrites it in place as the set
+      # changes, and closes it once nothing is held back. Re-running against an
+      # unchanged set is a no-op, so the schedule can be as frequent as it likes.
+      - name: Report major + pre-1.0 updates
+        run: pnpm run deps:report
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

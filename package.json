@@ -35,6 +35,7 @@
 		"deps:update": "taze -r -w",
 		"deps:major": "taze -r major",
 		"deps:major:update": "taze -r major -w",
+		"deps:report": "tsx scripts/major-update-report.ts",
 		"test": "vitest run",
 		"test:watch": "vitest",
 		"test:coverage": "vitest run --coverage",
