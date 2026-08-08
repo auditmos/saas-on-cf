@@ -26,7 +26,7 @@
 				"hooks": [
 					{
 						"type": "command",
-						"command": "FILE=$(cat - | jq -r '.tool_input.file_path') && case \"$FILE\" in */packages/data-ops/src/*) echo 'Reminder: run pnpm run build:data-ops for changes to be visible to consuming packages.';; esac; true"
+						"command": "FILE=$(cat - | jq -r '.tool_input.file_path') && case \"$FILE\" in */packages/data-ops/src/*) echo 'Type-checking already sees this edit (consumers resolve @repo/data-ops to src). Running it does not: tests, wrangler dev and vite dev take dist/, so run pnpm run build:data-ops before trusting a test run.';; esac; true"
 					}
 				]
 			}

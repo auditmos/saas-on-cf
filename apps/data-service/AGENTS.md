@@ -65,5 +65,5 @@ Required in `.dev.vars` (local) or Cloudflare dashboard (remote):
 ## Don't
 
 - Put DB queries here - add to `@repo/data-ops/{domain}`
-- Forget to rebuild data-ops after schema changes (`pnpm --filter @repo/data-ops build`)
+- Forget to rebuild data-ops before *running* against a schema change (`pnpm --filter @repo/data-ops build`) — type-checking already reads its source, tests and `wrangler dev` do not
 - Modify `worker-configuration.d.ts`, use `pnpm run cf-typegen`

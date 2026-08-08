@@ -37,7 +37,7 @@ Max 500 lines per source file — split if exceeding.
 
 <important if="you have finished implementing or modifying code">
 Run manually before declaring done:
-1. `pnpm run types` — type-check all packages (builds data-ops first)
+1. `pnpm run types` — type-check all packages (no build needed; consumers read data-ops source)
 2. `pnpm run test` — run all tests
 </important>
 

@@ -28,7 +28,7 @@
 		"lint": "biome check .",
 		"lint:fix": "biome check --write .",
 		"lint:ci": "biome ci .",
-		"types": "pnpm run build:data-ops && pnpm run --filter data-service --filter user-application types",
+		"types": "pnpm run --filter data-ops --filter data-service --filter user-application types",
 		"init-project": "tsx scripts/init-project.ts",
 		"knip": "knip",
 		"deps": "taze -r",

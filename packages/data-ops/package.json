@@ -2,34 +2,42 @@
 	"name": "@repo/data-ops",
 	"version": "1.0.0",
 	"description": "Manage auth, database, schemas, and queries",
+	"//exports": "`@repo/source` is listed first so it wins for anything told to apply it — TypeScript alone, via `customConditions` in each consumer's tsconfig. Nothing else opts in, so bundlers, vitest, wrangler and any published consumer fall through to `default` and get dist/. See packages/data-ops/AGENTS.md and scripts/data-ops-source-resolution.test.ts.",
 	"exports": {
 		"./client": {
+			"@repo/source": "./src/client/index.ts",
 			"types": "./dist/client/index.d.ts",
 			"default": "./dist/client/index.js"
 		},
 		"./health": {
+			"@repo/source": "./src/health/index.ts",
 			"types": "./dist/health/index.d.ts",
 			"default": "./dist/health/index.js"
 		},
 		"./rate-limit": {
+			"@repo/source": "./src/rate-limit/index.ts",
 			"types": "./dist/rate-limit/index.d.ts",
 			"default": "./dist/rate-limit/index.js"
 		},
 		"./auth/*": {
+			"@repo/source": "./src/auth/*.ts",
 			"types": "./dist/auth/*.d.ts",
 			"default": "./dist/auth/*.js"
 		},
 		"./database/*": {
+			"@repo/source": "./src/database/*.ts",
 			"types": "./dist/database/*.d.ts",
 			"default": "./dist/database/*.js"
 		},
 		"./drizzle/*": {
+			"@repo/source": "./src/drizzle/*.ts",
 			"types": "./dist/drizzle/*.d.ts",
 			"default": "./dist/drizzle/*.js"
 		}
 	},
 	"scripts": {
 		"build": "tsc -p tsconfig.json --outDir ./dist && tsc-alias",
+		"types": "tsc -p tsconfig.json --noEmit",
 		"better-auth:generate": "mkdir -p src/drizzle && npx @better-auth/cli@latest generate --config ./config/auth.ts --output ./src/drizzle/auth-schema.ts",
 		"db:generate:dev": "dotenvx run -f .env.dev -- drizzle-kit generate --config drizzle-dev.config.ts",
 		"db:migrate:dev": "dotenvx run -f .env.dev -- drizzle-kit migrate --config drizzle-dev.config.ts",

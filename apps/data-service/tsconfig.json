@@ -14,6 +14,10 @@
 		"module": "es2022",
 		/* Specify how TypeScript looks up a file from a given module specifier. */
 		"moduleResolution": "Bundler",
+		/* Resolve @repo/data-ops to its source, so a schema edit is visible here
+		   without a rebuild. Only TypeScript applies this condition — the bundler
+		   and the deploy fall through to `default` and still take dist/. */
+		"customConditions": ["@repo/source"],
 		/* Enable importing .json files */
 		"resolveJsonModule": true,
 

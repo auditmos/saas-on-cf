@@ -1,5 +1,5 @@
 import { count, eq } from "drizzle-orm";
-import { getDb } from "@/database/setup";
+import { getDb } from "../database/setup";
 import type {
 	Client,
 	ClientCreateInput,

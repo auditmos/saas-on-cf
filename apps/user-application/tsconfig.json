@@ -10,6 +10,10 @@
 
 		/* Bundler mode */
 		"moduleResolution": "bundler",
+		/* Resolve @repo/data-ops to its source, so a schema edit is visible here
+		   without a rebuild. Only TypeScript applies this condition — Vite and
+		   the deploy fall through to `default` and still take dist/. */
+		"customConditions": ["@repo/source"],
 		"allowImportingTsExtensions": true,
 		"verbatimModuleSyntax": false,
 		"noEmit": true,
