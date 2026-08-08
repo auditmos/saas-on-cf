@@ -398,78 +398,115 @@ export const auditedAction = fullyProtectedFunction
 
 ### Error Handling
 
-#### Domain-Specific Errors
+#### One error class
+
+There is a single error type in this app — [`AppError`](./src/core/errors.ts).
+Not a hierarchy of `NotFoundError` / `ForbiddenError` / `ConflictError`: the
+thing a caller branches on is the `code`, and a subclass per code buys nothing
+once the error crosses a network boundary (see below), where the class name is
+gone but the code survives.
 
 ```typescript
-// src/core/errors/index.ts
-export class NotFoundError extends Error {
-  constructor(resource: string, id: string) {
-    super(`${resource} with id ${id} not found`);
-    this.name = "NotFoundError";
-  }
-}
+new AppError(message, code, status?, field?)
+```
 
-export class ForbiddenError extends Error {
-  constructor(message = "You don't have permission to perform this action") {
-    super(message);
-    this.name = "ForbiddenError";
-  }
-}
+| Field | Purpose |
+|-------|---------|
+| `message` | Shown to the user as-is — write it for them, not for a log |
+| `code` | What the caller branches on, e.g. `NOT_FOUND`, `EMAIL_EXISTS` |
+| `status` | HTTP status, when one applies |
+| `field` | Which input the message belongs to, e.g. `"email"` — populated, not yet read |
 
-export class ConflictError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = "ConflictError";
+#### Where it gets thrown
+
+Three places, each turning something foreign into an `AppError`:
+
+**Auth middleware** ([`core/middleware/auth.ts`](./src/core/middleware/auth.ts))
+— the two states are kept distinct on purpose, because the interface renders a
+pending-approval screen for one and a signed-out screen for the other:
+
+```typescript
+throw new AppError("Authentication required", "UNAUTHENTICATED", 401);
+throw new AppError("Account pending approval", "NOT_APPROVED", 403);
+```
+
+**Direct server functions** ([`core/functions/clients/direct.ts`](./src/core/functions/clients/direct.ts))
+— translating a driver error into something a user can read. Drizzle puts the
+Postgres error in `error.cause`, never in `error.message` (which only ever holds
+the failed SQL), so the constraint check reads the pg code through
+`isUniqueViolation` from `@repo/data-ops/database/errors` rather than matching
+on a string:
+
+```typescript
+import { isUniqueViolation } from "@repo/data-ops/database/errors";
+
+try {
+  const client = await createClient(ctx.data);
+  return ClientSchema.parse(client);
+} catch (error) {
+  if (isUniqueViolation(error)) {
+    throw new AppError("Email already exists", "EMAIL_EXISTS", 409, "email");
   }
+  throw new AppError("Failed to create client", "UNKNOWN", 500);
 }
 ```
 
-#### Server Function Error Handling
+**HTTP boundaries** — `throwOnError()` in
+[`binding.ts`](./src/core/functions/clients/binding.ts) and `handleResponse()`
+in [`lib/api-client.ts`](./src/lib/api-client.ts) both re-raise the
+data-service's `{ message, code }` body under the response status, so a failure
+upstream keeps its identity instead of collapsing into "Request failed":
 
 ```typescript
-class ServerFunctionError extends Error {
-  constructor(
-    message: string,
-    public code: string,
-    public statusCode: number = 400
-  ) {
-    super(message);
-    this.name = "ServerFunctionError";
-  }
-}
-
-export const deleteClient = protectedFunction
-  .validator(/* ... */)
-  .handler(async ({ data, context }) => {
-    if (context.session.user.role !== "admin") {
-      throw new ServerFunctionError("Only admins can delete", "FORBIDDEN", 403);
-    }
-    // ...
-  });
+const body = await response.json().catch(() => ({}));
+const parsed = ErrorResponseSchema.safeParse(body);
+const errorData = parsed.success ? parsed.data : {};
+throw new AppError(
+  errorData.message || "Request failed",
+  errorData.code || "API_ERROR",
+  response.status,
+);
 ```
 
-#### UI Error Handling
+#### Rendering it
 
-```typescript
-import { ZodError } from "zod";
-import { NotFoundError, ForbiddenError } from "@/core/errors";
+Which of the two shapes you use is decided by whether the error crossed a
+server-function boundary, because the class does not survive that hop — the
+message does, the `instanceof` check does not.
 
-const handleError = (error: unknown): string => {
-  if (error instanceof ZodError) {
-    return error.errors.map(e => e.message).join(", ");
-  }
-  if (error instanceof NotFoundError) {
-    return "The requested item was not found";
-  }
-  if (error instanceof ForbiddenError) {
-    return "You don't have permission to do this";
-  }
-  if (error instanceof Error) {
-    return error.message;
-  }
-  return "An unexpected error occurred";
-};
+**Server functions** (`direct/*`, `binding/*`) — the error arrives client-side
+as a plain `Error`, so read `.message` and do not narrow:
+
+```tsx
+{mutation.isError && (
+  <Alert variant="destructive">
+    <AlertDescription>{mutation.error.message}</AlertDescription>
+  </Alert>
+)}
 ```
+
+**Browser fetch** (`api/*`, via `lib/api-client.ts`) — `AppError` is constructed
+in the same context that renders it, so narrowing works and `status` is
+available:
+
+```tsx
+{mutation.error instanceof AppError
+  ? `${mutation.error.message} (${mutation.error.status})`
+  : mutation.error.message}
+```
+
+That is why the `dashboard/api/*` routes narrow and the `dashboard/direct/*`
+and `dashboard/binding/*` routes do not. Copy the one matching your access
+pattern.
+
+Nothing reads `field` yet. Both halves of field-level error display exist —
+`direct.ts` sets it on `EMAIL_EXISTS`, and TanStack Form can attach a message to
+a named input — but no route wires them together. If you want that, the data is
+already there.
+
+Validation is not handled here: `inputValidator` parses with Zod before the
+handler runs, and TanStack Form surfaces field errors from the same schemas —
+see [Field Validators](#field-validators).
 
 ---
 
