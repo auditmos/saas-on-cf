@@ -1,3 +1,10 @@
+# [1.14.0](https://github.com/auditmos/saas-on-cf/compare/v1.13.2...v1.14.0) (2026-08-08)
+
+
+### Features
+
+* **deps:** report the updates the weekly bot is built to skip ([598c3e5](https://github.com/auditmos/saas-on-cf/commit/598c3e5c01f1acb23a91f2d4158b79b5309383cc)), closes [#60](https://github.com/auditmos/saas-on-cf/issues/60) [#48](https://github.com/auditmos/saas-on-cf/issues/48)
+
 ## [1.13.2](https://github.com/auditmos/saas-on-cf/compare/v1.13.1...v1.13.2) (2026-08-08)
 
 ## [1.13.1](https://github.com/auditmos/saas-on-cf/compare/v1.13.0...v1.13.1) (2026-08-08)
