@@ -1,3 +1,10 @@
+# [1.12.0](https://github.com/auditmos/saas-on-cf/compare/v1.11.0...v1.12.0) (2026-08-08)
+
+
+### Features
+
+* **observability:** write unexpected failures to the log ([4c45857](https://github.com/auditmos/saas-on-cf/commit/4c458575f0752e2d7c9cf4a9f001ea3e37e9d646)), closes [#43](https://github.com/auditmos/saas-on-cf/issues/43)
+
 # [1.11.0](https://github.com/auditmos/saas-on-cf/compare/v1.10.4...v1.11.0) (2026-08-07)
 
 
