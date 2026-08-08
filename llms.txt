@@ -24,8 +24,6 @@
 ### data-service
 - [Hono](.claude/rules/data-service/hono.md): Handler/service/query pattern, middleware chain, Result type
 - [Cloudflare Workers](.claude/rules/data-service/cloudflare-workers.md): Worker patterns and bindings
-- [Durable Objects](.claude/rules/data-service/durable-objects.md): DO patterns
-- [Queues & Workflows](.claude/rules/data-service/queues-workflows.md): Queue consumers, workflow definitions
 
 ### user-application
 - [TanStack](.claude/rules/user-application/tanstack.md): Router, Query, Form patterns

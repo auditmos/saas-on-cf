@@ -7,8 +7,7 @@
 		},
 		"apps/data-service": {
 			"entry": ["src/**/*.test.ts", "vitest.config.mts"],
-			"vitest": { "config": [] },
-			"ignore": ["src/durable-objects/**", "src/workflows/**"]
+			"vitest": { "config": [] }
 		},
 		"apps/user-application": {
 			"entry": ["src/start.tsx", "src/routes/**/*.{ts,tsx}", "vite.config.ts"],

@@ -13,17 +13,17 @@ Cloudflare Worker API exposing data-ops queries via Hono REST endpoints.
 ```
 src/
 ├── index.ts              # Worker entrypoint, initializes DB
-├── hono/
-│   ├── app.ts            # Hono app, middleware chain, routes
-│   ├── handlers/         # Route handlers (thin, delegate to services)
-│   ├── services/         # Business logic, calls data-ops queries
-│   ├── middleware/       # request-id, cors, auth, rate-limiter, error-handler
-│   └── utils/            # ApiError class, error helpers
-├── scheduled/            # Cron triggers
-├── queues/               # Queue consumers
-├── durable-objects/      # Durable Objects
-└── workflows/            # Workflows
+└── hono/
+    ├── app.ts            # Hono app, middleware chain, routes
+    ├── handlers/         # Route handlers (thin, delegate to services)
+    ├── services/         # Business logic, calls data-ops queries
+    ├── middleware/       # request-id, cors, auth, rate-limiter, error-handler
+    └── utils/            # ApiError class, error helpers
 ```
+
+This Worker serves HTTP and nothing else. Adding a cron, queue, Durable Object,
+or Workflow means adding the binding or trigger to `wrangler.jsonc` in the same
+change — `scripts/worker-surface.test.ts` fails on a handler nothing can fire.
 
 ## Patterns
 

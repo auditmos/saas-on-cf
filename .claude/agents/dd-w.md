@@ -15,8 +15,6 @@ color: cyan
 @.claude/rules/data-ops/better-auth.md
 @.claude/rules/data-service/hono.md
 @.claude/rules/data-service/cloudflare-workers.md
-@.claude/rules/data-service/queues-workflows.md
-@.claude/rules/data-service/durable-objects.md
 @.claude/rules/data-service/storage.md
 @.claude/rules/user-application/tanstack.md
 @.claude/rules/user-application/react.md

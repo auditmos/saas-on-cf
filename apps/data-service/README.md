@@ -10,11 +10,6 @@ Backend service for long-running tasks and API endpoints also place to utilize C
 
 ### Directory Structure
 
-#### [`src/durable-objects/`](./src/durable-objects/)
-Cloudflare Durable Objects.
-
-- **`example-durable-object.ts`** - Sample definition for DO
-
 #### [`src/hono/`](./src/hono/)
 Hono Framework.
 
@@ -52,20 +47,10 @@ Business logic layer.
 
 🔐 = standard-webhooks signature (`webhook-id`, `webhook-timestamp`, `webhook-signature` headers)
 
-#### [`src/queues/`](./src/queues/)
-Cloudflare Queues.
-
-- **`index.ts`** - Sample queue
-
-#### [`src/scheduled/`](./src/scheduled/)
-Cloudflare Scheduled (Cron).
-
-- **`index.ts`** - Sample scheduler
-
-#### [`src/workflows/`](./src/workflows/)
-Cloudflare Workflows.
-
-- **`example-workflow.ts`** - Sample definition for Workflow
+The Worker serves HTTP and nothing else — there is no cron, queue, Durable
+Object, or Workflow. Adding one means adding its binding or trigger to
+`wrangler.jsonc` in the same change; `scripts/worker-surface.test.ts` fails on a
+handler that nothing can fire, because such a handler is silently dead.
 
 ### Environment Variables
 
@@ -83,7 +68,7 @@ This project uses two type definition files for different purposes:
 | File | Purpose | Edited By |
 |------|---------|-----------|
 | `worker-configuration.d.ts` | Auto-generated types from Wrangler | `pnpm run cf-typegen` |
-| `service-bindings.d.ts` | Custom interfaces (workflows, queues) | Developer (manual) |
+| `service-bindings.d.ts` | The `Env` interface plus any hand-written service types | Developer (manual) |
 
 #### `worker-configuration.d.ts` (Auto-generated)
 
@@ -103,15 +88,16 @@ pnpm run cf-typegen
 
 #### `service-bindings.d.ts` (Manual)
 
-Use this file **only** for custom TypeScript interfaces that aren't environment variables:
-- Workflow parameters (e.g., `ExampleWorkflowParams`)
-- Queue message types (e.g., `ExampleQueueMessage`)
-- Custom types shared across the service
+Use this file **only** for custom TypeScript interfaces that aren't environment
+variables — types shared across the service that Wrangler does not generate.
 
-The `Env` interface in this file extends `Cloudflare.Env`:
+Its one required job is declaring `Env`, which extends the generated `BaseEnv`:
 ```typescript
-interface Env extends Cloudflare.Env {}
+interface Env extends BaseEnv {}
 ```
+
+Lose that extends clause and every binding on `Env` silently becomes `any`,
+which is what `src/service-bindings.test.ts` guards against.
 
 **Do not** add environment variables here. Add them to `.dev.vars` instead and run `cf-typegen`.
 

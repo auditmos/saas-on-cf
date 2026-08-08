@@ -13,11 +13,6 @@
 	// and names nothing. Inheritable, but `scripts/observability-config.test.ts`
 	// asserts it per env too, so an env block cannot drop it unnoticed.
 	"upload_source_maps": true,
-	// "triggers": {
-	//   "crons": [
-	//     "0 * * * *"
-	//   ]
-	// },
 	"env": {
 		/**
 		 * Local / Development environment
@@ -47,24 +42,7 @@
 			//     "id": "eed883194c594bf8ac25811ec3d37751",
 			//     "remote": true
 			//   }
-			// ],
-			// "queues": {
-			//   "producers": [
-			//     {
-			//       "queue": "notification-queue",
-			//       "binding": "NOTIFICATION_QUEUE"
-			//     }
-			//   ],
-			//   "consumers": [
-			//     {
-			//       "queue": "notification-queue",
-			//       "max_batch_size": 10,
-			//       "max_batch_timeout": 5,
-			//       "max_retries": 3,
-			//       "dead_letter_queue": "notification-dlq"
-			//     }
-			//   ]
-			// }
+			// ]
 		},
 		/**
 		 * Remote / Staging environment
@@ -100,24 +78,7 @@
 			//     "id": "eb683052a4dd40b3a87d212c23b36c0c",
 			//     "remote": false
 			//   }
-			// ],
-			// "queues": {
-			//   "producers": [
-			//     {
-			//       "queue": "notification-queue-stage",
-			//       "binding": "NOTIFICATION_QUEUE"
-			//     }
-			//   ],
-			//   "consumers": [
-			//     {
-			//       "queue": "notification-queue-stage",
-			//       "max_batch_size": 10,
-			//       "max_batch_timeout": 5,
-			//       "max_retries": 3,
-			//       "dead_letter_queue": "notification-dlq-stage"
-			//     }
-			//   ]
-			// }
+			// ]
 		},
 		/**
 		 * Remote / Production environment
@@ -153,24 +114,7 @@
 			//     "id": "7688a332f25e416795f71a004b557f65",
 			//     "remote": false
 			//   }
-			// ],
-			// "queues": {
-			//   "producers": [
-			//     {
-			//       "queue": "notification-queue-prod",
-			//       "binding": "NOTIFICATION_QUEUE"
-			//     }
-			//   ],
-			//   "consumers": [
-			//     {
-			//       "queue": "notification-queue-prod",
-			//       "max_batch_size": 10,
-			//       "max_batch_timeout": 5,
-			//       "max_retries": 3,
-			//       "dead_letter_queue": "notification-dlq-prod"
-			//     }
-			//   ]
-			// }
+			// ]
 		}
 	}
 }
