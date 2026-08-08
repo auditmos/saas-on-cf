@@ -59,7 +59,10 @@ Config files in `apps/data-service/`:
 - `.staging.vars` - Staging
 - `.production.vars` - Production
 
-Sample `.example.vars` file with minimum number of values available - [.example.vars](./.example.vars)
+Sample file with the minimum set of values - [.dev.vars.example](./.dev.vars.example). It is
+the only example format this app carries, and `scripts/env-example-drift.test.ts`
+keeps it exact in both directions: every var the Worker reads has a placeholder,
+and every placeholder is a var something reads.
 
 ### Type Definition Files
 
@@ -77,7 +80,7 @@ This project uses two type definition files for different purposes:
 - Cloudflare Workers runtime types
 
 To add a new environment variable:
-1. Add it to `.example.vars` (template) and `.dev.vars` (actual value)
+1. Add it to `.dev.vars.example` (template) and `.dev.vars` (actual value)
 2. Run `pnpm run cf-typegen` to regenerate types
 3. The variable will appear in `Cloudflare.Env`
 

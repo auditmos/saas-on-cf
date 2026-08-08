@@ -1,5 +1,5 @@
-import { readFileSync } from "node:fs";
-import { dirname, resolve } from "node:path";
+import { readdirSync, readFileSync } from "node:fs";
+import { basename, dirname, resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
 const repoRoot = resolve(dirname(new URL(import.meta.url).pathname), "..");
@@ -93,6 +93,49 @@ describe("env example file drift", () => {
 					`${target.exampleFile} is missing placeholders for: ${missing.join(", ")}`,
 				).toEqual([]);
 			});
+
+			// The mirror image, and the one a fork author feels: a placeholder for
+			// something nothing reads asks them to go find a value that will never
+			// be used. A key wrangler.jsonc already declares is the same trap — the
+			// deploy takes its value from there, so whatever they type is ignored.
+			it("declares no placeholder that nothing reads", () => {
+				const required = extractRequiredEnvVars(target.typesFile);
+				const wranglerVars = extractWranglerVars(target.wranglerFile);
+				const present = extractExampleKeys(target.exampleFile);
+				const unreferenced = [...present].filter((key) => !required.has(key));
+				const alreadyInWrangler = [...present].filter((key) => wranglerVars.has(key));
+
+				expect(
+					unreferenced,
+					`${target.exampleFile} declares keys absent from worker-configuration.d.ts, so nothing reads them: ${unreferenced.join(", ")}`,
+				).toEqual([]);
+				expect(
+					alreadyInWrangler,
+					`${target.exampleFile} declares keys wrangler.jsonc already sets, so a value typed here has no effect: ${alreadyInWrangler.join(", ")}`,
+				).toEqual([]);
+			});
+		});
+	}
+});
+
+/**
+ * One example format per app. Two teaches a fork author to fill in whichever
+ * they find first, and only one of them is the file the tooling reads.
+ */
+describe("one env example format per app", () => {
+	for (const target of targets) {
+		it(`${target.name}: has no competing example file beside ${basename(target.exampleFile)}`, () => {
+			const appDir = dirname(target.exampleFile);
+			const kept = basename(target.exampleFile);
+			const competing = readdirSync(appDir).filter(
+				(name) =>
+					name !== kept && /(^\.example\.|\.example$|example\.vars$|\.example\.)/.test(name),
+			);
+
+			expect(
+				competing,
+				`${appDir} carries more than one env example format: ${competing.join(", ")}`,
+			).toEqual([]);
 		});
 	}
 });

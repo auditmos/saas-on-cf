@@ -7,7 +7,7 @@ Modular web application template
 ## Using this Template
 
 1. Click **Use this template** on GitHub (or `gh repo create --template`).
-2. `pnpm install`.
+2. `pnpm install`. Node is pinned in [.node-version](./.node-version) — fnm, nvm, nodenv, asdf and Cloudflare's build images all read it, and `engines` in the root `package.json` states the same range for pnpm. Run `fnm use` (or your manager's equivalent) first if your shell is on another major.
 3. `pnpm run init-project` — prompts for a kebab-case project name, renames every `wrangler.jsonc` + root `package.json`, and fans out the `*.example` templates into per-env files (`apps/data-service/.{dev,staging,production}.vars`, `apps/user-application/.env{,.staging,.production}`, `packages/data-ops/.env.{dev,staging,production}`). Idempotent — re-runnable, never overwrites filled-in files. The script's "Next steps" output lists every field that still needs a value.
 4. Provision a Neon database and fill `DATABASE_HOST/USERNAME/PASSWORD` in the env files created above. Set `BETTER_AUTH_SECRET` (`openssl rand -base64 32`) in `apps/user-application/.env*` and the matching `VITE_API_TOKEN` / `DATA_SERVICE_API_TOKEN` / `API_TOKEN` triple per environment.
 5. Run `pnpm run setup && pnpm run db:generate:dev && pnpm run db:migrate:dev`.
