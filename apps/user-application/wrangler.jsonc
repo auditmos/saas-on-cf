@@ -1,7 +1,7 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "saas-on-cf-ua",
-	"compatibility_date": "2026-05-25",
+	"compatibility_date": "2026-08-24",
 	"compatibility_flags": ["nodejs_compat"],
 	"observability": {
 		"enabled": true,
