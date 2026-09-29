@@ -2,10 +2,10 @@ packages:
   - "packages/*"
   - "apps/*"
 
-onlyBuiltDependencies:
-  - '@tailwindcss/oxide'
-  - better-sqlite3
-  - esbuild
-  - sharp
-  - simple-git-hooks
-  - workerd
+allowBuilds:
+  '@tailwindcss/oxide': true
+  better-sqlite3: true
+  esbuild: true
+  sharp: true
+  simple-git-hooks: true
+  workerd: true

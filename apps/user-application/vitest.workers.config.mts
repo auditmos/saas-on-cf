@@ -15,7 +15,7 @@
  */
 
 import { resolve } from "node:path";
-import { cloudflareTest } from "@cloudflare/vitest-pool-workers";
+import { cloudflareTest } from "@cloudflare/vitest-plugin";
 import { defineConfig } from "vitest/config";
 
 /** Echoes the request it received so tests can assert what crossed the binding. */
@@ -44,9 +44,11 @@ export default defineConfig({
 				compatibilityFlags: ["nodejs_compat"],
 				bindings: { CLOUDFLARE_ENV: "dev" },
 				serviceBindings: { DATA_SERVICE: echoUpstream },
-				// Mirrors the `ratelimits` block in wrangler.jsonc.
-				// `scripts/rate-limit-policy.test.ts` fails if either drifts from the policy.
-				ratelimits: { RATE_LIMITER_SERVER_FN: { simple: { limit: 100, period: 60 } } },
+				// Hand-copied from the top-level (dev) `ratelimits` block in wrangler.jsonc.
+				// `scripts/rate-limit-policy.test.ts` guards wrangler.jsonc, not this copy.
+				ratelimits: {
+					RATE_LIMITER_SERVER_FN: { namespace_id: "2000", simple: { limit: 100, period: 60 } },
+				},
 			},
 		}),
 	],

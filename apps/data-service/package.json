@@ -11,8 +11,9 @@
 		"test": "vitest run",
 		"test:watch": "vitest"
 	},
+	"packageManager": "pnpm@12.6.0",
 	"devDependencies": {
-		"@cloudflare/vitest-pool-workers": "^0.16.20",
+		"@cloudflare/vitest-plugin": "^1.0.0",
 		"@types/node": "^22.20.1",
 		"typescript": "^5.9.3",
 		"vitest": "^4.1.10",

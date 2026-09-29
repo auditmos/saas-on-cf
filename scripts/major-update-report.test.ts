@@ -51,12 +51,12 @@ describe("findFrozenUpdates", () => {
 	// change, so minor mode refuses it, and nothing else was looking.
 	it("reports a pre-1.0 minor bump, which minor mode refuses as breaking", () => {
 		const updates = findFrozenUpdates({
-			"@cloudflare/vitest-pool-workers": { current: "0.16.20", latest: "0.17.3" },
+			"@cloudflare/vitest-plugin": { current: "0.16.20", latest: "0.17.3" },
 		});
 
 		expect(updates).toEqual([
 			{
-				name: "@cloudflare/vitest-pool-workers",
+				name: "@cloudflare/vitest-plugin",
 				current: "0.16.20",
 				latest: "0.17.3",
 				kind: "pre-1.0",

@@ -58,7 +58,7 @@
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
-	"packageManager": "pnpm@10.34.5",
+	"packageManager": "pnpm@12.6.0",
 	"dependencies": {
 		"@neondatabase/serverless": "^1.1.0",
 		"better-auth": "^1.6.25",

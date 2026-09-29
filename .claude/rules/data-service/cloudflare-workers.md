@@ -64,6 +64,6 @@ return response
 
 ## Testing
 
-- Use `@cloudflare/vitest-pool-workers` for integration tests
+- Use `@cloudflare/vitest-plugin` for integration tests
 - Mock bindings in unit tests
 - Test with `wrangler dev` locally
