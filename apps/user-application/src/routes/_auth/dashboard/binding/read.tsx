@@ -160,7 +160,7 @@ Response → React Query cache → Component`}
 					<pre className="bg-muted p-4 rounded text-sm overflow-x-auto">
 						{`// core/functions/clients/binding.ts
 export const getClientBinding = createServerFn()
-  .inputValidator((data) => GetUserInput.parse(data))
+  .validator((data) => GetUserInput.parse(data))
   .handler(async (ctx) => {
     const response = await makeBindingRequest(\`/clients/\${ctx.data.id}\`);
     if (response.status === 404) return null;

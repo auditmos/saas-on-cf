@@ -186,7 +186,7 @@ Response → queryClient.invalidateQueries()`}
 					<pre className="bg-muted p-4 rounded text-sm overflow-x-auto">
 						{`// core/functions/clients/direct.ts
 export const createClientDirect = createServerFn({ method: 'POST' })
-  .inputValidator((data) => ClientCreateRequestSchema.parse(data))
+  .validator((data) => ClientCreateRequestSchema.parse(data))
   .handler(async (ctx) => {
     const client = await createClient(ctx.data);
     return { success: true, client };

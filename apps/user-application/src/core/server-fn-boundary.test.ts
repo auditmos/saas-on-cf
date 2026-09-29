@@ -12,7 +12,7 @@ import { env, resetTestEnv } from "@/test/cloudflare-workers";
 vi.mock("@tanstack/react-start", async (importOriginal) => {
 	const actual = await importOriginal<typeof import("@tanstack/react-start")>();
 	type ChainNode = Record<string, unknown>;
-	const CHAINING = new Set(["middleware", "inputValidator", "validator"]);
+	const CHAINING = new Set(["middleware", "validator"]);
 
 	const compileLike = (node: ChainNode): ChainNode =>
 		new Proxy(node, {

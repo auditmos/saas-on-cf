@@ -9,40 +9,44 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SignupRouteImport } from './routes/signup'
-import { Route as SigninRouteImport } from './routes/signin'
-import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ApiHealthRouteImport } from './routes/api/health'
+import { Route as AuthRouteRouteImport } from './routes/_auth/route'
+import { Route as SigninRouteImport } from './routes/signin'
+import { Route as SignupRouteImport } from './routes/signup'
 import { Route as AuthDashboardRouteRouteImport } from './routes/_auth/dashboard/route'
-import { Route as AuthDashboardIndexRouteImport } from './routes/_auth/dashboard/index'
+import { Route as ApiHealthRouteImport } from './routes/api/health'
 import { Route as AuthAppIndexRouteImport } from './routes/_auth/app/index'
-import { Route as ApiAuthSplatRouteImport } from './routes/api/auth.$'
-import { Route as AuthDashboardDirectRouteRouteImport } from './routes/_auth/dashboard/direct/route'
-import { Route as AuthDashboardBindingRouteRouteImport } from './routes/_auth/dashboard/binding/route'
+import { Route as AuthDashboardIndexRouteImport } from './routes/_auth/dashboard/index'
 import { Route as AuthDashboardApiRouteRouteImport } from './routes/_auth/dashboard/api/route'
-import { Route as AuthDashboardDirectIndexRouteImport } from './routes/_auth/dashboard/direct/index'
-import { Route as AuthDashboardBindingIndexRouteImport } from './routes/_auth/dashboard/binding/index'
+import { Route as AuthDashboardBindingRouteRouteImport } from './routes/_auth/dashboard/binding/route'
+import { Route as AuthDashboardDirectRouteRouteImport } from './routes/_auth/dashboard/direct/route'
+import { Route as ApiAuthSplatRouteImport } from './routes/api/auth.$'
 import { Route as AuthDashboardApiIndexRouteImport } from './routes/_auth/dashboard/api/index'
-import { Route as AuthDashboardDirectUpdateRouteImport } from './routes/_auth/dashboard/direct/update'
-import { Route as AuthDashboardDirectReadRouteImport } from './routes/_auth/dashboard/direct/read'
-import { Route as AuthDashboardDirectListRouteImport } from './routes/_auth/dashboard/direct/list'
-import { Route as AuthDashboardDirectDeleteRouteImport } from './routes/_auth/dashboard/direct/delete'
-import { Route as AuthDashboardDirectCreateRouteImport } from './routes/_auth/dashboard/direct/create'
-import { Route as AuthDashboardBindingUpdateRouteImport } from './routes/_auth/dashboard/binding/update'
-import { Route as AuthDashboardBindingReadRouteImport } from './routes/_auth/dashboard/binding/read'
-import { Route as AuthDashboardBindingListRouteImport } from './routes/_auth/dashboard/binding/list'
-import { Route as AuthDashboardBindingDeleteRouteImport } from './routes/_auth/dashboard/binding/delete'
-import { Route as AuthDashboardBindingCreateRouteImport } from './routes/_auth/dashboard/binding/create'
-import { Route as AuthDashboardApiUpdateRouteImport } from './routes/_auth/dashboard/api/update'
-import { Route as AuthDashboardApiReadRouteImport } from './routes/_auth/dashboard/api/read'
-import { Route as AuthDashboardApiListRouteImport } from './routes/_auth/dashboard/api/list'
-import { Route as AuthDashboardApiDeleteRouteImport } from './routes/_auth/dashboard/api/delete'
 import { Route as AuthDashboardApiCreateRouteImport } from './routes/_auth/dashboard/api/create'
+import { Route as AuthDashboardApiDeleteRouteImport } from './routes/_auth/dashboard/api/delete'
+import { Route as AuthDashboardApiListRouteImport } from './routes/_auth/dashboard/api/list'
+import { Route as AuthDashboardApiReadRouteImport } from './routes/_auth/dashboard/api/read'
+import { Route as AuthDashboardApiUpdateRouteImport } from './routes/_auth/dashboard/api/update'
+import { Route as AuthDashboardBindingIndexRouteImport } from './routes/_auth/dashboard/binding/index'
+import { Route as AuthDashboardBindingCreateRouteImport } from './routes/_auth/dashboard/binding/create'
+import { Route as AuthDashboardBindingDeleteRouteImport } from './routes/_auth/dashboard/binding/delete'
+import { Route as AuthDashboardBindingListRouteImport } from './routes/_auth/dashboard/binding/list'
+import { Route as AuthDashboardBindingReadRouteImport } from './routes/_auth/dashboard/binding/read'
+import { Route as AuthDashboardBindingUpdateRouteImport } from './routes/_auth/dashboard/binding/update'
+import { Route as AuthDashboardDirectIndexRouteImport } from './routes/_auth/dashboard/direct/index'
+import { Route as AuthDashboardDirectCreateRouteImport } from './routes/_auth/dashboard/direct/create'
+import { Route as AuthDashboardDirectDeleteRouteImport } from './routes/_auth/dashboard/direct/delete'
+import { Route as AuthDashboardDirectListRouteImport } from './routes/_auth/dashboard/direct/list'
+import { Route as AuthDashboardDirectReadRouteImport } from './routes/_auth/dashboard/direct/read'
+import { Route as AuthDashboardDirectUpdateRouteImport } from './routes/_auth/dashboard/direct/update'
 
-const SignupRoute = SignupRouteImport.update({
-  id: '/signup',
-  path: '/signup',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRouteRoute = AuthRouteRouteImport.update({
+  id: '/_auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SigninRoute = SigninRouteImport.update({
@@ -50,18 +54,9 @@ const SigninRoute = SigninRouteImport.update({
   path: '/signin',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthRouteRoute = AuthRouteRouteImport.update({
-  id: '/_auth',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiHealthRoute = ApiHealthRouteImport.update({
-  id: '/api/health',
-  path: '/api/health',
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthDashboardRouteRoute = AuthDashboardRouteRouteImport.update({
@@ -69,105 +64,77 @@ const AuthDashboardRouteRoute = AuthDashboardRouteRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthRouteRoute,
 } as any)
-const AuthDashboardIndexRoute = AuthDashboardIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AuthDashboardRouteRoute,
+const ApiHealthRoute = ApiHealthRouteImport.update({
+  id: '/api/health',
+  path: '/api/health',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AuthAppIndexRoute = AuthAppIndexRouteImport.update({
   id: '/app/',
   path: '/app/',
   getParentRoute: () => AuthRouteRoute,
 } as any)
-const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
-  id: '/api/auth/$',
-  path: '/api/auth/$',
-  getParentRoute: () => rootRouteImport,
+const AuthDashboardIndexRoute = AuthDashboardIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthDashboardRouteRoute,
 } as any)
-const AuthDashboardDirectRouteRoute =
-  AuthDashboardDirectRouteRouteImport.update({
-    id: '/direct',
-    path: '/direct',
-    getParentRoute: () => AuthDashboardRouteRoute,
-  } as any)
+const AuthDashboardApiRouteRoute = AuthDashboardApiRouteRouteImport.update({
+  id: '/api',
+  path: '/api',
+  getParentRoute: () => AuthDashboardRouteRoute,
+} as any)
 const AuthDashboardBindingRouteRoute =
   AuthDashboardBindingRouteRouteImport.update({
     id: '/binding',
     path: '/binding',
     getParentRoute: () => AuthDashboardRouteRoute,
   } as any)
-const AuthDashboardApiRouteRoute = AuthDashboardApiRouteRouteImport.update({
-  id: '/api',
-  path: '/api',
-  getParentRoute: () => AuthDashboardRouteRoute,
+const AuthDashboardDirectRouteRoute =
+  AuthDashboardDirectRouteRouteImport.update({
+    id: '/direct',
+    path: '/direct',
+    getParentRoute: () => AuthDashboardRouteRoute,
+  } as any)
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const AuthDashboardDirectIndexRoute =
-  AuthDashboardDirectIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => AuthDashboardDirectRouteRoute,
-  } as any)
-const AuthDashboardBindingIndexRoute =
-  AuthDashboardBindingIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => AuthDashboardBindingRouteRoute,
-  } as any)
 const AuthDashboardApiIndexRoute = AuthDashboardApiIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AuthDashboardApiRouteRoute,
 } as any)
-const AuthDashboardDirectUpdateRoute =
-  AuthDashboardDirectUpdateRouteImport.update({
-    id: '/update',
-    path: '/update',
-    getParentRoute: () => AuthDashboardDirectRouteRoute,
-  } as any)
-const AuthDashboardDirectReadRoute = AuthDashboardDirectReadRouteImport.update({
-  id: '/read',
-  path: '/read',
-  getParentRoute: () => AuthDashboardDirectRouteRoute,
+const AuthDashboardApiCreateRoute = AuthDashboardApiCreateRouteImport.update({
+  id: '/create',
+  path: '/create',
+  getParentRoute: () => AuthDashboardApiRouteRoute,
 } as any)
-const AuthDashboardDirectListRoute = AuthDashboardDirectListRouteImport.update({
+const AuthDashboardApiDeleteRoute = AuthDashboardApiDeleteRouteImport.update({
+  id: '/delete',
+  path: '/delete',
+  getParentRoute: () => AuthDashboardApiRouteRoute,
+} as any)
+const AuthDashboardApiListRoute = AuthDashboardApiListRouteImport.update({
   id: '/list',
   path: '/list',
-  getParentRoute: () => AuthDashboardDirectRouteRoute,
+  getParentRoute: () => AuthDashboardApiRouteRoute,
 } as any)
-const AuthDashboardDirectDeleteRoute =
-  AuthDashboardDirectDeleteRouteImport.update({
-    id: '/delete',
-    path: '/delete',
-    getParentRoute: () => AuthDashboardDirectRouteRoute,
-  } as any)
-const AuthDashboardDirectCreateRoute =
-  AuthDashboardDirectCreateRouteImport.update({
-    id: '/create',
-    path: '/create',
-    getParentRoute: () => AuthDashboardDirectRouteRoute,
-  } as any)
-const AuthDashboardBindingUpdateRoute =
-  AuthDashboardBindingUpdateRouteImport.update({
-    id: '/update',
-    path: '/update',
-    getParentRoute: () => AuthDashboardBindingRouteRoute,
-  } as any)
-const AuthDashboardBindingReadRoute =
-  AuthDashboardBindingReadRouteImport.update({
-    id: '/read',
-    path: '/read',
-    getParentRoute: () => AuthDashboardBindingRouteRoute,
-  } as any)
-const AuthDashboardBindingListRoute =
-  AuthDashboardBindingListRouteImport.update({
-    id: '/list',
-    path: '/list',
-    getParentRoute: () => AuthDashboardBindingRouteRoute,
-  } as any)
-const AuthDashboardBindingDeleteRoute =
-  AuthDashboardBindingDeleteRouteImport.update({
-    id: '/delete',
-    path: '/delete',
+const AuthDashboardApiReadRoute = AuthDashboardApiReadRouteImport.update({
+  id: '/read',
+  path: '/read',
+  getParentRoute: () => AuthDashboardApiRouteRoute,
+} as any)
+const AuthDashboardApiUpdateRoute = AuthDashboardApiUpdateRouteImport.update({
+  id: '/update',
+  path: '/update',
+  getParentRoute: () => AuthDashboardApiRouteRoute,
+} as any)
+const AuthDashboardBindingIndexRoute =
+  AuthDashboardBindingIndexRouteImport.update({
+    id: '/',
+    path: '/',
     getParentRoute: () => AuthDashboardBindingRouteRoute,
   } as any)
 const AuthDashboardBindingCreateRoute =
@@ -176,31 +143,64 @@ const AuthDashboardBindingCreateRoute =
     path: '/create',
     getParentRoute: () => AuthDashboardBindingRouteRoute,
   } as any)
-const AuthDashboardApiUpdateRoute = AuthDashboardApiUpdateRouteImport.update({
-  id: '/update',
-  path: '/update',
-  getParentRoute: () => AuthDashboardApiRouteRoute,
-} as any)
-const AuthDashboardApiReadRoute = AuthDashboardApiReadRouteImport.update({
-  id: '/read',
-  path: '/read',
-  getParentRoute: () => AuthDashboardApiRouteRoute,
-} as any)
-const AuthDashboardApiListRoute = AuthDashboardApiListRouteImport.update({
+const AuthDashboardBindingDeleteRoute =
+  AuthDashboardBindingDeleteRouteImport.update({
+    id: '/delete',
+    path: '/delete',
+    getParentRoute: () => AuthDashboardBindingRouteRoute,
+  } as any)
+const AuthDashboardBindingListRoute =
+  AuthDashboardBindingListRouteImport.update({
+    id: '/list',
+    path: '/list',
+    getParentRoute: () => AuthDashboardBindingRouteRoute,
+  } as any)
+const AuthDashboardBindingReadRoute =
+  AuthDashboardBindingReadRouteImport.update({
+    id: '/read',
+    path: '/read',
+    getParentRoute: () => AuthDashboardBindingRouteRoute,
+  } as any)
+const AuthDashboardBindingUpdateRoute =
+  AuthDashboardBindingUpdateRouteImport.update({
+    id: '/update',
+    path: '/update',
+    getParentRoute: () => AuthDashboardBindingRouteRoute,
+  } as any)
+const AuthDashboardDirectIndexRoute =
+  AuthDashboardDirectIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthDashboardDirectRouteRoute,
+  } as any)
+const AuthDashboardDirectCreateRoute =
+  AuthDashboardDirectCreateRouteImport.update({
+    id: '/create',
+    path: '/create',
+    getParentRoute: () => AuthDashboardDirectRouteRoute,
+  } as any)
+const AuthDashboardDirectDeleteRoute =
+  AuthDashboardDirectDeleteRouteImport.update({
+    id: '/delete',
+    path: '/delete',
+    getParentRoute: () => AuthDashboardDirectRouteRoute,
+  } as any)
+const AuthDashboardDirectListRoute = AuthDashboardDirectListRouteImport.update({
   id: '/list',
   path: '/list',
-  getParentRoute: () => AuthDashboardApiRouteRoute,
+  getParentRoute: () => AuthDashboardDirectRouteRoute,
 } as any)
-const AuthDashboardApiDeleteRoute = AuthDashboardApiDeleteRouteImport.update({
-  id: '/delete',
-  path: '/delete',
-  getParentRoute: () => AuthDashboardApiRouteRoute,
+const AuthDashboardDirectReadRoute = AuthDashboardDirectReadRouteImport.update({
+  id: '/read',
+  path: '/read',
+  getParentRoute: () => AuthDashboardDirectRouteRoute,
 } as any)
-const AuthDashboardApiCreateRoute = AuthDashboardApiCreateRouteImport.update({
-  id: '/create',
-  path: '/create',
-  getParentRoute: () => AuthDashboardApiRouteRoute,
-} as any)
+const AuthDashboardDirectUpdateRoute =
+  AuthDashboardDirectUpdateRouteImport.update({
+    id: '/update',
+    path: '/update',
+    getParentRoute: () => AuthDashboardDirectRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -397,18 +397,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/signup': {
-      id: '/signup'
-      path: '/signup'
-      fullPath: '/signup'
-      preLoaderRoute: typeof SignupRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/signin': {
-      id: '/signin'
-      path: '/signin'
-      fullPath: '/signin'
-      preLoaderRoute: typeof SigninRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_auth': {
@@ -418,18 +411,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/signin': {
+      id: '/signin'
+      path: '/signin'
+      fullPath: '/signin'
+      preLoaderRoute: typeof SigninRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/health': {
-      id: '/api/health'
-      path: '/api/health'
-      fullPath: '/api/health'
-      preLoaderRoute: typeof ApiHealthRouteImport
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_auth/dashboard': {
@@ -439,12 +432,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthDashboardRouteRouteImport
       parentRoute: typeof AuthRouteRoute
     }
-    '/_auth/dashboard/': {
-      id: '/_auth/dashboard/'
-      path: '/'
-      fullPath: '/dashboard/'
-      preLoaderRoute: typeof AuthDashboardIndexRouteImport
-      parentRoute: typeof AuthDashboardRouteRoute
+    '/api/health': {
+      id: '/api/health'
+      path: '/api/health'
+      fullPath: '/api/health'
+      preLoaderRoute: typeof ApiHealthRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_auth/app/': {
       id: '/_auth/app/'
@@ -453,25 +446,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAppIndexRouteImport
       parentRoute: typeof AuthRouteRoute
     }
-    '/api/auth/$': {
-      id: '/api/auth/$'
-      path: '/api/auth/$'
-      fullPath: '/api/auth/$'
-      preLoaderRoute: typeof ApiAuthSplatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_auth/dashboard/direct': {
-      id: '/_auth/dashboard/direct'
-      path: '/direct'
-      fullPath: '/dashboard/direct'
-      preLoaderRoute: typeof AuthDashboardDirectRouteRouteImport
-      parentRoute: typeof AuthDashboardRouteRoute
-    }
-    '/_auth/dashboard/binding': {
-      id: '/_auth/dashboard/binding'
-      path: '/binding'
-      fullPath: '/dashboard/binding'
-      preLoaderRoute: typeof AuthDashboardBindingRouteRouteImport
+    '/_auth/dashboard/': {
+      id: '/_auth/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof AuthDashboardIndexRouteImport
       parentRoute: typeof AuthDashboardRouteRoute
     }
     '/_auth/dashboard/api': {
@@ -481,19 +460,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthDashboardApiRouteRouteImport
       parentRoute: typeof AuthDashboardRouteRoute
     }
-    '/_auth/dashboard/direct/': {
-      id: '/_auth/dashboard/direct/'
-      path: '/'
-      fullPath: '/dashboard/direct/'
-      preLoaderRoute: typeof AuthDashboardDirectIndexRouteImport
-      parentRoute: typeof AuthDashboardDirectRouteRoute
+    '/_auth/dashboard/binding': {
+      id: '/_auth/dashboard/binding'
+      path: '/binding'
+      fullPath: '/dashboard/binding'
+      preLoaderRoute: typeof AuthDashboardBindingRouteRouteImport
+      parentRoute: typeof AuthDashboardRouteRoute
     }
-    '/_auth/dashboard/binding/': {
-      id: '/_auth/dashboard/binding/'
-      path: '/'
-      fullPath: '/dashboard/binding/'
-      preLoaderRoute: typeof AuthDashboardBindingIndexRouteImport
-      parentRoute: typeof AuthDashboardBindingRouteRoute
+    '/_auth/dashboard/direct': {
+      id: '/_auth/dashboard/direct'
+      path: '/direct'
+      fullPath: '/dashboard/direct'
+      preLoaderRoute: typeof AuthDashboardDirectRouteRouteImport
+      parentRoute: typeof AuthDashboardRouteRoute
+    }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_auth/dashboard/api/': {
       id: '/_auth/dashboard/api/'
@@ -502,95 +488,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthDashboardApiIndexRouteImport
       parentRoute: typeof AuthDashboardApiRouteRoute
     }
-    '/_auth/dashboard/direct/update': {
-      id: '/_auth/dashboard/direct/update'
-      path: '/update'
-      fullPath: '/dashboard/direct/update'
-      preLoaderRoute: typeof AuthDashboardDirectUpdateRouteImport
-      parentRoute: typeof AuthDashboardDirectRouteRoute
-    }
-    '/_auth/dashboard/direct/read': {
-      id: '/_auth/dashboard/direct/read'
-      path: '/read'
-      fullPath: '/dashboard/direct/read'
-      preLoaderRoute: typeof AuthDashboardDirectReadRouteImport
-      parentRoute: typeof AuthDashboardDirectRouteRoute
-    }
-    '/_auth/dashboard/direct/list': {
-      id: '/_auth/dashboard/direct/list'
-      path: '/list'
-      fullPath: '/dashboard/direct/list'
-      preLoaderRoute: typeof AuthDashboardDirectListRouteImport
-      parentRoute: typeof AuthDashboardDirectRouteRoute
-    }
-    '/_auth/dashboard/direct/delete': {
-      id: '/_auth/dashboard/direct/delete'
-      path: '/delete'
-      fullPath: '/dashboard/direct/delete'
-      preLoaderRoute: typeof AuthDashboardDirectDeleteRouteImport
-      parentRoute: typeof AuthDashboardDirectRouteRoute
-    }
-    '/_auth/dashboard/direct/create': {
-      id: '/_auth/dashboard/direct/create'
+    '/_auth/dashboard/api/create': {
+      id: '/_auth/dashboard/api/create'
       path: '/create'
-      fullPath: '/dashboard/direct/create'
-      preLoaderRoute: typeof AuthDashboardDirectCreateRouteImport
-      parentRoute: typeof AuthDashboardDirectRouteRoute
-    }
-    '/_auth/dashboard/binding/update': {
-      id: '/_auth/dashboard/binding/update'
-      path: '/update'
-      fullPath: '/dashboard/binding/update'
-      preLoaderRoute: typeof AuthDashboardBindingUpdateRouteImport
-      parentRoute: typeof AuthDashboardBindingRouteRoute
-    }
-    '/_auth/dashboard/binding/read': {
-      id: '/_auth/dashboard/binding/read'
-      path: '/read'
-      fullPath: '/dashboard/binding/read'
-      preLoaderRoute: typeof AuthDashboardBindingReadRouteImport
-      parentRoute: typeof AuthDashboardBindingRouteRoute
-    }
-    '/_auth/dashboard/binding/list': {
-      id: '/_auth/dashboard/binding/list'
-      path: '/list'
-      fullPath: '/dashboard/binding/list'
-      preLoaderRoute: typeof AuthDashboardBindingListRouteImport
-      parentRoute: typeof AuthDashboardBindingRouteRoute
-    }
-    '/_auth/dashboard/binding/delete': {
-      id: '/_auth/dashboard/binding/delete'
-      path: '/delete'
-      fullPath: '/dashboard/binding/delete'
-      preLoaderRoute: typeof AuthDashboardBindingDeleteRouteImport
-      parentRoute: typeof AuthDashboardBindingRouteRoute
-    }
-    '/_auth/dashboard/binding/create': {
-      id: '/_auth/dashboard/binding/create'
-      path: '/create'
-      fullPath: '/dashboard/binding/create'
-      preLoaderRoute: typeof AuthDashboardBindingCreateRouteImport
-      parentRoute: typeof AuthDashboardBindingRouteRoute
-    }
-    '/_auth/dashboard/api/update': {
-      id: '/_auth/dashboard/api/update'
-      path: '/update'
-      fullPath: '/dashboard/api/update'
-      preLoaderRoute: typeof AuthDashboardApiUpdateRouteImport
-      parentRoute: typeof AuthDashboardApiRouteRoute
-    }
-    '/_auth/dashboard/api/read': {
-      id: '/_auth/dashboard/api/read'
-      path: '/read'
-      fullPath: '/dashboard/api/read'
-      preLoaderRoute: typeof AuthDashboardApiReadRouteImport
-      parentRoute: typeof AuthDashboardApiRouteRoute
-    }
-    '/_auth/dashboard/api/list': {
-      id: '/_auth/dashboard/api/list'
-      path: '/list'
-      fullPath: '/dashboard/api/list'
-      preLoaderRoute: typeof AuthDashboardApiListRouteImport
+      fullPath: '/dashboard/api/create'
+      preLoaderRoute: typeof AuthDashboardApiCreateRouteImport
       parentRoute: typeof AuthDashboardApiRouteRoute
     }
     '/_auth/dashboard/api/delete': {
@@ -600,12 +502,110 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthDashboardApiDeleteRouteImport
       parentRoute: typeof AuthDashboardApiRouteRoute
     }
-    '/_auth/dashboard/api/create': {
-      id: '/_auth/dashboard/api/create'
-      path: '/create'
-      fullPath: '/dashboard/api/create'
-      preLoaderRoute: typeof AuthDashboardApiCreateRouteImport
+    '/_auth/dashboard/api/list': {
+      id: '/_auth/dashboard/api/list'
+      path: '/list'
+      fullPath: '/dashboard/api/list'
+      preLoaderRoute: typeof AuthDashboardApiListRouteImport
       parentRoute: typeof AuthDashboardApiRouteRoute
+    }
+    '/_auth/dashboard/api/read': {
+      id: '/_auth/dashboard/api/read'
+      path: '/read'
+      fullPath: '/dashboard/api/read'
+      preLoaderRoute: typeof AuthDashboardApiReadRouteImport
+      parentRoute: typeof AuthDashboardApiRouteRoute
+    }
+    '/_auth/dashboard/api/update': {
+      id: '/_auth/dashboard/api/update'
+      path: '/update'
+      fullPath: '/dashboard/api/update'
+      preLoaderRoute: typeof AuthDashboardApiUpdateRouteImport
+      parentRoute: typeof AuthDashboardApiRouteRoute
+    }
+    '/_auth/dashboard/binding/': {
+      id: '/_auth/dashboard/binding/'
+      path: '/'
+      fullPath: '/dashboard/binding/'
+      preLoaderRoute: typeof AuthDashboardBindingIndexRouteImport
+      parentRoute: typeof AuthDashboardBindingRouteRoute
+    }
+    '/_auth/dashboard/binding/create': {
+      id: '/_auth/dashboard/binding/create'
+      path: '/create'
+      fullPath: '/dashboard/binding/create'
+      preLoaderRoute: typeof AuthDashboardBindingCreateRouteImport
+      parentRoute: typeof AuthDashboardBindingRouteRoute
+    }
+    '/_auth/dashboard/binding/delete': {
+      id: '/_auth/dashboard/binding/delete'
+      path: '/delete'
+      fullPath: '/dashboard/binding/delete'
+      preLoaderRoute: typeof AuthDashboardBindingDeleteRouteImport
+      parentRoute: typeof AuthDashboardBindingRouteRoute
+    }
+    '/_auth/dashboard/binding/list': {
+      id: '/_auth/dashboard/binding/list'
+      path: '/list'
+      fullPath: '/dashboard/binding/list'
+      preLoaderRoute: typeof AuthDashboardBindingListRouteImport
+      parentRoute: typeof AuthDashboardBindingRouteRoute
+    }
+    '/_auth/dashboard/binding/read': {
+      id: '/_auth/dashboard/binding/read'
+      path: '/read'
+      fullPath: '/dashboard/binding/read'
+      preLoaderRoute: typeof AuthDashboardBindingReadRouteImport
+      parentRoute: typeof AuthDashboardBindingRouteRoute
+    }
+    '/_auth/dashboard/binding/update': {
+      id: '/_auth/dashboard/binding/update'
+      path: '/update'
+      fullPath: '/dashboard/binding/update'
+      preLoaderRoute: typeof AuthDashboardBindingUpdateRouteImport
+      parentRoute: typeof AuthDashboardBindingRouteRoute
+    }
+    '/_auth/dashboard/direct/': {
+      id: '/_auth/dashboard/direct/'
+      path: '/'
+      fullPath: '/dashboard/direct/'
+      preLoaderRoute: typeof AuthDashboardDirectIndexRouteImport
+      parentRoute: typeof AuthDashboardDirectRouteRoute
+    }
+    '/_auth/dashboard/direct/create': {
+      id: '/_auth/dashboard/direct/create'
+      path: '/create'
+      fullPath: '/dashboard/direct/create'
+      preLoaderRoute: typeof AuthDashboardDirectCreateRouteImport
+      parentRoute: typeof AuthDashboardDirectRouteRoute
+    }
+    '/_auth/dashboard/direct/delete': {
+      id: '/_auth/dashboard/direct/delete'
+      path: '/delete'
+      fullPath: '/dashboard/direct/delete'
+      preLoaderRoute: typeof AuthDashboardDirectDeleteRouteImport
+      parentRoute: typeof AuthDashboardDirectRouteRoute
+    }
+    '/_auth/dashboard/direct/list': {
+      id: '/_auth/dashboard/direct/list'
+      path: '/list'
+      fullPath: '/dashboard/direct/list'
+      preLoaderRoute: typeof AuthDashboardDirectListRouteImport
+      parentRoute: typeof AuthDashboardDirectRouteRoute
+    }
+    '/_auth/dashboard/direct/read': {
+      id: '/_auth/dashboard/direct/read'
+      path: '/read'
+      fullPath: '/dashboard/direct/read'
+      preLoaderRoute: typeof AuthDashboardDirectReadRouteImport
+      parentRoute: typeof AuthDashboardDirectRouteRoute
+    }
+    '/_auth/dashboard/direct/update': {
+      id: '/_auth/dashboard/direct/update'
+      path: '/update'
+      fullPath: '/dashboard/direct/update'
+      preLoaderRoute: typeof AuthDashboardDirectUpdateRouteImport
+      parentRoute: typeof AuthDashboardDirectRouteRoute
     }
   }
 }

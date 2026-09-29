@@ -354,7 +354,7 @@ Response → Success: keep optimistic
 					<pre className="bg-muted p-4 rounded text-sm overflow-x-auto">
 						{`// core/functions/clients/binding.ts
 export const updateClientBinding = createServerFn({ method: 'POST' })
-  .inputValidator((data) => UpdateUserInput.parse(data))
+  .validator((data) => UpdateUserInput.parse(data))
   .handler(async (ctx) => {
     const response = await makeBindingRequest(\`/clients/\${ctx.data.id}\`, {
       method: 'PUT',

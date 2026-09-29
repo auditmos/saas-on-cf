@@ -40,7 +40,7 @@ async function throwOnError(response: Response, fallbackMessage: string): Promis
 const GetClientInput = z.object({ id: z.string().min(1) });
 
 export const getClientBinding = createServerFn()
-	.inputValidator((data: z.infer<typeof GetClientInput>) => GetClientInput.parse(data))
+	.validator((data: z.infer<typeof GetClientInput>) => GetClientInput.parse(data))
 	.handler(async (ctx): Promise<Client | null> => {
 		const response = await makeBindingRequest(`/clients/${ctx.data.id}`);
 		if (response.status === 404) return null;
@@ -50,9 +50,7 @@ export const getClientBinding = createServerFn()
 
 // GET Clients (paginated)
 export const getClientsBinding = createServerFn()
-	.inputValidator((data: z.infer<typeof PaginationRequestSchema>) =>
-		PaginationRequestSchema.parse(data),
-	)
+	.validator((data: z.infer<typeof PaginationRequestSchema>) => PaginationRequestSchema.parse(data))
 	.handler(async (ctx): Promise<ClientListResponse> => {
 		const params = new URLSearchParams({
 			limit: String(ctx.data.limit),
@@ -65,7 +63,7 @@ export const getClientsBinding = createServerFn()
 
 // CREATE Client
 export const createClientBinding = createServerFn({ method: "POST" })
-	.inputValidator((data: unknown): ClientCreateInput => ClientCreateRequestSchema.parse(data))
+	.validator((data: unknown): ClientCreateInput => ClientCreateRequestSchema.parse(data))
 	.handler(async (ctx): Promise<Client> => {
 		const response = await makeBindingRequest("/clients", {
 			method: "POST",
@@ -83,7 +81,7 @@ const UpdateClientInput = z.object({
 });
 
 export const updateClientBinding = createServerFn({ method: "POST" })
-	.inputValidator((data: unknown) => UpdateClientInput.parse(data))
+	.validator((data: unknown) => UpdateClientInput.parse(data))
 	.handler(async (ctx): Promise<Client> => {
 		const { id, data: updateData } = ctx.data;
 
@@ -100,7 +98,7 @@ export const updateClientBinding = createServerFn({ method: "POST" })
 const DeleteClientInput = z.object({ id: z.string().min(1) });
 
 export const deleteClientBinding = createServerFn({ method: "POST" })
-	.inputValidator((data: unknown) => DeleteClientInput.parse(data))
+	.validator((data: unknown) => DeleteClientInput.parse(data))
 	.handler(async (ctx): Promise<void> => {
 		const response = await makeBindingRequest(`/clients/${ctx.data.id}`, {
 			method: "DELETE",

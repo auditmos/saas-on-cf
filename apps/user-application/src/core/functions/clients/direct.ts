@@ -21,7 +21,7 @@ import { AppError } from "@/core/errors";
 const GetClientInput = z.object({ id: z.string().min(1) });
 
 export const getClientDirect = createServerFn()
-	.inputValidator((data: z.infer<typeof GetClientInput>) => GetClientInput.parse(data))
+	.validator((data: z.infer<typeof GetClientInput>) => GetClientInput.parse(data))
 	.handler(async (ctx): Promise<Client | null> => {
 		const client = await getClient(ctx.data.id);
 		return client ? ClientSchema.parse(client) : null;
@@ -29,16 +29,14 @@ export const getClientDirect = createServerFn()
 
 // GET Clients (paginated)
 export const getClientsDirect = createServerFn()
-	.inputValidator((data: z.infer<typeof PaginationRequestSchema>) =>
-		PaginationRequestSchema.parse(data),
-	)
+	.validator((data: z.infer<typeof PaginationRequestSchema>) => PaginationRequestSchema.parse(data))
 	.handler(async (ctx): Promise<ClientListResponse> => {
 		return getClients(ctx.data);
 	});
 
 // CREATE Client
 export const createClientDirect = createServerFn({ method: "POST" })
-	.inputValidator((data: unknown): ClientCreateInput => ClientCreateRequestSchema.parse(data))
+	.validator((data: unknown): ClientCreateInput => ClientCreateRequestSchema.parse(data))
 	.handler(async (ctx): Promise<Client> => {
 		try {
 			const client = await createClient(ctx.data);
@@ -58,7 +56,7 @@ const UpdateClientInput = z.object({
 });
 
 export const updateClientDirect = createServerFn({ method: "POST" })
-	.inputValidator((data: unknown) => UpdateClientInput.parse(data))
+	.validator((data: unknown) => UpdateClientInput.parse(data))
 	.handler(async (ctx): Promise<Client> => {
 		const { id, data: updateData } = ctx.data;
 
@@ -87,7 +85,7 @@ export const updateClientDirect = createServerFn({ method: "POST" })
 const DeleteClientInput = z.object({ id: z.string().min(1) });
 
 export const deleteClientDirect = createServerFn({ method: "POST" })
-	.inputValidator((data: unknown) => DeleteClientInput.parse(data))
+	.validator((data: unknown) => DeleteClientInput.parse(data))
 	.handler(async (ctx): Promise<void> => {
 		const { id } = ctx.data;
 

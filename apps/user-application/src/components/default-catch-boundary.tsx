@@ -15,9 +15,10 @@ export function DefaultCatchBoundary({ error }: ErrorComponentProps) {
 	});
 	const [showDetails, setShowDetails] = useState(false);
 
-	// Format error details for display
-	const errorMessage = error?.message || "An unexpected error occurred";
-	const errorStack = error?.stack || "";
+	// Anything can be thrown, so the router types `error` as `unknown`.
+	const thrown = error instanceof Error ? error : undefined;
+	const errorMessage = thrown?.message || "An unexpected error occurred";
+	const errorStack = thrown?.stack || "";
 	const hasStack = errorStack.length > 0;
 
 	const handleReportError = () => {

@@ -206,7 +206,7 @@ const makeBindingRequest = async (path, options = {}) =>
   );
 
 export const createClientBinding = createServerFn({ method: 'POST' })
-  .inputValidator((data) => ClientCreateRequestSchema.parse(data))
+  .validator((data) => ClientCreateRequestSchema.parse(data))
   .handler(async (ctx) => {
     const response = await makeBindingRequest('/clients', {
       method: 'POST',

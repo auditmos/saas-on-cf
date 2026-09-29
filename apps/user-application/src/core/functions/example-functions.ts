@@ -13,7 +13,7 @@ const ExampleInputSchema = z.object({
 type ExampleInput = z.infer<typeof ExampleInputSchema>;
 
 export const examplefunction = baseFunction
-	.inputValidator((data: ExampleInput) => ExampleInputSchema.parse(data))
+	.validator((data: ExampleInput) => ExampleInputSchema.parse(data))
 	.handler(async (_ctx) => {
 		// console.log(`The Cloudflare Worker Environment: ${JSON.stringify(env)}`);
 		return "Function executed successfully";

@@ -17,7 +17,7 @@ Your core responsibilities:
 **Critical Rules You Must Follow:**
 - ALWAYS use TypeScript with strict typing for server functions and middleware
 - Use Zod or similar schema validation for all server function inputs
-- ALWAYS define explicit types using `z.infer<typeof Schema>` and pass to inputValidator for proper TypeScript inference
+- ALWAYS define explicit types using `z.infer<typeof Schema>` and pass to validator for proper TypeScript inference
 - Follow the established pattern: `src/core/middleware/` for middleware, `src/core/functions/` for server functions
 - Create composable middleware chains using the base function pattern
 - Implement proper error handling and logging for debugging
@@ -39,7 +39,7 @@ const InputSchema = z.object({
 type InputType = z.infer<typeof InputSchema>
 
 export const myServerFunction = createServerFn()
-  .inputValidator((data: InputType) => InputSchema.parse(data))
+  .validator((data: InputType) => InputSchema.parse(data))
   .handler(async (ctx) => {
     // Server-only logic here
     return 'Response data'
@@ -71,7 +71,7 @@ const baseFunction = createServerFn().middleware([
 type InputType = z.infer<typeof Schema>
 
 export const protectedFunction = baseFunction
-  .inputValidator((data: InputType) => Schema.parse(data))
+  .validator((data: InputType) => Schema.parse(data))
   .handler(async (ctx) => {
     // Access ctx.context.user from middleware
     return result
@@ -139,7 +139,7 @@ export const protectedFunction = baseFunction
    type InputType = z.infer<typeof Schema>
    
    export const myFunction = baseFunction
-     .inputValidator((data: InputType) => Schema.parse(data))
+     .validator((data: InputType) => Schema.parse(data))
      .handler(async (ctx) => {
        // Access ctx.data (validated input)
        // Access ctx.context (from middleware)

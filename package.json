@@ -51,17 +51,17 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.4.4",
-		"@semantic-release/changelog": "^6.0.3",
-		"@semantic-release/git": "^10.0.1",
-		"@types/node": "^22.20.1",
-		"@vitest/coverage-v8": "^4.1.10",
-		"knip": "^6.31.0",
-		"semantic-release": "^25.0.8",
-		"simple-git-hooks": "^2.13.1",
-		"taze": "^19.17.1",
-		"tsx": "^4.23.5",
-		"typescript": "^5.9.3",
-		"vitest": "^4.1.10"
+		"@semantic-release/changelog": "^7.0.0",
+		"@semantic-release/git": "^11.0.1",
+		"@types/node": "^24.19.0",
+		"@vitest/coverage-v8": "^4.1.11",
+		"knip": "^6.38.0",
+		"semantic-release": "^25.0.9",
+		"simple-git-hooks": "^2.14.0",
+		"taze": "^21.2.0",
+		"tsx": "^4.23.15",
+		"typescript": "^6.0.3",
+		"vitest": "^4.1.11"
 	},
 	"simple-git-hooks": {
 		"pre-commit": "pnpm run lint:ci",

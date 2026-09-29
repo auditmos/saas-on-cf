@@ -504,7 +504,7 @@ Nothing reads `field` yet. Both halves of field-level error display exist —
 a named input — but no route wires them together. If you want that, the data is
 already there.
 
-Validation is not handled here: `inputValidator` parses with Zod before the
+Validation is not handled here: `validator` parses with Zod before the
 handler runs, and TanStack Form surfaces field errors from the same schemas —
 see [Field Validators](#field-validators).
 

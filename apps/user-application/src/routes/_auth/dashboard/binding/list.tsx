@@ -164,7 +164,7 @@ Response → React Query cache → Table render`}
 					<pre className="bg-muted p-4 rounded text-sm overflow-x-auto">
 						{`// core/functions/clients/binding.ts
 export const getClientsBinding = createServerFn()
-  .inputValidator((data) => PaginationRequestSchema.parse(data))
+  .validator((data) => PaginationRequestSchema.parse(data))
   .handler(async (ctx) => {
     const params = new URLSearchParams({
       limit: String(ctx.data.limit),

@@ -207,7 +207,7 @@ Response → Invalidate queries → UI refresh`}
 					<pre className="bg-muted p-4 rounded text-sm overflow-x-auto">
 						{`// core/functions/clients/binding.ts
 export const deleteClientBinding = createServerFn({ method: 'POST' })
-  .inputValidator((data) => DeleteUserInput.parse(data))
+  .validator((data) => DeleteUserInput.parse(data))
   .handler(async (ctx) => {
     const response = await makeBindingRequest(\`/clients/\${ctx.data.id}\`, {
       method: 'DELETE',
