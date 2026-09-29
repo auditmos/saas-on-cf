@@ -53,6 +53,10 @@ jobs:
       - name: Type check
         run: pnpm run types
 
+      # Tests import @repo/data-ops from dist/, which is not committed.
+      - name: Build data-ops
+        run: pnpm run build:data-ops
+
       - name: Test
         run: pnpm run test
 
