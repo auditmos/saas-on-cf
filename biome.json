@@ -90,6 +90,7 @@
 			"**",
 			"!**/node_modules",
 			"!**/dist",
+			"!**/.wrangler",
 			"!**/.cache",
 			"!**/*.tsbuildinfo",
 			"!**/worker-configuration.d.ts",
