@@ -58,19 +58,19 @@
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
-	"packageManager": "pnpm@12.6.0",
+	"packageManager": "pnpm@12.9.1",
 	"dependencies": {
-		"@neondatabase/serverless": "^1.1.0",
+		"@neondatabase/serverless": "^1.2.0",
 		"better-auth": "^1.7.6",
 		"drizzle-orm": "^0.45.3",
 		"zod": "^4.6.5"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "^5.20260928.1",
-		"@types/node": "^24.19.0",
+		"@cloudflare/workers-types": "^5.20261004.1",
+		"@types/node": "^24.19.1",
 		"drizzle-kit": "^0.31.11",
 		"postgres": "^3.4.9",
-		"tsc-alias": "^1.9.5",
+		"tsc-alias": "^1.9.7",
 		"tsx": "^4.23.15",
 		"typescript": "^6.0.3"
 	}
