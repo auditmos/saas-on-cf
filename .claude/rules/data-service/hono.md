@@ -24,15 +24,7 @@ export default {
 
 ## Middleware Chain
 
-Apply in order: requestId → errorHandler → cors → auth → rateLimiter → validator
-
-```ts
-app.use('*', requestId())
-app.use('*', errorHandler())
-app.use('*', cors())
-app.use('/api/*', authMiddleware())
-app.use('/api/*', rateLimiter())
-```
+The order is fixed in `src/hono/app.ts` and listed in this app's `AGENTS.md`: requestId → secure headers → onError → cors → rateLimiter, then route-level session check and `zValidator`. The rate limiter runs before the session check so an unauthenticated flood does not cost a session lookup per request.
 
 ## Route Structure
 
@@ -50,9 +42,9 @@ clients.get('/:id', zValidator('param', IdParamSchema), async (c) => {
 
 ## Request Validation
 
-**ALWAYS** use `zValidator` from `@hono/zod-validator` — never raw `z.parse()`, `z.safeParse()`, or manual `c.req.json()` parsing in handlers.
+Validate requests with `zValidator` from `@hono/zod-validator`, not raw `z.parse()`, `z.safeParse()`, or manual `c.req.json()` parsing in handlers, so every handler reads typed input from `c.req.valid()` and invalid input fails the same way everywhere.
 
-**ALWAYS** import named schemas from `@repo/data-ops/{domain}` — never write inline `z.object()` inside `zValidator()`. If a schema doesn't exist yet, create it in the appropriate `data-ops` package first.
+Pass `zValidator()` a named schema imported from `@repo/data-ops/{domain}`, not an inline `z.object()`, because data-ops is where the frontend reads the same schemas. If the schema doesn't exist yet, add it to data-ops first.
 
 ```ts
 // CORRECT — named schema from data-ops

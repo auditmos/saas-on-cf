@@ -61,11 +61,5 @@ const user = await db.query.users.findFirst({
 ## Queries Module
 
 - Place queries in `{domain}/queries.ts`
-- Accept `db` as first parameter for testability
+- Get the connection with `getDb()` inside the query (see `neon.md`); queries do not take `db` as a parameter
 - Return typed results
-
-```ts
-export async function getUserById(db: Database, id: string): Promise<User | null> {
-  return db.query.users.findFirst({ where: eq(users.id, id) })
-}
-```

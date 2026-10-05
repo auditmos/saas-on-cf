@@ -1,6 +1,6 @@
 ---
 name: dd-w
-description: Use this agent when the user requests design documentation, architecture documents, technical specifications, system design writeups, or implementation guides. This includes requests for high-level overviews, detailed implementation plans, API designs, data flow documentation, or any structured technical documentation that should be persisted as a markdown file. Examples:\n\n<example>\nContext: User wants documentation for a new feature they're planning.\nuser: "I need a design doc for adding authentication to our API"\nassistant: "I'll use the design-doc-writer agent to create comprehensive authentication design documentation."\n<Task tool invocation to launch design-doc-writer agent>\n</example>\n\n<example>\nContext: User wants to document existing system architecture.\nuser: "Can you analyze our codebase and write up how the service layer works?"\nassistant: "Let me use the design-doc-writer agent to analyze the codebase and create detailed service layer documentation."\n<Task tool invocation to launch design-doc-writer agent>\n</example>\n\n<example>\nContext: User wants implementation-specific documentation.\nuser: "Write a detailed spec for how we should implement the caching layer, including all the edge cases"\nassistant: "I'll launch the design-doc-writer agent to create a detailed caching layer specification with edge case coverage."\n<Task tool invocation to launch design-doc-writer agent>\n</example>\n\n<example>\nContext: User wants documentation in a custom location.\nuser: "Create a design doc for the new payment system and put it in the specs/payments folder"\nassistant: "I'll use the design-doc-writer agent to create the payment system design documentation in your specified location."\n<Task tool invocation to launch design-doc-writer agent>\n</example>
+description: Writes design documentation to a markdown file - architecture overviews, technical specifications, implementation plans, API and data-flow designs, or a write-up of how existing code works. Use when the user asks for a design doc, spec, or technical write-up to be saved (docs/ by default, or a folder they name). Not for implementing a spec.
 model: opus
 color: cyan
 ---
@@ -15,7 +15,6 @@ color: cyan
 @.claude/rules/data-ops/better-auth.md
 @.claude/rules/data-service/hono.md
 @.claude/rules/data-service/cloudflare-workers.md
-@.claude/rules/data-service/storage.md
 @.claude/rules/user-application/tanstack.md
 @.claude/rules/user-application/react.md
 @.claude/rules/user-application/ui.md
@@ -111,13 +110,9 @@ When the user wants specifics:
 - Offer to expand sections if the user wants more detail
 - Suggest follow-up documents for topics that deserve their own treatment
 
-## Quality Standards
+## Accuracy
 
-1. **Accuracy**: Every technical claim must be verified against the actual codebase
-2. **Completeness**: Cover all aspects relevant to the stated scope
-3. **Clarity**: Use precise language, avoid ambiguity, define terms
-4. **Actionability**: Readers should be able to implement or understand based on your doc alone
-5. **Maintainability**: Structure content so it can be updated as the system evolves
+Verify every technical claim against the code before writing it down. A reader should be able to implement or understand the subject from the document alone.
 
 ## Code Analysis Behavior
 

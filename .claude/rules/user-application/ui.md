@@ -43,9 +43,9 @@ export function Modal({ trigger, children }: ModalProps) {
 </div>
 ```
 
-## Theme Awareness (REQUIRED)
+## Theme Awareness
 
-Every UI element MUST use theme-aware CSS variable classes. Never use hardcoded colors.
+Use theme-aware CSS variable classes for every color, not hardcoded ones, so each element renders correctly in both the light and the dark theme.
 
 - Text: `text-foreground`, `text-muted-foreground`, `text-primary`, `text-destructive`
 - Backgrounds: `bg-background`, `bg-muted`, `bg-card`, `bg-accent`

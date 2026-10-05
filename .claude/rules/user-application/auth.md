@@ -37,23 +37,13 @@ function UserMenu() {
 
 ## Protected Routes
 
-Use TanStack Router middleware:
+Server functions are protected by default: `protectedFunctionMiddleware` in
+`core/middleware/auth.ts` is registered as global `functionMiddleware` in `start.tsx`.
+It throws `AppError` (`UNAUTHENTICATED` / `NOT_APPROVED`) instead of redirecting, and
+only functions listed in `core/public-server-fns.ts` run without a session.
 
-```ts
-// core/middleware/auth.ts
-import { createMiddleware } from '@tanstack/react-start'
-
-export const authMiddleware = createMiddleware().server(async ({ next }) => {
-  const session = await getSession()
-  if (!session) {
-    throw redirect({ to: '/login' })
-  }
-  return next({ context: { session } })
-})
-```
-
-Apply to the layout route, so everything nested under it is covered — including
-routes added later:
+Pages are protected by the layout route, so everything nested under it is covered —
+including routes added later:
 
 ```tsx
 // routes/_auth/route.tsx
@@ -81,22 +71,9 @@ Uses standard `form-patterns.md` template. Auth-specific notes:
 - Never expose tokens in client code
 - Use HTTP-only cookies (Better Auth default)
 - Validate session on sensitive operations
-- Redirect to login on 401 responses
-
-```ts
-// API client interceptor
-if (response.status === 401) {
-  window.location.href = '/login'
-}
-```
 
 ## Server Functions with Auth
 
-```ts
-export const getSecureData = createServerFn({ method: 'GET' })
-  .middleware([authMiddleware])
-  .handler(async ({ context }) => {
-    // context.session guaranteed to exist
-    return fetchDataForUser(context.session.user.id)
-  })
-```
+Don't add auth middleware per function — the global middleware already runs. Read the
+caller from `context.auth`, which is `{ status: "public" }` or
+`{ status: "authorized", userId, email }`; check `status` before using the identity.

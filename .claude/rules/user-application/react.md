@@ -98,7 +98,7 @@ return <DataView data={data} />
 
 - Use Transitions for non-urgent updates
 - Leverage Suspense boundaries
-- Use `use()` hook for promises in render (experimental)
+- Use the `use()` hook to read promises and context in render
 
 ```tsx
 function App() {

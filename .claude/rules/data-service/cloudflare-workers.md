@@ -9,15 +9,22 @@ paths:
 
 - Use ES module syntax with default export
 - Extend `WorkerEntrypoint` for typed bindings
-- Initialize resources (DB) in fetch handler
+- Initialize resources (DB, auth) once in the constructor; `fetch` only hands the request to the Hono app
 
 ```ts
 import { WorkerEntrypoint } from 'cloudflare:workers'
 
-export default class extends WorkerEntrypoint<Env> {
-  async fetch(request: Request): Promise<Response> {
-    const db = getDb(this.env.DATABASE_URL)
-    return app.fetch(request, { ...this.env, db })
+export default class DataService extends WorkerEntrypoint<Env> {
+  constructor(ctx: ExecutionContext, env: Env) {
+    super(ctx, env)
+    initDatabase({
+      host: env.DATABASE_HOST,
+      username: env.DATABASE_USERNAME,
+      password: env.DATABASE_PASSWORD,
+    })
+  }
+  fetch(request: Request) {
+    return App.fetch(request, this.env, this.ctx)
   }
 }
 ```
@@ -27,16 +34,6 @@ export default class extends WorkerEntrypoint<Env> {
 - Run `pnpm cf-typegen` to generate types from wrangler.jsonc and environment variables
 - Above script modifies `Env` interface in **worker-configuration.d.ts**
 - Access via `this.env` or `c.env` (Hono)
-
-```ts
-interface Env {
-  DATABASE_URL: string
-  MY_KV: KVNamespace
-  MY_BUCKET: R2Bucket
-  MY_QUEUE: Queue
-  MY_DO: DurableObjectNamespace
-}
-```
 
 ## Secrets Management
 
