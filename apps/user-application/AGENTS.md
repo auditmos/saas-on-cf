@@ -50,11 +50,12 @@ pnpm run deploy:production  # build:production + wrangler deploy
 
 `.env` (local) or Cloudflare dashboard:
 - `DATABASE_HOST`, `DATABASE_USERNAME`, `DATABASE_PASSWORD`
-- `BETTER_AUTH_SECRET`
+- `BETTER_AUTH_SECRET`, `BETTER_AUTH_BASE_URL`
 - `CLOUDFLARE_ENV` - dev | staging | production
 - `VITE_DATA_SERVICE_URL` - public API URL
-- `VITE_API_TOKEN` - client-side API auth
-- `DATA_SERVICE_API_TOKEN` - server-side bearer for the service binding
+- `DATA_SERVICE_API_TOKEN` - server-side bearer for the service binding; must equal the data-service's `API_TOKEN`
+
+The browser carries no API token: `lib/api-client.ts` authenticates with the session cookie, and `api-token-not-in-bundle.test.ts` fails if a token reaches the bundle.
 
 <important if="you are making server-side calls to data-service from user-application">
 ## Service Binding (DATA_SERVICE)

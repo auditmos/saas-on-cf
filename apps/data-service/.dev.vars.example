@@ -4,8 +4,10 @@ DATABASE_HOST=
 DATABASE_USERNAME=
 DATABASE_PASSWORD=
 
-# API token for client-side callers (paired with VITE_API_TOKEN in user-application).
+# Service-to-service bearer. Must equal DATA_SERVICE_API_TOKEN in user-application,
+# which sends it over the service binding. Browsers authenticate with the session cookie.
 API_TOKEN=
 
-# Comma-separated list of allowed origins for CORS. Leave empty for dev (allows all).
+# Comma-separated list of allowed origins for CORS. Ignored in dev, which allows
+# http://localhost:3000 and http://127.0.0.1:3000 only.
 ALLOWED_ORIGINS=

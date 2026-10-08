@@ -24,8 +24,7 @@ All vars from `.env` are available on the Worker `env` object from `cloudflare:w
 ```ts
 import { env } from 'cloudflare:workers'
 env.DATA_SERVICE_API_TOKEN       // correct — server-only bearer for the service binding
-env.VITE_DATA_SERVICE_URL        // correct
-env.VITE_API_TOKEN               // correct — the token the browser also gets
+env.VITE_DATA_SERVICE_URL        // correct — the VITE_ prefix stays on the name
 ```
 
 ### Client-side (browser)

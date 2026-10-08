@@ -46,7 +46,7 @@ function ApiCreatePage() {
     ▼
 fetch('${import.meta.env.VITE_DATA_SERVICE_URL || "http://localhost:8788"}/clients', {
   method: 'POST',
-  headers: { Authorization: 'Bearer <VITE_API_TOKEN>' },
+  credentials: 'include', // Better Auth session cookie, no bearer token
   body: JSON.stringify(data)
 })
     │
@@ -197,13 +197,14 @@ Response → queryClient.invalidateQueries()`}
 export async function createClientApi(data: ClientCreateInput): Promise<Client> {
   const response = await fetch(\`\${API_URL}/clients\`, {
     method: 'POST',
-    headers: getHeaders(), // includes Authorization if VITE_API_TOKEN set
+    headers: JSON_HEADERS,
+    credentials: CREDENTIALS, // "include" — the session cookie authenticates
     body: JSON.stringify(data),
   });
   return handleResponse<Client>(response);
 }
 
-// Component - errors thrown as ApiError
+// Component - errors thrown as AppError
 const mutation = useMutation({
   mutationFn: (data) => createClientApi(data),
   onSuccess: () => {

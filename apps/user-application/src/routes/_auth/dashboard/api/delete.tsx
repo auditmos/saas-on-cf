@@ -215,10 +215,12 @@ Response → Invalidate queries → UI refresh`}
 export async function deleteClientApi(id: string): Promise<void> {
   const response = await fetch(\`\${API_URL}/clients/\${id}\`, {
     method: 'DELETE',
-    headers: getHeaders(),
+    headers: JSON_HEADERS,
+    credentials: CREDENTIALS,
   });
   if (!response.ok) {
-    throw new ApiError(errorData.message || 'Failed to delete', response.status);
+    // errorData: the data-service's { message, code } body
+    throw new AppError(errorData.message || 'Failed to delete client', errorData.code || 'API_ERROR', response.status);
   }
 }
 

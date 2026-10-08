@@ -167,7 +167,8 @@ export async function fetchClients(params: PaginationRequest): Promise<ClientLis
   });
   const response = await fetch(\`\${API_URL}/clients?\${searchParams}\`, {
     method: 'GET',
-    headers: getHeaders(),
+    headers: JSON_HEADERS,
+    credentials: CREDENTIALS,
   });
   return handleResponse<ClientListResponse>(response);
 }
