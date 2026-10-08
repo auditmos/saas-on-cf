@@ -29,41 +29,48 @@ File-based routing with TanStack Router.
 Root layout component applied to all routes.
 
 ##### [`src/routes/_auth/`](./src/routes/_auth/)
-Authenticated routes requiring user authentication.
+Authenticated routes. [`route.tsx`](./src/routes/_auth/route.tsx) is the server-side guard: a signed-out request is redirected to `/signin`, and a signed-in but unapproved user sees the pending-approval screen.
 
-- **`app/`** - Main application routes
-  - **`polar/`** - Payment and subscription management (checkout, portal, subscriptions)
+- **`app/`** - Placeholder for your application's own routes
+- **`dashboard/`** - Demo of the three data-access patterns, one CRUD set each: `direct/`, `binding/`, `api/`
 
-##### [`src/routes/_static/`](./src/routes/_static/)
-Static content routes.
+##### Public routes
 
-- **`docs/`** - Documentation pages
+- **`index.tsx`** - Landing page
+- **`signin.tsx`**, **`signup.tsx`** - Email and password sign-in and sign-up
 
 ##### [`src/routes/api/`](./src/routes/api/)
 API route handlers.
 
 - **`auth.$.tsx`** - Better Auth API endpoints
+- **`health.ts`** - Health check
 
 #### [`src/core/`](./src/core/)
 Core business logic and server functions.
 
 ##### [`src/core/functions/`](./src/core/functions/)
-Server functions with middleware support.
+Server functions.
 
-- **`example-functions.ts`** - Sample server function
-
-##### [`src/core/forms/`](./src/core/forms/)
-TanStack Form definitions for form handling with server validation.
+- **`auth/session.ts`** - `getAuthView`, the session check the `_auth` guard calls
+- **`clients/direct.ts`** - Demo CRUD straight against `@repo/data-ops` (Pattern 2)
+- **`clients/binding.ts`** - Demo CRUD through the `DATA_SERVICE` service binding (Pattern 1)
+- **`example-functions.ts`** - Sample server function with its own middleware
 
 ##### [`src/core/middleware/`](./src/core/middleware/)
-Server-side middleware for authentication, validation, and more.
+Server-side middleware.
 
-- **`auth.ts`** - Authentication middleware (includes `protectedFunctionMiddleware` and `protectedRequestMiddleware`)
-- **`example-middleware.ts`** - Sample middleware
+- **`auth.ts`** - `protectedFunctionMiddleware`, registered globally in [`src/start.tsx`](./src/start.tsx) so every server function requires an approved session
+- **`example-middleware.ts`** - Sample middleware that adds to the context
+
+##### Other modules
+
+- **[`public-server-fns.ts`](./src/core/public-server-fns.ts)** - The complete list of server functions reachable without a session
+- **[`errors.ts`](./src/core/errors.ts)** - `AppError`, see [Error Handling](#error-handling)
+- **[`auth-view.ts`](./src/core/auth-view.ts)** - Maps a session to signed-out / pending / authorized
 
 ### Server Functions & Data Access
 
-> **Demo Routes:** See [docs/demos/](../../docs/demos/) for implementation examples of each pattern.
+> **Demo Routes:** [`src/routes/_auth/dashboard/`](./src/routes/_auth/dashboard/) implements each pattern: `direct/` is Pattern 2, `binding/` is Pattern 1, `api/` is Pattern 3.
 
 #### Three Data Access Patterns
 
@@ -113,68 +120,38 @@ data-service        (direct database)
 
 ---
 
-### TanStack Form (Complex Forms)
+### TanStack Form
 
-For forms with multiple fields and validation, use TanStack Form with FormData.
-
-**Features:**
-- Progressive enhancement (works without JavaScript)
-- Native HTML form submission with FormData
-- Server + client validation
-- Type-safe form state management
-
-**Required packages:**
-```bash
-pnpm add @tanstack/react-form @tanstack/react-form-start @tanstack/react-store
-```
+`@tanstack/react-form` is installed and used by every create, read and update demo and by [`email-auth.tsx`](./src/components/auth/email-auth.tsx). The form holds field state and client-side validators; submitting hands the values to a TanStack Query mutation, which calls a server function (or the browser API client). Server-side validation is the server function's `.validator()` parsing the shared Zod schema — the form does not submit `FormData`, so it needs JavaScript.
 
 #### Form Setup Pattern
 
+From [`dashboard/direct/create.tsx`](./src/routes/_auth/dashboard/direct/create.tsx):
+
 ```typescript
-// src/core/forms/create-user-form.ts
-import { createServerFn } from "@tanstack/react-start";
-import {
-  formOptions,
-  createServerValidate,
-  ServerValidateError,
-  getFormData,
-} from "@tanstack/react-form-start";
-import { UserCreateRequest, type UserCreateInput } from "@repo/data-ops/zod-schema/user";
+import { useForm } from "@tanstack/react-form";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createClientDirect } from "@/core/functions/clients/direct";
+import { clientKeys } from "@/lib/query-keys";
 
-// 1. Form options (shared between client/server)
-export const createUserFormOpts = formOptions<UserCreateInput>({
-  defaultValues: {
-    name: "",
-    email: "",
+const queryClient = useQueryClient();
+
+const mutation = useMutation({
+  mutationFn: (data: { name: string; surname: string; email: string }) =>
+    createClientDirect({ data }),
+  onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: clientKeys.all });
+    form.reset();
   },
 });
 
-// 2. Server-side validation
-const serverValidate = createServerValidate({
-  ...createUserFormOpts,
-  onServerValidate: ({ value }) => {
-    const result = UserCreateRequest.safeParse(value);
-    if (!result.success) {
-      return result.error.errors[0]?.message;
-    }
+const form = useForm({
+  defaultValues: { name: "", surname: "", email: "" },
+  onSubmit: async ({ value }) => {
+    mutation.reset();
+    mutation.mutate(value);
   },
 });
-
-// 3. Server function handler
-export const handleCreateUser = createServerFn({ method: "POST" })
-  .validator((data: unknown) => {
-    if (!(data instanceof FormData)) throw new Error("Invalid form data");
-    return data;
-  })
-  .handler(async (ctx) => {
-    const validatedData = await serverValidate(ctx.data);
-    // ... call API or database
-  });
-
-// 4. SSR form state
-export const getCreateUserFormData = createServerFn({ method: "GET" }).handler(
-  async () => getFormData()
-);
 ```
 
 #### Field Validators
@@ -238,30 +215,21 @@ const isDirty = useStore(form.store, (state) => state.isDirty);
 
 ### Direct Server Functions (Simple Mutations)
 
-For simple mutations (delete, toggle) use direct server functions with TanStack Query.
+For simple mutations (delete, toggle) call a server function from a TanStack Query mutation, with no form. Authentication needs no code here: the global middleware already requires an approved session (see [Middleware Patterns](#middleware-patterns)).
+
+From [`core/functions/clients/binding.ts`](./src/core/functions/clients/binding.ts), where `makeBindingRequest` calls the data-service over the `DATA_SERVICE` binding with `DATA_SERVICE_API_TOKEN`, and `throwOnError` re-raises its error body as an `AppError`:
 
 ```typescript
-// src/core/functions/user-functions.ts
-import { createServerFn } from "@tanstack/react-start";
-import { z } from "zod";
-import { env } from "cloudflare:workers";
-import { protectedFunctionMiddleware } from "@/core/middleware/auth";
+const DeleteClientInput = z.object({ id: z.string().min(1) });
 
-const protectedFunction = createServerFn().middleware([
-  protectedFunctionMiddleware,
-]);
+export const deleteClientBinding = createServerFn({ method: "POST" })
+  .validator((data: unknown) => DeleteClientInput.parse(data))
+  .handler(async (ctx): Promise<void> => {
+    const response = await makeBindingRequest(`/clients/${ctx.data.id}`, {
+      method: "DELETE",
+    });
 
-export const deleteClient = protectedFunction
-  .validator((data: { id: string }) => z.object({ id: z.string() }).parse(data))
-  .handler(async ({ data, context }) => {
-    const response = await env.DATA_SERVICE.fetch(
-      new Request(`https://data-service/clients/${data.id}`, {
-        method: "DELETE",
-        headers: { "Authorization": `Bearer ${env.DATA_SERVICE_API_TOKEN}` },
-      })
-    );
-    if (!response.ok) throw new Error("Failed to delete");
-    return { success: true };
+    if (!response.ok) await throwOnError(response, "Failed to delete client");
   });
 ```
 
@@ -269,7 +237,7 @@ export const deleteClient = protectedFunction
 
 ```typescript
 const deleteMutation = useMutation({
-  mutationFn: (id: string) => deleteClient({ data: { id } }),
+  mutationFn: (id: string) => deleteClientBinding({ data: { id } }),
   onSuccess: () => {
     // Key factories live in `src/lib/query-keys.ts` — invalidate through them
     // rather than retyping the array, so a key change cannot miss a call site.
@@ -286,55 +254,37 @@ const deleteMutation = useMutation({
 
 ### Zod Schema Patterns
 
-Schemas are defined in `packages/data-ops/src/zod-schema/` and shared across apps.
+Schemas live with their domain in `@repo/data-ops` and are shared by both apps. The demo domain is `client`: [`packages/data-ops/src/client/schema.ts`](../../packages/data-ops/src/client/schema.ts), imported as `@repo/data-ops/client`.
 
 #### Schema Types
 
+| Kind | Exports |
+|------|---------|
+| Domain (what a record looks like) | `ClientSchema` |
+| Requests (what a caller sends) | `ClientCreateRequestSchema`, `ClientUpdateRequestSchema`, `PaginationRequestSchema`, `IdParamSchema` |
+| Responses | `ClientListResponseSchema`, `PaginationMetaSchema`, `ErrorResponseSchema` |
+| Inferred types | `Client`, `ClientCreateInput`, `ClientUpdateInput`, `PaginationRequest`, `ClientListResponse`, `ErrorResponse` |
+
 ```typescript
-// packages/data-ops/src/zod-schema/user.ts
-import { z } from "zod";
-
-// Domain Schema (what data looks like)
-export const UserSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  email: z.string()
+export const ClientCreateRequestSchema = z.object({
+  name: z.string().min(1, "Name is required").max(30, "Name must be at most 30 characters"),
+  surname: z
+    .string()
+    .min(1, "Surname is required")
+    .max(30, "Surname must be at most 30 characters"),
+  email: z.string().email("Invalid email format"),
 });
-
-// Request Schemas (what client sends)
-export const UserCreateRequest = z.object({
-  name: z.string().min(1).max(30),
-  email: z.string().email()
-});
-
-export const UserUpdateRequest = z.object({
-  name: z.string().min(1).max(30).optional(),
-  email: z.string().email().optional()
-}).refine(data => data.name || data.email, {
-  message: "At least one field required"
-});
-
-// Pagination Schemas
-export const PaginationQuerySchema = z.object({
-  limit: z.coerce.number().min(1).max(100).default(10),
-  offset: z.coerce.number().min(0).default(0)
-});
-
-// Inferred Types
-export type User = z.infer<typeof UserSchema>;
-export type UserCreateInput = z.infer<typeof UserCreateRequest>;
-export type UserUpdateInput = z.infer<typeof UserUpdateRequest>;
 ```
 
 #### Using in Server Functions
 
 ```typescript
-import { UserCreateRequest, type UserCreateInput } from "@repo/data-ops/zod-schema/user";
+import { ClientCreateRequestSchema, type ClientCreateInput } from "@repo/data-ops/client";
 
-export const createUser = createServerFn()
-  .validator((data: UserCreateInput) => UserCreateRequest.parse(data))
-  .handler(async ({ data }) => {
-    // data is typed and validated
+export const createClientDirect = createServerFn({ method: "POST" })
+  .validator((data: unknown): ClientCreateInput => ClientCreateRequestSchema.parse(data))
+  .handler(async (ctx) => {
+    // ctx.data is typed and validated
   });
 ```
 
@@ -344,53 +294,42 @@ export const createUser = createServerFn()
 
 #### Authentication Middleware
 
-```typescript
-import { protectedFunctionMiddleware } from "@/core/middleware/auth";
-
-const protectedFunction = createServerFn().middleware([
-  protectedFunctionMiddleware,
-]);
-
-export const myProtectedFunction = protectedFunction
-  .validator(/* ... */)
-  .handler(async ({ data, context }) => {
-    // context.session is available with user data
-    const { session } = context;
-    console.log("Authenticated user:", session.user.id);
-  });
-```
-
-#### Custom Context Middleware
+Server functions are public HTTP endpoints, so authentication is the default rather than something each function opts into. [`src/start.tsx`](./src/start.tsx) registers `protectedFunctionMiddleware` as global `functionMiddleware`:
 
 ```typescript
-// src/core/middleware/request-context.ts
-import { createMiddleware } from "@tanstack/react-start";
-
-export const requestContextMiddleware = createMiddleware({
-  type: "function",
-}).server(async ({ next }) => {
-  const requestId = crypto.randomUUID();
-  const timestamp = new Date().toISOString();
-
-  return await next({
-    context: { requestId, timestamp },
-  });
+export const startInstance = createStart(() => {
+  return {
+    defaultSsr: true,
+    functionMiddleware: [protectedFunctionMiddleware],
+  };
 });
 ```
 
-#### Combining Multiple Middleware
+A new server function is therefore protected without any auth code. Its handler receives `context.auth`, which is `{ status: "authorized", userId, email }` for an approved session. A missing session throws `UNAUTHENTICATED` (401); an unapproved account throws `NOT_APPROVED` (403).
+
+To make a function reachable anonymously, add it to `PUBLIC_SERVER_FNS` in [`public-server-fns.ts`](./src/core/public-server-fns.ts) with the reason, and update the expected list in [`scripts/server-fn-enumeration.test.ts`](../../scripts/server-fn-enumeration.test.ts) — the test fails until you do, so opening an endpoint is always visible in review. Its handler then sees `context.auth.status === "public"`.
+
+#### Custom Context Middleware
+
+Per-function middleware runs in addition to the global one. From [`example-middleware.ts`](./src/core/middleware/example-middleware.ts) and [`example-functions.ts`](./src/core/functions/example-functions.ts):
 
 ```typescript
-const fullyProtectedFunction = createServerFn().middleware([
-  requestContextMiddleware,  // Runs first
-  protectedFunctionMiddleware,  // Runs second
-]);
+export const exampleMiddlewareWithContext = createMiddleware({
+  type: "function",
+}).server(async ({ next }) => {
+  return await next({
+    context: {
+      data: "Some Data From Middleware",
+    },
+  });
+});
 
-export const auditedAction = fullyProtectedFunction
-  .validator(/* ... */)
-  .handler(async ({ data, context }) => {
-    // context has: requestId, timestamp, session
-    console.log(`[${context.requestId}] User ${context.session.user.id}`);
+const baseFunction = createServerFn().middleware([exampleMiddlewareWithContext]);
+
+export const examplefunction = baseFunction
+  .validator((data: ExampleInput) => ExampleInputSchema.parse(data))
+  .handler(async (_ctx) => {
+    return "Function executed successfully";
   });
 ```
 
@@ -505,8 +444,8 @@ a named input — but no route wires them together. If you want that, the data i
 already there.
 
 Validation is not handled here: `validator` parses with Zod before the
-handler runs, and TanStack Form surfaces field errors from the same schemas —
-see [Field Validators](#field-validators).
+handler runs, and TanStack Form runs its own field validators in the browser
+before anything is sent — see [Field Validators](#field-validators).
 
 ---
 
@@ -514,25 +453,22 @@ see [Field Validators](#field-validators).
 
 #### TanStack Form Checklist
 
-- [ ] Install `@tanstack/react-form`, `@tanstack/react-form-start`, `@tanstack/react-store`
-- [ ] Ensure Zod schema exists in `packages/data-ops/src/zod-schema/`
-- [ ] Create form options in `src/core/forms/` (imports schema from `@repo/data-ops`)
-- [ ] Create `createServerValidate` for server validation
-- [ ] Create server function with FormData input validator
-- [ ] Create `getFormData` server function for SSR
-- [ ] Use `useForm` with `useTransform` + `mergeForm` in component
-- [ ] Use native `<form>` with `action`, `method="post"`, `encType="multipart/form-data"`
+- [ ] Ensure the Zod request schema exists in the domain's `schema.ts` in `@repo/data-ops`
+- [ ] Create the server function the form submits to (see the checklist below)
+- [ ] Wrap it in `useMutation`, invalidating the affected `clientKeys`-style query keys on success
+- [ ] Create the form with `useForm({ defaultValues, onSubmit })`, calling `mutation.mutate(value)` from `onSubmit`
 - [ ] Add field-level validators in `<form.Field>`
 - [ ] Use `<form.Subscribe>` for submit button state
+- [ ] Render `mutation.error.message` for server-side failures
 
 #### Direct Server Functions Checklist
 
-- [ ] Ensure Zod schema exists in `packages/data-ops/src/zod-schema/`
-- [ ] Import schemas and types from `@repo/data-ops/zod-schema/...`
-- [ ] Create server function in `src/core/functions/`
-- [ ] Add appropriate middleware (auth if needed)
-- [ ] Use `.validator()` with imported Zod schema
-- [ ] Handle errors appropriately in handler
+- [ ] Ensure the Zod schema exists in the domain's `schema.ts` in `@repo/data-ops`
+- [ ] Import schemas and types from `@repo/data-ops/<domain>`
+- [ ] Create the server function in `src/core/functions/`
+- [ ] Leave auth to the global middleware; add to `PUBLIC_SERVER_FNS` only if anonymous callers need it
+- [ ] Use `.validator()` with the imported Zod schema
+- [ ] Translate failures into `AppError` in the handler
 - [ ] Use TanStack Query (`useQuery`/`useMutation`) in UI
 - [ ] Handle loading/error states in component
 
@@ -540,9 +476,8 @@ see [Field Validators](#field-validators).
 
 | Use Case | Approach |
 |----------|----------|
-| Create/Edit forms with multiple fields | TanStack Form + FormData |
-| Forms that should work without JS | TanStack Form + FormData |
-| Complex validation (async, cross-field) | TanStack Form + FormData |
+| Create/Edit forms with multiple fields | TanStack Form + useMutation |
+| Complex validation (async, cross-field) | TanStack Form validators + server-side Zod |
 | Simple delete/toggle actions | Direct Server Function + useMutation |
 | Data fetching | Direct Server Function + useQuery |
 | Quick mutations from buttons | Direct Server Function + useMutation |
@@ -554,7 +489,8 @@ React components organized by feature.
 Authentication UI components.
 
 - **`account-dialog.tsx`** - User account management dialog
-- **`google-login.tsx`** - Google OAuth login button
+- **`email-auth.tsx`** - Email and password sign-in / sign-up form
+- **`pending-approval.tsx`** - Shown to a signed-in account that is not yet approved
 
 
 ##### [`src/components/ui/`](./src/components/ui/)
@@ -583,6 +519,11 @@ TanStack Query setup and providers.
 Shared utilities and client libraries.
 
 - **`auth-client.ts`** - Better Auth client configuration
+- **`api-client.ts`** - Browser client for the public data-service API (Pattern 3); authenticates with the session cookie only
+- **`data-service.ts`** - `fetchDataService()`, a thin wrapper over the `DATA_SERVICE` service binding
+- **`query-keys.ts`** - TanStack Query key factories and query options
+- **`rate-limit.ts`** - Applies the shared rate-limit policy from `@repo/data-ops/rate-limit` around every request in `src/server.ts`
+- **`security-headers.ts`** - Security headers applied in `src/server.ts`
 - **`utils.ts`** - Utility functions
 
 ### Service Bindings vs Environment Variables
@@ -621,35 +562,28 @@ const response = await env.DATA_SERVICE.fetch(
 - No CORS configuration needed
 - No URL management per environment
 
-#### When to Use Vars (Public API URLs)
+#### Public API URL (Pattern 3)
 
-Use `vars` only when you need **public API access** (mobile apps, third-party integrations):
+The browser demo (`dashboard/api/*`, via [`lib/api-client.ts`](./src/lib/api-client.ts)) calls the data-service over the public internet at `VITE_DATA_SERVICE_URL`, a build-time Vite variable that falls back to `http://localhost:8788`. It sends the Better Auth session cookie (`credentials: "include"`) and no bearer token. The data-service already carries the CORS middleware this needs.
 
-```jsonc
-// wrangler.jsonc - Only if exposing data-service publicly
-"vars": {
-  "PUBLIC_API_URL": "https://api.your-domain.com"
-}
-```
-
-This would require:
-1. Adding public routes to `data-service/wrangler.jsonc`
-2. CORS middleware in `data-service`
-3. Client-side auth token management
+To use it outside local development:
+1. Uncomment and set the custom-domain `routes` in `apps/data-service/wrangler.jsonc`
+2. Set `VITE_DATA_SERVICE_URL` in the matching `.env.<mode>` file
+3. Add this app's origin to the data-service's `ALLOWED_ORIGINS` for that environment (dev allows `localhost:3000` without it)
 
 #### Comparison
 
-| Aspect | Service Binding (`services`) | Env Var (`vars`) |
+| Aspect | Service Binding (`services`) | Public URL (`VITE_DATA_SERVICE_URL`) |
 |--------|------------------------------|------------------|
 | **Network** | Cloudflare internal | Public internet |
 | **Speed** | Faster | Slower |
-| **Security** | Private (not exposed) | Must secure endpoint |
+| **Security** | Private (not exposed) | Public endpoint, session-cookie auth |
 | **Use case** | Server functions (Pattern 1) | Client direct calls (Pattern 3) |
-| **Setup** | Just binding config | Routes + CORS + auth |
+| **Setup** | Just binding config | Custom domain + CORS origins |
 
 #### Recommendation
 
-**Use service bindings** (current setup) for all server-side operations. Only add public API routes + vars when you actually need external client access.
+**Use service bindings** (current setup) for all server-side operations. Expose the data-service publicly only when an external client needs it.
 
 ### Environment Variables
 
@@ -660,14 +594,17 @@ Config files in `apps/user-application/`:
 
 Sample `.env.example` file with minimum number of values available - [.env.example](./.env.example)
 
-Required variables:
+Variables the code reads:
 - `CLOUDFLARE_ENV` - Current environment (dev/staging/production)
 - `DATABASE_HOST` - PostgreSQL database host
 - `DATABASE_USERNAME` - Database username
 - `DATABASE_PASSWORD` - Database password
 - `BETTER_AUTH_SECRET` - Authentication secret key
-- `GOOGLE_CLIENT_ID` - Google OAuth client ID (optional)
-- `GOOGLE_CLIENT_SECRET` - Google OAuth client secret (optional)
+- `BETTER_AUTH_BASE_URL` - The app's base URL, passed to Better Auth as `baseURL`
+- `DATA_SERVICE_API_TOKEN` - Bearer token for service-binding calls; must equal the data-service's `API_TOKEN`
+- `VITE_DATA_SERVICE_URL` - Public data-service URL for the browser API client (defaults to `http://localhost:8788`)
+
+The browser bundle carries no API token: the Pattern 3 client authenticates with the Better Auth session cookie, and `api-token-not-in-bundle.test.ts` fails if a `VITE_API_TOKEN` value ever reaches the bundle.
 
 ### Helper Scripts
 

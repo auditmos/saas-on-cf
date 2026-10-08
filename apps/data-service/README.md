@@ -4,7 +4,7 @@ Modular web application template - data service (backend package)
 
 ## Architecture
 
-Backend service for long-running tasks and API endpoints also place to utilize Cloudflare primitives.
+Hono HTTP API Worker: the `clients` REST endpoints behind session or bearer auth, called by the user application over a service binding or from the browser. Cloudflare primitives such as queues or Durable Objects are added here when a project needs them; none ship.
 
 - **`wrangler.jsonc`** - Definitions for Cloudflare primitives.
 

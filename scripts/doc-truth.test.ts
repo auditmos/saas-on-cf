@@ -31,10 +31,13 @@ const SKIP_DIRS = new Set([
 	"skills",
 ]);
 
-/** Documents an agent is expected to follow. CLAUDE.md is a symlink to AGENTS.md. */
+/**
+ * Documents an agent is expected to follow. CLAUDE.md is a symlink to AGENTS.md.
+ * READMEs count too: an agent starting a project from this template follows them.
+ */
 function isAgentFacing(relative: string): boolean {
-	if (relative === "AGENTS.md" || relative === "llms.txt") return true;
-	if (relative.endsWith("/AGENTS.md")) return true;
+	if (relative === "AGENTS.md" || relative === "llms.txt" || relative === "README.md") return true;
+	if (relative.endsWith("/AGENTS.md") || relative.endsWith("/README.md")) return true;
 	return relative.startsWith(".claude/rules/") && relative.endsWith(".md");
 }
 
