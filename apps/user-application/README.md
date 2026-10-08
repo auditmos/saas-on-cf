@@ -604,8 +604,6 @@ Variables the code reads:
 - `DATA_SERVICE_API_TOKEN` - Bearer token for service-binding calls; must equal the data-service's `API_TOKEN`
 - `VITE_DATA_SERVICE_URL` - Public data-service URL for the browser API client (defaults to `http://localhost:8788`)
 
-The browser bundle carries no API token: the Pattern 3 client authenticates with the Better Auth session cookie, and `api-token-not-in-bundle.test.ts` fails if a `VITE_API_TOKEN` value ever reaches the bundle.
-
 ### Helper Scripts
 
 Sync script - synchronize secrets with remote environment
