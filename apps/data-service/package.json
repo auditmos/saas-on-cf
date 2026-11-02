@@ -11,17 +11,17 @@
 		"test": "vitest run",
 		"test:watch": "vitest"
 	},
-	"packageManager": "pnpm@12.15.0",
+	"packageManager": "pnpm@12.16.1",
 	"devDependencies": {
-		"@cloudflare/vitest-plugin": "^1.4.7",
+		"@cloudflare/vitest-plugin": "^1.4.11",
 		"@types/node": "^24.19.2",
 		"typescript": "^6.0.3",
 		"vitest": "^4.1.12",
-		"wrangler": "^4.152.0"
+		"wrangler": "^4.156.0"
 	},
 	"dependencies": {
 		"@hono/zod-validator": "^0.9.1",
 		"@repo/data-ops": "workspace:*",
-		"hono": "^4.13.13"
+		"hono": "^4.13.16"
 	}
 }
