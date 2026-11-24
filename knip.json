@@ -1,12 +1,11 @@
 {
 	"$schema": "https://unpkg.com/knip@6/schema.json",
-	"ignoreDependencies": ["cloudflare"],
 	"workspaces": {
 		".": {
 			"entry": ["scripts/*.ts", "taze.config.ts"]
 		},
 		"apps/data-service": {
-			"entry": ["src/**/*.test.ts", "vitest.config.mts"],
+			"entry": ["src/**/*.test.ts"],
 			"vitest": { "config": [] }
 		},
 		"apps/user-application": {
