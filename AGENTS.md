@@ -25,6 +25,7 @@ pnpm run deploy:production:data-service
 pnpm run db:seed:dev / db:seed:staging / db:seed:production
 pnpm run lint                     # check all (formatting + linting)
 pnpm run lint:fix                 # auto-fix all
+pnpm run bundle:check             # build frontend and check Brotli budgets (after build:data-ops)
 pnpm run test                     # run all tests
 pnpm run test:watch               # watch mode
 pnpm run test:coverage            # with coverage report

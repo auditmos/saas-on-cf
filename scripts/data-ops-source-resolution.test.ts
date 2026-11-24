@@ -40,7 +40,11 @@ function resolveAsConsumer(consumerDir: string, specifier: string): string {
 }
 
 const CONSUMERS = ["apps/data-service", "apps/user-application"];
-const SPECIFIERS = ["@repo/data-ops/client", "@repo/data-ops/database/setup"];
+const SPECIFIERS = [
+	"@repo/data-ops/client",
+	"@repo/data-ops/client/schema",
+	"@repo/data-ops/database/setup",
+];
 
 describe("consumers type-check against data-ops source", () => {
 	for (const consumer of CONSUMERS) {

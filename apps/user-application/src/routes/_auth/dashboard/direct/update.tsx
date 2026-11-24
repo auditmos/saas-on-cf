@@ -65,6 +65,7 @@ function DirectUpdatePage() {
 		},
 
 		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: clientKeys.lists() });
 			navigate({ to: "/dashboard/direct/update", search: { clientId, editing: false } });
 		},
 

@@ -48,6 +48,7 @@ src/
 
 ```ts
 import { getClient, ClientSchema, type Client } from "@repo/data-ops/client"
+import { ErrorResponseSchema } from "@repo/data-ops/client/schema" // browser-safe schemas
 import { checkDatabase, type LivenessResponse } from "@repo/data-ops/health"
 import { enforceRateLimit, RATE_LIMIT_POLICY } from "@repo/data-ops/rate-limit"
 ```

@@ -13,6 +13,7 @@ export const getRouter = () => {
 		routeTree,
 		context: { ...rqContext },
 		defaultPreload: "intent",
+		defaultPreloadStaleTime: 0,
 		Wrap: (props: { children: React.ReactNode }) => {
 			return <TanstackQuery.Provider {...rqContext}>{props.children}</TanstackQuery.Provider>;
 		},

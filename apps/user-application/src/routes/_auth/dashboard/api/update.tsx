@@ -59,6 +59,7 @@ function ApiUpdatePage() {
 		},
 
 		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: clientKeys.lists() });
 			navigate({ to: "/dashboard/api/update", search: { clientId, editing: false } });
 		},
 

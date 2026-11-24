@@ -9,6 +9,11 @@
 			"types": "./dist/client/index.d.ts",
 			"default": "./dist/client/index.js"
 		},
+		"./client/schema": {
+			"@repo/source": "./src/client/schema.ts",
+			"types": "./dist/client/schema.d.ts",
+			"default": "./dist/client/schema.js"
+		},
 		"./health": {
 			"@repo/source": "./src/health/index.ts",
 			"types": "./dist/health/index.d.ts",

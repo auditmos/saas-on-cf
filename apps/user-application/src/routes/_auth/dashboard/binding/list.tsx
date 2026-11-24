@@ -16,7 +16,7 @@ export const Route = createFileRoute("/_auth/dashboard/binding/list")({
 	validateSearch: paginationSchema,
 	loaderDeps: ({ search }) => ({ limit: search.limit, offset: search.offset }),
 	loader: async ({ context, deps }) => {
-		await context.queryClient.ensureQueryData(clientBindingQueries.list(deps));
+		await context.queryClient.query(clientBindingQueries.list(deps));
 	},
 });
 
@@ -180,6 +180,7 @@ export const clientBindingQueries.list = (params) =>
   queryOptions({
     queryKey: clientKeys.list(params, 'binding'),
     queryFn: () => getClientsBinding({ data: params }),
+    staleTime: 30_000,
   });`}
 					</pre>
 				</CardContent>

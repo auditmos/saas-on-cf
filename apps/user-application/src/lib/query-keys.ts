@@ -19,7 +19,10 @@ interface EntityQueryConfig<TDetail, TList> {
 	};
 }
 
-function createEntityQueryOptions<TDetail, TList>(config: EntityQueryConfig<TDetail, TList>) {
+function createEntityQueryOptions<TDetail, TList>(
+	config: EntityQueryConfig<TDetail, TList>,
+	listOptions?: { staleTime: number },
+) {
 	return {
 		detail: (id: string) =>
 			queryOptions({
@@ -31,6 +34,7 @@ function createEntityQueryOptions<TDetail, TList>(config: EntityQueryConfig<TDet
 			queryOptions({
 				queryKey: config.keys.list(params),
 				queryFn: () => config.fns.getList(params),
+				...listOptions,
 			}),
 	};
 }
@@ -56,16 +60,19 @@ export const clientDirectQueries = createEntityQueryOptions<Client | null, Clien
 	},
 });
 
-export const clientBindingQueries = createEntityQueryOptions<Client | null, ClientListResponse>({
-	keys: {
-		detail: (id) => clientKeys.detail(id, "binding"),
-		list: (params) => clientKeys.list(params, "binding"),
+export const clientBindingQueries = createEntityQueryOptions<Client | null, ClientListResponse>(
+	{
+		keys: {
+			detail: (id) => clientKeys.detail(id, "binding"),
+			list: (params) => clientKeys.list(params, "binding"),
+		},
+		fns: {
+			getOne: (id) => getClientBinding({ data: { id } }),
+			getList: (params) => getClientsBinding({ data: params }),
+		},
 	},
-	fns: {
-		getOne: (id) => getClientBinding({ data: { id } }),
-		getList: (params) => getClientsBinding({ data: params }),
-	},
-});
+	{ staleTime: 30_000 },
+);
 
 export const clientApiQueries = createEntityQueryOptions<Client | null, ClientListResponse>({
 	keys: {

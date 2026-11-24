@@ -16,7 +16,7 @@ import {
 	type ClientUpdateInput,
 	ErrorResponseSchema,
 	type PaginationRequest,
-} from "@repo/data-ops/client";
+} from "@repo/data-ops/client/schema";
 import { AppError } from "@/core/errors";
 
 const API_URL = import.meta.env.VITE_DATA_SERVICE_URL || "http://localhost:8788";

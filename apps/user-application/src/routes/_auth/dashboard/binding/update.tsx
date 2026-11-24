@@ -65,6 +65,7 @@ function BindingUpdatePage() {
 		},
 
 		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: clientKeys.lists() });
 			navigate({ to: "/dashboard/binding/update", search: { clientId, editing: false } });
 		},
 

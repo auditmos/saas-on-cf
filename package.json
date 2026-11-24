@@ -6,6 +6,7 @@
 		"prepare": "simple-git-hooks",
 		"setup": "pnpm i && pnpm run build:data-ops",
 		"build:data-ops": "pnpm run --filter data-ops build",
+		"bundle:check": "pnpm --filter user-application exec vite build --manifest && node scripts/check-client-bundle.mts",
 		"dev:user-application": "pnpm run --filter user-application dev",
 		"deploy:staging:user-application": "pnpm run build:data-ops && pnpm run --filter user-application deploy:staging",
 		"deploy:production:user-application": "pnpm run build:data-ops && pnpm run --filter user-application deploy:production",
