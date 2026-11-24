@@ -5,7 +5,7 @@
 	"scripts": {
 		"deploy:staging": "wrangler deploy --env staging",
 		"deploy:production": "wrangler deploy --env production",
-		"dev": "wrangler dev --env dev --port 8788",
+		"dev": "CLOUDFLARE_DEV_REGISTRY_PATH=../../.wrangler/dev-registry wrangler dev --env dev --port 8788",
 		"cf-typegen": "wrangler types --env-interface BaseEnv --env dev",
 		"types": "tsc --noEmit",
 		"test": "vitest run",
@@ -17,7 +17,7 @@
 		"@types/node": "^24.19.2",
 		"typescript": "^6.0.3",
 		"vitest": "^5.1.1",
-		"wrangler": "^4.162.0"
+		"wrangler": "^4.166.0"
 	},
 	"dependencies": {
 		"@hono/zod-validator": "^0.9.1",

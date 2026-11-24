@@ -72,6 +72,7 @@ const data = await response.json();
 - Server-only — uses `env` from `cloudflare:workers`
 - No HTTP/DNS overhead — internal Worker-to-Worker RPC
 - Health check: `GET /api/health` verifies binding, DB, and env
+- Local dev: the binding reaches a running `pnpm run dev:data-service` through a dev registry. wrangler and the Vite plugin default to different registry folders, so both `dev` scripts set the same `CLOUDFLARE_DEV_REGISTRY_PATH`; start either app without it and the binding answers `Worker "…" not found`
 </important>
 
 <important if="you are writing or moving tests in user-application">

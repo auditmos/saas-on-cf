@@ -118,3 +118,37 @@ describe("no script can deploy without choosing an environment", () => {
 		});
 	}
 });
+
+/**
+ * In local dev, DATA_SERVICE reaches the data-service session through a dev
+ * registry: a folder where each session advertises itself. wrangler and the Vite
+ * plugin default to different folders, so unless both dev scripts name the same
+ * one, the binding answers `Worker "…" not found` and /api/health reports it.
+ */
+describe("local dev sessions share one dev registry", () => {
+	const apps = ["apps/data-service", "apps/user-application"];
+	const REGISTRY_RE = /\bCLOUDFLARE_DEV_REGISTRY_PATH=(\S+)\s/;
+
+	const registries = apps.map((app) => {
+		const { scripts = {} } = JSON.parse(
+			readFileSync(resolve(repoRoot, app, "package.json"), "utf8"),
+		) as { scripts?: Record<string, string> };
+		const path = REGISTRY_RE.exec(scripts.dev ?? "")?.[1];
+		return { app, registry: path && resolve(repoRoot, app, path) };
+	});
+
+	for (const { app, registry } of registries) {
+		it(`${app}: the dev script sets CLOUDFLARE_DEV_REGISTRY_PATH`, () => {
+			expect(
+				registry,
+				`${app}/package.json "dev" sets no CLOUDFLARE_DEV_REGISTRY_PATH`,
+			).toBeDefined();
+		});
+	}
+
+	it("both dev scripts point at the same folder", () => {
+		const paths = registries.map((r) => r.registry);
+		expect(paths.every(Boolean), "a dev script sets no registry").toBe(true);
+		expect(new Set(paths).size).toBe(1);
+	});
+});
