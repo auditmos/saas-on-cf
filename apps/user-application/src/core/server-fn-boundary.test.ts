@@ -78,7 +78,13 @@ type ServerFn = {
 	}) => Promise<{ result?: unknown; error?: unknown }>;
 };
 
-async function invoke(fn: unknown, data: unknown) {
+/**
+ * `asPublic` runs `fn` the way production runs a PUBLIC_SERVER_FNS entry. The
+ * compiler's identity metadata is missing here, so the global middleware would
+ * treat it as protected; for a public function it only adds
+ * `{ auth: { status: "public" } }`, so leaving it out changes nothing else.
+ */
+async function invoke(fn: unknown, data: unknown, { asPublic = false } = {}) {
 	const { startInstance } = await import("@/start");
 	const startOptions = await startInstance.getOptions();
 	const storage = (globalThis as unknown as Record<symbol, AsyncLocalStorage<unknown>>)[
@@ -88,7 +94,7 @@ async function invoke(fn: unknown, data: unknown) {
 
 	return storage.run(
 		{
-			startOptions,
+			startOptions: asPublic ? { ...startOptions, functionMiddleware: [] } : startOptions,
 			request: new Request("https://app.example.com/_serverFn/test"),
 			contextAfterGlobalMiddlewares: {},
 			executedRequestMiddlewares: new Set(),
@@ -276,5 +282,47 @@ describe("server-function boundary — an account awaiting approval", () => {
 		// The whole point: a caller awaiting approval must not be told they are
 		// signed out, or the interface shows them a signed-out experience.
 		expect(errorOf(pending).code).not.toBe(errorOf(anonymous).code);
+	});
+});
+
+// --- the session read, against real Better Auth -------------------------------
+
+/**
+ * Every test above stubs getSession, so none of them sees how the request is
+ * handed to Better Auth. Here the stub forwards to a real instance. Its
+ * in-memory adapter is never reached: a request with no session cookie is
+ * answered before any lookup.
+ */
+async function forwardToRealBetterAuth() {
+	const [{ createBetterAuth }, { memoryAdapter }] = await Promise.all([
+		import("@repo/data-ops/auth/setup"),
+		import("better-auth/adapters/memory"),
+	]);
+	const auth = createBetterAuth({
+		database: memoryAdapter({}),
+		secret: "test-secret-long-enough-for-better-auth",
+		baseURL: "https://app.example.com",
+	});
+	mockGetSession.mockImplementation((input) =>
+		auth.api.getSession(input as Parameters<typeof auth.api.getSession>[0]),
+	);
+}
+
+describe("session read — a signed-out request, real Better Auth", () => {
+	beforeEach(forwardToRealBetterAuth);
+
+	it("getAuthView tells the protected layout's guard that the caller is signed out", async () => {
+		const { getAuthView } = await import("@/core/functions/auth/session");
+
+		const outcome = await invoke(getAuthView, undefined, { asPublic: true });
+
+		expect(outcome.error).toBeUndefined();
+		expect(outcome.result).toEqual({ view: "signed-out", email: null });
+	});
+
+	it("a protected server function rejects the caller as unauthenticated", async () => {
+		const outcome = await invoke(await loadDirect("getClientDirect"), { id: "client_1" });
+
+		expect(errorOf(outcome).code, errorOf(outcome).message).toBe("UNAUTHENTICATED");
 	});
 });

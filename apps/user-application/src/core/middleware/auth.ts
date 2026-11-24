@@ -33,7 +33,7 @@ interface ServerFnAuthContext {
  */
 async function requireApprovedSession(): Promise<{ userId: string; email: string }> {
 	const auth = getAuth();
-	const session = await auth.api.getSession(getRequest());
+	const session = await auth.api.getSession({ headers: getRequest().headers });
 
 	if (!session) {
 		setResponseStatus(401);

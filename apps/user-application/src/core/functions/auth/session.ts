@@ -18,7 +18,7 @@ export interface AuthViewResult {
  * state — an anonymous request gets `{ view: "signed-out", email: null }`.
  */
 export const getAuthView = createServerFn().handler(async (): Promise<AuthViewResult> => {
-	const session = await getAuth().api.getSession(getRequest());
+	const session = await getAuth().api.getSession({ headers: getRequest().headers });
 
 	return {
 		view: selectAuthView(session),
