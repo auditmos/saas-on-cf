@@ -1,3 +1,10 @@
+## [1.14.2](https://github.com/auditmos/saas-on-cf/compare/v1.14.1...v1.14.2) (2026-11-24)
+
+
+### Performance Improvements
+
+* **user-application:** trim startup JS and reuse preloaded client lists ([7971d98](https://github.com/auditmos/saas-on-cf/commit/7971d98340cbfe36f757f1e3af3d2ea87c68666a))
+
 ## [1.14.1](https://github.com/auditmos/saas-on-cf/compare/v1.14.0...v1.14.1) (2026-11-24)
 
 
