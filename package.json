@@ -54,14 +54,14 @@
 		"@semantic-release/changelog": "^7.0.0",
 		"@semantic-release/git": "^11.0.1",
 		"@types/node": "^24.19.2",
-		"@vitest/coverage-v8": "^4.1.12",
+		"@vitest/coverage-v8": "^5.1.1",
 		"knip": "^6.45.1",
 		"semantic-release": "^25.0.9",
 		"simple-git-hooks": "^2.14.0",
 		"taze": "^21.3.0",
 		"tsx": "^4.23.15",
 		"typescript": "^6.0.3",
-		"vitest": "^4.1.12"
+		"vitest": "^5.1.1"
 	},
 	"simple-git-hooks": {
 		"pre-commit": "pnpm run lint:ci",
