@@ -10,11 +10,18 @@ export const Route = createFileRoute("/_auth")({
 	// Runs on the server before anything under /_auth renders, so an
 	// unauthenticated request is answered with a redirect instead of with the
 	// protected content plus a client-side correction after the fact.
-	beforeLoad: async () => {
+	beforeLoad: async ({ location }) => {
 		const auth = await getAuthView();
 
 		if (auth.view === "signed-out") {
 			throw redirect({ to: "/signin" });
+		}
+
+		// Child loaders run before this layout renders the pending screen, and
+		// their server functions reject an unapproved account, which would make
+		// the page a 500. So it only ever sees /dashboard, which loads nothing.
+		if (auth.view === "pending-approval" && location.pathname.replace(/\/$/, "") !== "/dashboard") {
+			throw redirect({ to: "/dashboard" });
 		}
 
 		return { auth };

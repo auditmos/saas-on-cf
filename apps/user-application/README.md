@@ -29,7 +29,7 @@ File-based routing with TanStack Router.
 Root layout component applied to all routes.
 
 ##### [`src/routes/_auth/`](./src/routes/_auth/)
-Authenticated routes. [`route.tsx`](./src/routes/_auth/route.tsx) is the server-side guard: a signed-out request is redirected to `/signin`, and a signed-in but unapproved user sees the pending-approval screen.
+Authenticated routes. [`route.tsx`](./src/routes/_auth/route.tsx) is the server-side guard: a signed-out request is redirected to `/signin`, and a signed-in but unapproved user is redirected to `/dashboard`, which shows the pending-approval screen and loads no data.
 
 - **`app/`** - Placeholder for your application's own routes
 - **`dashboard/`** - Demo of the three data-access patterns, one CRUD set each: `direct/`, `binding/`, `api/`

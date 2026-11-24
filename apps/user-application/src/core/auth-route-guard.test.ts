@@ -29,7 +29,7 @@ async function loadRoute() {
 
 type BeforeLoad = (ctx: Record<string, unknown>) => Promise<unknown>;
 
-async function runGuard(): Promise<{ thrown?: unknown; returned?: unknown }> {
+async function runGuard(path = "/app"): Promise<{ thrown?: unknown; returned?: unknown }> {
 	const route = await loadRoute();
 	const beforeLoad = (route.options as { beforeLoad?: BeforeLoad }).beforeLoad;
 	if (typeof beforeLoad !== "function") {
@@ -38,7 +38,7 @@ async function runGuard(): Promise<{ thrown?: unknown; returned?: unknown }> {
 		);
 	}
 	try {
-		return { returned: await beforeLoad({ location: { href: "/app" } }) };
+		return { returned: await beforeLoad({ location: { href: path, pathname: path } }) };
 	} catch (thrown) {
 		return { thrown };
 	}
@@ -86,10 +86,33 @@ describe("server-side guard on the protected layout", () => {
 	it("does not redirect an account awaiting approval to the sign-in page", async () => {
 		mockGetAuthView.mockResolvedValue({ view: "pending-approval", email: "pending@example.com" });
 
-		const { thrown, returned } = await runGuard();
+		const { thrown, returned } = await runGuard("/dashboard");
 
 		expect(thrown, "a user awaiting approval was sent to sign in again").toBeUndefined();
 		expect(returned).toMatchObject({ auth: { view: "pending-approval" } });
+	});
+
+	// Every matched loader runs before the layout decides to show the pending
+	// screen, and a loader's server function rejects the account (NOT_APPROVED),
+	// which turns the page into a 500. Pages with data must not load for it.
+	it("sends an account awaiting approval from a page that loads data to /dashboard", async () => {
+		mockGetAuthView.mockResolvedValue({ view: "pending-approval", email: "pending@example.com" });
+
+		const { thrown } = await runGuard("/dashboard/direct/list");
+
+		expect(isRedirect(thrown), "the page's loader would run for an unapproved account").toBe(true);
+		expect((thrown as Response & { options: { to?: string } }).options.to).toBe("/dashboard");
+	});
+
+	it("keeps /dashboard, where an account awaiting approval lands, free of loaders", async () => {
+		const pages = [
+			await import("@/routes/_auth/dashboard/route"),
+			await import("@/routes/_auth/dashboard/index"),
+		];
+
+		for (const { Route } of pages) {
+			expect((Route.options as { loader?: unknown }).loader, Route.id).toBeUndefined();
+		}
 	});
 
 	it("consults the session on every request rather than trusting a client-supplied value", async () => {

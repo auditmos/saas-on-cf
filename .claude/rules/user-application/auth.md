@@ -48,15 +48,28 @@ including routes added later:
 ```tsx
 // routes/_auth/route.tsx
 export const Route = createFileRoute('/_auth')({
-  beforeLoad: async () => {
+  beforeLoad: async ({ location }) => {
     const auth = await getAuthView()
     if (auth.view === 'signed-out') {
       throw redirect({ to: '/signin' })
+    }
+    if (auth.view === 'pending-approval' && location.pathname.replace(/\/$/, '') !== '/dashboard') {
+      throw redirect({ to: '/dashboard' })
     }
     return { auth }
   },
 })
 ```
+
+An unapproved account only ever sees `/dashboard`, where the layout renders the
+pending-approval screen. Child loaders run before the layout renders, and their
+server functions reject such an account (`NOT_APPROVED`), so on any page that
+loads data it would get a 500. Keep `/dashboard` free of loaders;
+`auth-route-guard.test.ts` checks it.
+
+Read the session with `getSession({ headers: getRequest().headers })`, never
+`getSession(getRequest())`. Better Auth copies its argument, a `Request` keeps
+its headers on the prototype, and the copy fails with "Headers is required".
 
 ## Auth Forms
 
