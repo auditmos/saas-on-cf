@@ -1,6 +1,7 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { describe, expect, it } from "vitest";
+import { installedRuntimes, newestSupportedDate } from "./bump-stale-compat-dates";
 
 const THRESHOLD_DAYS = 90;
 const MS_PER_DAY = 86_400_000;
@@ -44,6 +45,22 @@ describe("wrangler.jsonc compatibility_date freshness", () => {
 				ageDays,
 				`${relative} compatibility_date is ${Math.floor(ageDays)}d old (threshold ${THRESHOLD_DAYS}d) — run \`pnpm tsx scripts/bump-stale-compat-dates.ts\` to bump`,
 			).toBeLessThanOrEqual(THRESHOLD_DAYS);
+		});
+
+		// workerd refuses a Worker dated later than it knows, so a date past the
+		// oldest local runtime stops `wrangler dev`, `vite dev` or the test pool.
+		it(`${relative} has compatibility_date no newer than its local runtimes support`, () => {
+			const dateStr = readFileSync(file, "utf8").match(DATE_FIELD_RE)?.[1];
+			const runtimes = installedRuntimes(dirname(file));
+			const supported = newestSupportedDate(runtimes);
+			expect(supported, `no local workerd found for ${relative}`).toBeDefined();
+			if (!dateStr || !supported) return;
+
+			const list = runtimes.map((r) => `${r.tool} → workerd ${r.workerd}`).join(", ");
+			expect(
+				dateStr <= supported,
+				`${relative} compatibility_date ${dateStr} is newer than ${supported}, the newest date its local runtimes support (${list}) — upgrade them, or lower the date`,
+			).toBe(true);
 		});
 	}
 });

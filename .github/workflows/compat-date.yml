@@ -59,7 +59,11 @@ jobs:
           title: "chore: bump stale Workers compatibility_date"
           body: |
             One or more `wrangler.jsonc` files have a `compatibility_date`
-            more than 90 days old. This PR bumps each to today's date.
+            more than 90 days old. This PR bumps each to today's date, or to
+            the newest date its local workerd supports when that is earlier:
+            a later date stops `wrangler dev`, `vite dev` and the Workers test
+            pool from starting. A capped bump names the runtimes that held it
+            back; upgrading them is what moves the date further.
 
             ## Files changed
 
