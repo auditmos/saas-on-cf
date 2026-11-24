@@ -1,3 +1,12 @@
+## [1.14.1](https://github.com/auditmos/saas-on-cf/compare/v1.14.0...v1.14.1) (2026-11-24)
+
+
+### Bug Fixes
+
+* **scripts:** cap compatibility_date bumps at the local workerd ([8304522](https://github.com/auditmos/saas-on-cf/commit/830452235456dfe7d748d1534ef16b4434e1eef2)), closes [#68](https://github.com/auditmos/saas-on-cf/issues/68)
+* **user-application:** pass request headers to Better Auth's getSession ([4a71e6b](https://github.com/auditmos/saas-on-cf/commit/4a71e6be263d79f4d17d27da012a6212e26a4cd8))
+* **user-application:** send an unapproved account to /dashboard ([d807d91](https://github.com/auditmos/saas-on-cf/commit/d807d91f24f0709d4dde844798265c596e3a4094))
+
 # [1.14.0](https://github.com/auditmos/saas-on-cf/compare/v1.13.2...v1.14.0) (2026-08-08)
 
 
